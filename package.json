@@ -1,0 +1,50 @@
+{
+  "name": "react-native-http-request-handler",
+  "version": "1.0.9",
+  "description": "",
+  "main": "dist/module/index.js",
+  "module": "dist/module/index.js",
+  "react-native": "src/index.ts",
+  "types": "dist/typescript/src/index.d.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "bob build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/bob": "^0.17.1",
+    "@react-navigation/native": "^5.7.3",
+    "axios": "^0.20.0",
+    "react": "^16.11.0",
+    "react-native": "^0.62.2",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5"
+  },
+  "@react-native-community/bob": {
+    "source": "src",
+    "output": "dist",
+    "targets": [
+      "module",
+      "typescript"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^15.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "typescript": "~3.9.5"
+  },
+  "peerDependencies": {
+    "react": "^16.11.0",
+    "react-native": "~0.62.2"
+  }
+}
