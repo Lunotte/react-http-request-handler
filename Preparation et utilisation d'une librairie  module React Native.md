@@ -210,9 +210,9 @@ Il faut utiliser yarn pour installer la dépendance (du moins en local), avec np
 
 **Installation de la dépendance**
 
-Apres modification dans la librairie sans changer le numéro de version, côté projet principal le module ne semble pas prendre les modifications effectuée, même après suppression de la dépendance. **Il faut appliquer la manipulation ci-dessous**. 
+Apres modification dans la librairie sans changer le numéro de version, côté projet principal le module ne semble pas prendre les modifications effectuées, même après suppression de la dépendance. **Il faut appliquer la manipulation ci-dessous**. 
 
-Si on ne monte pas la version de la lib, la supprimer des dépendances et faire :
+Si on ne monte pas la version de la lib, la supprimer des dépendances, supprimer le fichier yarn.lock et faire :
 
 ```powershell
 yarn upgrade  'PATH-LIB-PROJET\NOM-LIB-X.X.X.tgz'

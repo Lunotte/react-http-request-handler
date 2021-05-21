@@ -1,16 +1,15 @@
-import { axiosConfigJourSemaine } from './../query';
-import { CHARGER_CONFIG_ACTION, DECHARGER_CONFIG_ACTION, UTILISER_CONFIG_ACTION } from './hook-action';
-import { ConfigAxios } from './../models/AxiosConfig';
+import { CHARGER_CONFIG_ACTION, UTILISER_CONFIG_ACTION, DESACTIVER_CONFIG_ACTION } from './hook-action';
+import { ConfigAxiosEtat } from './../models/AxiosConfig';
 
 const initialHookState: HookState = {
-  configs: [axiosConfigJourSemaine],
+  configs: [],
 };
 
 export default function hookReducer(state = initialHookState, action) {
 
   switch (action.type) {
     case CHARGER_CONFIG_ACTION:
-    case DECHARGER_CONFIG_ACTION:
+    case DESACTIVER_CONFIG_ACTION:
     case UTILISER_CONFIG_ACTION:
       return configReducer(state, action);
     default:
@@ -25,21 +24,35 @@ export default function hookReducer(state = initialHookState, action) {
 /////////////////////////////////////////////////////
 
 function configReducer(state = initialHookState, action) {
-  let config: ConfigAxios;
   let index: number;
-  let newState: ConfigAxios[];
+  let newState: ConfigAxiosEtat[];
 
   switch (action.type) {
     case CHARGER_CONFIG_ACTION:
-      config = { ...action.payload, actif: false };
-      return { ...state, configs: [...state.configs, config] };
+      newState = [...state.configs];
+
+      action.payload.forEach((actionConfig: ConfigAxiosEtat) => {
+        const condition = state.configs.find(config => config.label === actionConfig.label);
+
+        if (condition != null && !condition.actif && actionConfig.actif) {
+           // Si un élément a déjà été ajouté, on le remplace, peut-être qu'un paramètre a été modifié
+           newState = state.configs.filter(config => config.label !== actionConfig.label);
+           newState = [...newState, actionConfig];
+        }
+        
+        if (!condition) {
+          newState = [...newState, actionConfig];
+        }
+      });
+      
+      return { ...state, configs: newState };
     
     case UTILISER_CONFIG_ACTION:
       index = state.configs.findIndex(config => config.label === action.payload);
       newState = [...state.configs];
       return { ...state, configs: [{...newState[index], actif: true}]  };
     
-    case DECHARGER_CONFIG_ACTION:
+    case DESACTIVER_CONFIG_ACTION:
       index = state.configs.findIndex(config => config.label === action.payload);
       newState = [...state.configs];
       return { ...state, configs: [{ ...newState[index], actif: false }] };
@@ -48,5 +61,5 @@ function configReducer(state = initialHookState, action) {
 }
 
 export interface HookState {
-  readonly configs: ConfigAxios[];
+  readonly configs: ConfigAxiosEtat[];
 }

@@ -1,8 +1,9 @@
-import { chargementFinishedAction, chargementStartedAction, dechargerConfigAction } from './redux/hook-action';
-import { ConfigAxios } from './models/AxiosConfig';
+import { RootState } from './redux/hook-store';
+import { chargementFinishedAction, chargementStartedAction, desactiverConfigAction, chargerConfigAction } from './redux/hook-action';
+import { ConfigAxios, ConfigAxiosEtat } from './models/AxiosConfig';
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 import { fetchApi } from './services/ApiServiceFetch';
 
@@ -23,31 +24,59 @@ let httpRequestManager: ConfigParamRequest[] = [];
  * Ceci n'utilise pas de cache
  * @param config Information concernant la requête à executer
  */
-export function useRequestWithConfigAxios(config: ConfigAxios) {
-    console.log('config', config);
+ export function useRequestWithConfigAxios(config: ConfigAxios) {
+    console.log('Dans useRequestWithConfigAxios ----->>>> config', config);
     
     const dispatch = useDispatch();
     console.log('dispatch', dispatch);
 
+    const configSelecteur = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === config.configAxiosEtat.label));
+
     useEffect(() => {
         async function fetch() {
             console.log('fetch');
-            if (config && config.actif) {
-                const reponse = await fetchApi(config.axiosRequestConfig);
+            if (configSelecteur && configSelecteur.actif) {
+                const reponse = await fetchApi(config.configAxiosEtat.axiosRequestConfig);
                 console.log(reponse);
                 
                 if (reponse != null) {
-                    dispatch(config.actionToDispatch(reponse.data));
-                    dispatch(dechargerConfigAction(config.label));
+                    if (config.actionToDispatch) {
+                        dispatch(config.actionToDispatch(reponse.data));
+                    }
+                    dispatch(desactiverConfigAction(config.configAxiosEtat.label));
                 }
             }
         }
         fetch();
-    }, [config]);
-
+    }, [config, configSelecteur]);
 }
 
-export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeReponse: boolean = true) {
+
+/**
+ * Charger la configuration des requêtes qui seront executées
+ * @param configs 
+ */
+export function useToLoadConfig(configs: ConfigAxios[]) {
+    console.log('Dans useToLoadConfig ====>>>> configs', configs);
+    
+    const dispatch = useDispatch();
+    dispatch(chargerConfigAction(configs.map(config => config.configAxiosEtat)));
+
+    configs.forEach(config => {
+        useRequestWithConfigAxios(config);
+    })
+}
+
+
+
+/**
+ * Faire une requete sans avoir à faire une action post execution
+ * @param config 
+ * @param justeReponse 
+ * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
+ * @returns 
+ */
+ export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void) {
     const [state, setState] = useState({
         loading: true,
         data: null,
@@ -57,11 +86,60 @@ export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeRepon
         async function fetch() {
             if (config) {
                 const reponse = await fetchApi(config);
-                setState({ loading: false, data: justeReponse ? reponse.data : reponse });
+                const retour = justeReponse ? reponse.data : reponse;
+                if (codeAdditionel) {
+                    codeAdditionel(retour);
+                } else {
+                    setState({ loading: false, data: retour});
+                }
             }
         }
         fetch();
-    }, [config]);
+    }, [config?.method, config?.url, config?.data]);
+
+    return state;
+}
+
+
+/**
+ * Faire une requete sans avoir à faire une action post execution
+ * @param config 
+ * @param justeReponse 
+ * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
+ * @returns 
+ */
+ export function useRequestWithoutDispatch2(configLabel: string, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void, postData?: any) {
+    const [state, setState] = useState({
+        loading: true,
+        data: null,
+    });
+     
+    const configSelecteur: ConfigAxiosEtat = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === configLabel));
+    console.log('configSelecteur', configSelecteur);
+     
+    let axiosRequest = configSelecteur?.axiosRequestConfig;
+     
+    if (postData) {
+        axiosRequest = { ...axiosRequest, data: postData};
+    }
+    console.log('axiosRequest2', axiosRequest);
+
+    useEffect(() => {
+        async function fetch() {
+            if (configSelecteur) {
+                console.log('configSelecteur', configSelecteur);
+                
+                const reponse = await fetchApi(axiosRequest);
+                const retour = justeReponse ? reponse.data : reponse;
+                if (codeAdditionel) {
+                    codeAdditionel(retour);
+                } else {
+                    setState({ loading: false, data: retour});
+                }
+            }
+        }
+        fetch();
+    }, [axiosRequest?.method, axiosRequest?.url, axiosRequest?.data]);
 
     return state;
 }

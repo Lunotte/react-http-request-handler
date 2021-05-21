@@ -14,5 +14,7 @@ let composeEnhancers = compose;
 
 composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION__ || compose;
 
+const rootReducers = combineReducers({ lib: hookReducer });
+export default createStore(combineReducers({lib: hookReducer}), composeEnhancers(applyMiddleware()));
 
-export default createStore(combineReducers({hookReducer}), composeEnhancers(applyMiddleware()));
+export type RootState = ReturnType<typeof rootReducers>;
