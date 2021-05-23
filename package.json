@@ -1,50 +1,73 @@
 {
   "name": "react-native-http-request-handler",
-  "version": "1.0.19",
+  "version": "1.0.50",
   "description": "",
-  "main": "dist/module/index.js",
-  "module": "dist/module/index.js",
-  "react-native": "src/index.ts",
-  "types": "dist/typescript/src/index.d.ts",
+  "main": "lib\\commonjs\\index.js",
+  "module": "lib\\module\\index.js",
+  "react-native": "src\\index.ts",
+  "types": "lib\\typescript\\src\\index.d.ts",
   "files": [
     "src",
-    "dist"
+    "lib",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
   ],
   "scripts": {
     "prepare": "bob build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@react-native-community/async-storage": "^1.11.0",
-    "@react-native-community/bob": "^0.17.1",
     "@react-navigation/native": "^5.7.3",
     "axios": "^0.20.0",
-    "react": "^16.11.0",
-    "react-native": "^0.62.2",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5"
   },
   "@react-native-community/bob": {
     "source": "src",
-    "output": "dist",
+    "output": "lib",
     "targets": [
       "module",
       "typescript"
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
     "@types/node": "^15.3.0",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "eslint": "^7.26.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "react": ">=16.11.0",
+    "react-native": ">=0.62.2",
+    "react-native-builder-bob": "^0.18.1",
     "typescript": "~3.9.5"
   },
   "peerDependencies": {
-    "react": "^16.11.0",
-    "react-native": "~0.62.2"
-  }
+    "@react-navigation/native": "^5.7.3",
+    "axios": "^0.20.0",
+    "react": ">=16.11.0",
+    "react-native": ">=0.62.2",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ]
 }
