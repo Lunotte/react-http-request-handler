@@ -1,7 +1,10 @@
-import { CHARGER_CONFIG_ACTION, UTILISER_CONFIG_ACTION, DESACTIVER_CONFIG_ACTION } from './hook-action';
-import { ConfigAxiosEtat } from './../models/AxiosConfig';
+import { CHARGER_CONFIG_ACTION, UTILISER_CONFIG_ACTION, DESACTIVER_CONFIG_ACTION, INIT_SETTINGS_ACTION } from './hook-action';
+import { ConfigAxiosEtat, SettingsInitializerRnhrh } from './../models/AxiosConfig';
 
 const initialHookState: HookState = {
+  globalConfig: {
+    baseUrl: null
+  },
   configs: [],
 };
 
@@ -11,6 +14,7 @@ export default function hookReducer(state = initialHookState, action) {
     case CHARGER_CONFIG_ACTION:
     case DESACTIVER_CONFIG_ACTION:
     case UTILISER_CONFIG_ACTION:
+    case INIT_SETTINGS_ACTION:
       return configReducer(state, action);
     default:
       return state;
@@ -57,9 +61,12 @@ function configReducer(state = initialHookState, action) {
       newState = [...state.configs];
       return { ...state, configs: [{ ...newState[index], actif: false }] };
     
+    case INIT_SETTINGS_ACTION:
+      return { ...state, globalConfig: action.payload };
   }
 }
 
 export interface HookState {
+  readonly globalConfig: SettingsInitializerRnhrh;
   readonly configs: ConfigAxiosEtat[];
 }

@@ -10,6 +10,14 @@ import { AxiosRequestConfig } from 'axios';
 
 // export type ConfigAxiosTrigger = string;
 
+/**
+ * reduxIsActif ça peut servir
+ */
+export interface SettingsInitializerRnhrh {
+    baseUrl: string,
+    reduxIsActif?: boolean;
+}
+
 export interface ConfigAxiosEtat {
     readonly axiosRequestConfig: AxiosRequestConfig;
     readonly label: ConfigAxiosTrigger;
