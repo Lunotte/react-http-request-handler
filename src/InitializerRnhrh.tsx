@@ -1,12 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { default as Store } from './redux/hook-store';
-import SettingRnhrh from './SettingRnhrh';
 import { SettingsInitializerRnhrh } from './models/AxiosConfig';
 
-const InitializerRnhrh: React.FC<{ settingsInitializer: SettingsInitializerRnhrh }> = ({ settingsInitializer, children }) => {
+const InitializerRnhrh = (props: any) => {
 
-  console.log(settingsInitializer, children);
+  console.log(props.children);
 
   // function SettingRnhrhComponent() {
   //   return (
@@ -32,9 +31,7 @@ const InitializerRnhrh: React.FC<{ settingsInitializer: SettingsInitializerRnhrh
 
   return (
     <Provider store={Store}>
-      <SettingRnhrh settingsInitializer={settingsInitializer}>
-        {children}
-      </SettingRnhrh>
+        {props.children}
     </Provider>
   );
 }

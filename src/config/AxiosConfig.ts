@@ -1,10 +1,9 @@
 import axios from 'axios';
-import params from '../config/parametre.json'
 import { getStorage } from '../services/storage-service';
 import gestionConfig from '../services/GestionConfigService';
 
 export const instance = axios.create({
-    baseURL: params.baseUrl
+  baseURL: gestionConfig.getParameterBaseUrl()
 });
 
 instance.interceptors.request.use(

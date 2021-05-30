@@ -1,6 +1,6 @@
 {
   "name": "react-native-http-request-handler",
-  "version": "1.0.77",
+  "version": "1.0.82",
   "description": "",
   "main": "lib\\commonjs\\index.js",
   "module": "lib\\module\\index.js",

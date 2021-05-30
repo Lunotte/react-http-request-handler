@@ -1,22 +1,27 @@
-import { ParametersLib } from "../models/GestionConfig";
+import { SettingsInitializerRnhrh } from "../models/GestionConfig";
 
 class GestionConfig {
 
-    private parameters: ParametersLib;
+    private parameters: SettingsInitializerRnhrh;
 
     constructor() {
         this.parameters = {
+            baseUrl: null,
             reduxIsActif: false,
             useAsyncStorage: false
         }
     }
 
-    initializeParameters(parameters: ParametersLib) {
+    initializeParameters(parameters: SettingsInitializerRnhrh) {
         this.parameters = parameters;
     }
 
-    getParameters(): ParametersLib {
+    getParameters(): SettingsInitializerRnhrh {
         return this.parameters;
+    }
+
+    getParameterBaseUrl(): string {
+        return this.parameters.baseUrl;
     }
 
     getParameterUseAsyncStorage(): boolean {
