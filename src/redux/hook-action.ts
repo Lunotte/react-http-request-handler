@@ -16,6 +16,8 @@ export const UTILISER_CONFIG_ACTION = 'UTILISER_CONFIG_ACTION'; // Utiliser une 
 
 export const INIT_SETTINGS_ACTION = 'INIT_SETTINGS_ACTION'; // Utiliser une config précédemment chargée
 
+export const POUR_TEST_ACTION = 'POUR_TEST_ACTION'; // Utiliser une config précédemment chargée
+
 export const chargementStartedAction = () => ({ type: CHARGEMENT_STARTED_ACTION });
 export const chargementFinishedAction = () => ({ type: CHARGEMENT_FINISHED_ACTION });
 
@@ -34,3 +36,11 @@ export const utiliserConfigAction = (configCible: ConfigAxiosTrigger) => {
 export const initSettingsAction = (settings: SettingsInitializerRnhrh) => {
     return { type: INIT_SETTINGS_ACTION, payload: settings };
 }
+
+export const pourTestAction = (param: any) => {
+    console.log(param);
+    
+    return { type: POUR_TEST_ACTION, payload: param };
+}
+
+

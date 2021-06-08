@@ -1,3 +1,4 @@
+import { ConfigQueryParameter, MethodRnhrh } from './models/QueryDirectory';
 import { RootState } from './redux/hook-store';
 import { chargementFinishedAction, chargementStartedAction, desactiverConfigAction, chargerConfigAction } from './redux/hook-action';
 import { ConfigAxios, ConfigAxiosEtat } from './models/AxiosConfig';
@@ -6,8 +7,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 import { fetchApi } from './services/ApiServiceFetch';
+import { default as queryDirectoryService } from './services/QueryDirectoryService';
 
-let httpRequestManager: ConfigParamRequest[] = [];
+//let httpRequestManager: ConfigParamRequest[] = [];
 
 
 //
@@ -69,36 +71,36 @@ export function useToLoadConfig(configs: ConfigAxios[]) {
 
 
 
-/**
- * Faire une requete sans avoir à faire une action post execution
- * @param config 
- * @param justeReponse 
- * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
- * @returns 
- */
- export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void) {
-    const [state, setState] = useState({
-        loading: true,
-        data: null,
-    });
+// /**
+//  * Faire une requete sans avoir à faire une action post execution
+//  * @param config 
+//  * @param justeReponse 
+//  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
+//  * @returns 
+//  */
+//  export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void) {
+//     const [state, setState] = useState({
+//         loading: true,
+//         data: null,
+//     });
 
-    useEffect(() => {
-        async function fetch() {
-            if (config) {
-                const reponse = await fetchApi(config);
-                const retour = justeReponse ? reponse.data : reponse;
-                if (codeAdditionel) {
-                    codeAdditionel(retour);
-                } else {
-                    setState({ loading: false, data: retour});
-                }
-            }
-        }
-        fetch();
-    }, [config?.method, config?.url, config?.data]);
+//     useEffect(() => {
+//         async function fetch() {
+//             if (config) {
+//                 const reponse = await fetchApi(config);
+//                 const retour = justeReponse ? reponse.data : reponse;
+//                 if (codeAdditionel) {
+//                     codeAdditionel(retour);
+//                 } else {
+//                     setState({ loading: false, data: retour});
+//                 }
+//             }
+//         }
+//         fetch();
+//     }, [config?.method, config?.url, config?.data]);
 
-    return state;
-}
+//     return state;
+// }
 
 
 /**
@@ -144,11 +146,11 @@ export function useToLoadConfig(configs: ConfigAxios[]) {
     return state;
 }
 
-interface ConfigParamRequest {
-    url: string;
-    method: string;
-    params: any;
-}
+// interface ConfigParamRequest {
+//     url: string;
+//     method: string;
+//     params: any;
+// }
 
 /**
  * Va cher executer une requête Http
@@ -163,7 +165,7 @@ export function useRequest<Kind>(
     filter: boolean = true,
     justeReponse?: boolean,
     actionSuplementaires?: { type: string; payload?: any }[]
-) {
+): void {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -174,31 +176,31 @@ export function useRequest<Kind>(
             //     Si la requête ne doit pas être envoyée directement quand l'utilisateur arrive sur sa page, ça nous permet d'attendre que la config
             //     soit ajoutée pour pouvoir effectuer la requête
 
-            let configTmp: ConfigParamRequest;
+            let configTmp: ConfigQueryParameter;
             if (config != null) {
-                configTmp = { method: config.method, url: config.url, params: config.params };
+                configTmp = { method: config.method as MethodRnhrh, url: config.url, params: config.params };
             }
 
-            if (filter && !httpRequestManager.some((x) => x.url === configTmp.url && x.method === configTmp.method && x.params === configTmp.params)) {
+            if (filter && !queryDirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
                 if (configTmp.url !== 'user/you') {
-                    httpRequestManager.push(configTmp);
+                    queryDirectoryService.addConfigQueryParameter(configTmp);
                 }
                 dispatch(chargementStartedAction());
 
                 const reponse = await fetchApi(config);
-                if (reponse != null) {
-                    dispatch(actionToDispatch(justeReponse == null || justeReponse === true ? reponse.data : reponse));
+                console.log(reponse);
+                
+                dispatch(actionToDispatch(justeReponse == null || justeReponse === true ? reponse.data : reponse));
 
-                    if (actionSuplementaires != null && actionSuplementaires.length > 0) {
-                        actionSuplementaires.forEach((as) => dispatch(as));
-                    }
-
-                    dispatch(chargementFinishedAction());
+                if (actionSuplementaires != null && actionSuplementaires.length > 0) {
+                    actionSuplementaires.forEach((as) => dispatch(as));
                 }
+
+                dispatch(chargementFinishedAction());
             }
         }
         fetch();
-    }, [httpRequestManager, filter]);
+    }, [queryDirectoryService, filter]);
 }
 
 /**
@@ -228,6 +230,11 @@ export function useFetchAvecOuSansParametre<Kind>(
     }
 }
 
+// @TODO retourner key/value 
+// Dans useFetchAvecOuSansParametre prendre en param la clé a rechercher comme actuellement
+// Si dans la requette http on aura besoin d'ajouter un autre param en get,
+// il faudra ajouter une propriete qui prendra en param la key/value 
+// Ensuite on pourra mapper les bonne valeur d'après les clés pour construire l'url
 export function getObjectInRouteParam(params: string[]) {
     const route = useRoute();
     let data = null;

@@ -1,10 +1,63 @@
 {
   "name": "react-native-http-request-handler",
-  "version": "1.0.82",
-  "description": "",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start --reset-cache",
+    "test": "jest",
+    "lint": "eslint .",
+    "prepare": "bob build"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.5",
+    "@react-native-community/cli": "^5.0.1-alpha.2",
+    "@react-navigation/native": "^5.9.4",
+    "axios": "^0.21.1",
+    "react": "17.0.1",
+    "react-native": "0.64.2",
+    "react-native-builder-bob": "^0.18.1",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/runtime": "^7.14.0",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@types/jest": "^26.0.23",
+    "@types/react": "^17.0.9",
+    "@types/react-native": "^0.64.10",
+    "@types/react-test-renderer": "^17.0.1",
+    "babel-jest": "^27.0.2",
+    "eslint": "^7.28.0",
+    "jest": "^27.0.4",
+    "metro-react-native-babel-preset": "^0.66.0",
+    "react-native-builder-bob": "^0.18.1",
+    "react-test-renderer": "17.0.1",
+    "typescript": "^4.3.2"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.5",
+    "@react-native-community/cli": "^5.0.1-alpha.2",
+    "@react-navigation/native": "^5.9.4",
+    "axios": "^0.21.1",
+    "react": "17.0.1",
+    "react-native": "0.64.2",
+    "react-native-builder-bob": "^0.18.1",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/lib/"
+    ],
+    "setupFiles": ["./__mocks__/@react-native-async-storage/async-storage.js"]
+  },
   "main": "lib\\commonjs\\index.js",
-  "module": "lib\\module\\index.js",
   "react-native": "src\\index.ts",
+  "module": "lib\\module\\index.js",
   "types": "lib\\typescript\\src\\index.d.ts",
   "files": [
     "src",
@@ -13,53 +66,6 @@
     "!**/__fixtures__",
     "!**/__mocks__"
   ],
-  "scripts": {
-    "prepare": "bob build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "react-native start",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios"
-  },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.4",
-    "@react-native-community/cli": "^5.0.1-alpha.2",
-    "@react-navigation/native": "^5.7.3",
-    "axios": "^0.20.0",
-    "react-native-eject": "^0.1.2",
-    "react-redux": "^7.2.1",
-    "redux": "^4.0.5"
-  },
-  "@react-native-community/bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "module",
-      "typescript"
-    ]
-  },
-  "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@types/node": "^15.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
-    "eslint": "^7.26.0",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "react": "17.0.1",
-    "react-native": "0.64.1",
-    "react-native-builder-bob": "^0.18.1",
-    "typescript": "~3.9.5"
-  },
-  "peerDependencies": {
-    "@react-navigation/native": "^5.7.3",
-    "axios": "^0.20.0",
-    "react": ">=16.11.0",
-    "react-native": ">=0.64.1",
-    "react-redux": "^7.2.1",
-    "redux": "^4.0.5"
-  },
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
