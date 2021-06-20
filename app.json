@@ -1,4 +1,10 @@
 {
   "name": "ReactNativeHttpRequestHandler",
-  "displayName": "ReactNativeHttpRequestHandler"
+  "displayName": "ReactNativeHttpRequestHandler",
+  "ios": {
+    "bundleIdentifier": "com.lunotte.reactnativehttprequesthandler"
+  },
+  "android": {
+    "package": "com.lunotte.reactnativehttprequesthandler"
+  }
 }

@@ -1,9 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { useRequest } from './src/effects';
+import { pourTestAction } from './src/redux/hook-action';
 
 const Child = () => {
+
+    const navigation = useNavigation();
+
+
+  //  navigation.navigate('Third', 'Je dois ajkouter param') //Je dois ajouter au moins 2 params pour tester la methode getObjectInRouteParam
 
 
     // const apiUserYou = {
@@ -20,11 +27,13 @@ const Child = () => {
     // const reponse = useRequestWithoutDispatch2(AXIOS_CONFIG_AUTHENTICATION, false, (data) => console.log('me voici', data));
     // console.log(reponse);
     const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-    useRequest(() => console.log('je suis le meilleur'), axiosConfig);
+    useRequest(pourTestAction, axiosConfig);
 
     return (
        <>
             <Text>Call me Jack</Text>
+            <Text>Call me Jack 2</Text>
+            <Text>Call me Jack 3</Text>
         </>
     );
 }

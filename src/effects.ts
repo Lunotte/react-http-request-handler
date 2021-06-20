@@ -33,7 +33,7 @@ import { default as queryDirectoryService } from './services/QueryDirectoryServi
     console.log('dispatch', dispatch);
 
     const configSelecteur = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === config.configAxiosEtat.label));
-
+                                                                        
     useEffect(() => {
         async function fetch() {
             console.log('fetch');
@@ -53,54 +53,22 @@ import { default as queryDirectoryService } from './services/QueryDirectoryServi
     }, [config, configSelecteur]);
 }
 
-
-/**
- * Charger la configuration des requêtes qui seront executées
- * @param configs 
- */
-export function useToLoadConfig(configs: ConfigAxios[]) {
-    console.log('Dans useToLoadConfig ====>>>> configs', configs);
-    
-    const dispatch = useDispatch();
-    dispatch(chargerConfigAction(configs.map(config => config.configAxiosEtat)));
-
-    configs.forEach(config => {
-        useRequestWithConfigAxios(config);
-    })
-}
-
-
-
+// ---------------- Comme le commentaire pour useRequestWithoutDispatch2
 // /**
-//  * Faire une requete sans avoir à faire une action post execution
-//  * @param config 
-//  * @param justeReponse 
-//  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
-//  * @returns 
+//  * Charger la configuration des requêtes qui seront executées
+//  * @param configs 
 //  */
-//  export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void) {
-//     const [state, setState] = useState({
-//         loading: true,
-//         data: null,
-//     });
+// export function useToLoadConfig(configs: ConfigAxios[]) {
+//     console.log('Dans useToLoadConfig ====>>>> configs', configs);
+    
+//     const dispatch = useDispatch();
+//     dispatch(chargerConfigAction(configs.map(config => config.configAxiosEtat)));
 
-//     useEffect(() => {
-//         async function fetch() {
-//             if (config) {
-//                 const reponse = await fetchApi(config);
-//                 const retour = justeReponse ? reponse.data : reponse;
-//                 if (codeAdditionel) {
-//                     codeAdditionel(retour);
-//                 } else {
-//                     setState({ loading: false, data: retour});
-//                 }
-//             }
-//         }
-//         fetch();
-//     }, [config?.method, config?.url, config?.data]);
-
-//     return state;
+//     configs.forEach(config => {
+//         useRequestWithConfigAxios(config);
+//     })
 // }
+
 
 
 /**
@@ -110,28 +78,16 @@ export function useToLoadConfig(configs: ConfigAxios[]) {
  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
  * @returns 
  */
- export function useRequestWithoutDispatch2(configLabel: string, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void, postData?: any) {
+ export function useRequestWithoutDispatch(config: AxiosRequestConfig, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void) {
     const [state, setState] = useState({
         loading: true,
         data: null,
     });
-     
-    const configSelecteur: ConfigAxiosEtat = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === configLabel));
-    console.log('configSelecteur', configSelecteur);
-     
-    let axiosRequest = configSelecteur?.axiosRequestConfig;
-     
-    if (postData) {
-        axiosRequest = { ...axiosRequest, data: postData};
-    }
-    console.log('axiosRequest2', axiosRequest);
 
     useEffect(() => {
         async function fetch() {
-            if (configSelecteur) {
-                console.log('configSelecteur', configSelecteur);
-                
-                const reponse = await fetchApi(axiosRequest);
+            if (config) {
+                const reponse = await fetchApi(config);
                 const retour = justeReponse ? reponse.data : reponse;
                 if (codeAdditionel) {
                     codeAdditionel(retour);
@@ -141,10 +97,55 @@ export function useToLoadConfig(configs: ConfigAxios[]) {
             }
         }
         fetch();
-    }, [axiosRequest?.method, axiosRequest?.url, axiosRequest?.data]);
+    }, [config?.method, config?.url, config?.data]);
 
     return state;
 }
+
+// ---------------------------- On peut garder cette portion pour plus tard quand on va 
+// ---------------------------- mettre en place le service de gestion des requetes pré-chargée
+// /**
+//  * Faire une requete sans avoir à faire une action post execution
+//  * @param config 
+//  * @param justeReponse 
+//  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
+//  * @returns 
+//  */
+//  export function useRequestWithoutDispatch2(configLabel: string, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void, postData?: any) {
+//     const [state, setState] = useState({
+//         loading: true,
+//         data: null,
+//     });
+     
+//     const configSelecteur: ConfigAxiosEtat = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === configLabel));
+//     console.log('configSelecteur', configSelecteur);
+     
+//     let axiosRequest = configSelecteur?.axiosRequestConfig;
+     
+//     if (postData) {
+//         axiosRequest = { ...axiosRequest, data: postData};
+//     }
+//     console.log('axiosRequest2', axiosRequest);
+
+//     useEffect(() => {
+//         async function fetch() {
+//             if (configSelecteur) {
+//                 console.log('configSelecteur', configSelecteur);
+                
+//                 const reponse = await fetchApi(axiosRequest);
+//                 const retour = justeReponse ? reponse.data : reponse;
+//                 if (codeAdditionel) {
+//                     codeAdditionel(retour);
+//                 } else {
+//                     setState({ loading: false, data: retour});
+//                 }
+//             }
+//         }
+//         fetch();
+//     }, [axiosRequest?.method, axiosRequest?.url, axiosRequest?.data]);
+
+//     return state;
+// }
 
 // interface ConfigParamRequest {
 //     url: string;
@@ -219,13 +220,22 @@ export function useFetchAvecOuSansParametre<Kind>(
     actionSuplementaires?: { type: string; payload?: any }[]
 ) {
     const route = useRoute();
+    const dataInRouteParam = getDataInRouteParam(params);
 
-    if (route.params == null || getObjectInRouteParam(params) == null) {
+    // Chaque paramètre va etre precede d'un /
+    let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) => 
+        avant.concat('/').concat(dataInRouteParam[maintenant]), '');
+
+    console.log(parametresConcatenes);
+    
+    if (route.params == null || dataInRouteParam == null) {
         useRequest<Kind>(actionToDispatch, config, filter, justeReponse, actionSuplementaires);
     } else {
         const apiAvecParam = { ...config };
-        apiAvecParam.url = config.url.concat('/').concat(getObjectInRouteParam(params));
-
+        if (config.url.endsWith('/')) {
+            parametresConcatenes = parametresConcatenes.substring(1);
+        }
+        apiAvecParam.url = config.url.concat(parametresConcatenes);
         useRequest<Kind>(actionToDispatch, apiAvecParam, filter, justeReponse, actionSuplementaires);
     }
 }
@@ -235,14 +245,15 @@ export function useFetchAvecOuSansParametre<Kind>(
 // Si dans la requette http on aura besoin d'ajouter un autre param en get,
 // il faudra ajouter une propriete qui prendra en param la key/value 
 // Ensuite on pourra mapper les bonne valeur d'après les clés pour construire l'url
-export function getObjectInRouteParam(params: string[]) {
+export function getDataInRouteParam(params: string[]) {
     const route = useRoute();
-    let data = null;
-    params.forEach((v) => {
-        if (data == null) {
-            data = route.params[v];
-        } else {
-            data = data[v];
+    let data = {};
+    
+    params.forEach((key) => {
+        const param = route.params[key];
+        if (param != null) {
+            console.log(param);
+            data[key] = param;
         }
     });
     return data;

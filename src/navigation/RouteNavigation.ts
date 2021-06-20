@@ -1,11 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 
 export const ROUTE_PAR_DEFAUT = 'ListeRendezVous';
-
-export const navigationRef = React.createRef();
+export const navigationRef = React.createRef<any>();
 
 export function navigateTo(name, params?) {
-    (<any>navigationRef.current)?.navigate(name);
+    navigationRef.current?.navigate(name);
 }
 
 /**
@@ -13,12 +13,11 @@ export function navigateTo(name, params?) {
  */
 export function navigateToPrevious() {
 
-    const current: any = navigationRef.current;
-    const currentRoute = current.getCurrentRoute().name;
+    const currentRoute = navigationRef.current.getCurrentRoute().name;
     if (currentRoute === 'Inscription') {
-        current?.navigate(currentRoute);
+        navigationRef.current?.navigate(currentRoute);
     } 
     else {
-        current?.navigate('ListeRendezVous');
+        navigationRef.current?.navigate('ListeRendezVous');
     } 
 }

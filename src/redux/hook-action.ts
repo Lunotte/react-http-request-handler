@@ -38,8 +38,6 @@ export const initSettingsAction = (settings: SettingsInitializerRnhrh) => {
 }
 
 export const pourTestAction = (param: any) => {
-    console.log(param);
-    
     return { type: POUR_TEST_ACTION, payload: param };
 }
 

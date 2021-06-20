@@ -30,6 +30,7 @@ import { InitializerRnhrh } from './src';
 import { useRequest } from './src/effects';
 import { default as Store } from './src//redux/hook-store';
 import Child from './Child';
+import Navigation from './Navigation';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -39,7 +40,7 @@ const App = () => {
   };
   return (
     <InitializerRnhrh>
-       <Child />
+       <Navigation />
     </InitializerRnhrh>
   );
 };
