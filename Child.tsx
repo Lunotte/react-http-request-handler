@@ -26,7 +26,7 @@ const Child = () => {
     // useToLoadConfig([axiosConfigAuthentication]);
     // const reponse = useRequestWithoutDispatch2(AXIOS_CONFIG_AUTHENTICATION, false, (data) => console.log('me voici', data));
     // console.log(reponse);
-    const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+    const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
     useRequest(pourTestAction, axiosConfig);
 
     return (
