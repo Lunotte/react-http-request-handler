@@ -43,8 +43,12 @@ describe('Add Configuration', () => {
     describe('Add Configuration - Tester params vide', () => {
         it('url - method - param array vide dans service, aucun param recherché', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: []};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {}};
             queryDirectoryService.addConfigQueryParameter(config);
+
+            console.log(queryDirectoryService.getConfigQueryParameters());
+            console.log(queryDirectoryService.hasConfigQueryParameter(config.url, config.method));
+            
 
             expect(queryDirectoryService.hasConfigQueryParameter(config.url, config.method)).toBeTruthy();
         });
@@ -62,7 +66,7 @@ describe('Add Configuration', () => {
 
         it('url - method - param array avec pour valeur unParam', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: ['unParam']};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {unParam: 'unParam'}};
             queryDirectoryService.addConfigQueryParameter(config);
             
             expect(queryDirectoryService.hasConfigQueryParameter(config.url, config.method, config.params)).toBe(true);
@@ -70,7 +74,7 @@ describe('Add Configuration', () => {
 
         it('url - method - param array avec pour valeur 5', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: [5]};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {val: 5}};
             queryDirectoryService.addConfigQueryParameter(config);
             
             expect(queryDirectoryService.hasConfigQueryParameter(config.url, config.method, config.params)).toBe(true);
@@ -78,7 +82,7 @@ describe('Add Configuration', () => {
 
         it('url - method - param array avec pour valeur unParam, 2, deuxParam', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: ['unParam', 2, 'deuxParam']};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier : 'unParam', second: 2, troisieme: 'deuxParam'}};
             queryDirectoryService.addConfigQueryParameter(config);
             
             expect(queryDirectoryService.hasConfigQueryParameter(config.url, config.method, config.params)).toBe(true);
@@ -107,7 +111,7 @@ describe('Find Configuration', () => {
     describe('Rechercher Configuration - Tester params vide', () => {
         it('url - method - param array vide dans service, aucun param recherché', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: []};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {}};
             queryDirectoryService.addConfigQueryParameter(config);
             
             const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method);
@@ -115,7 +119,7 @@ describe('Find Configuration', () => {
             expect(resultat).not.toBe(null);
             expect(resultat.method).toBe('GET');
             expect(resultat.url).toBe('uneUrl');
-            expect(resultat.params.length).toBe(0);
+            expect(Object.keys(resultat.params).length).toBe(0);
         });
 
         it('url - method - param array vide dans service, null param recherché', () => {
@@ -136,7 +140,7 @@ describe('Find Configuration', () => {
 
         it('url - method - param array avec pour valeur unParamn mais rechercher avec null', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: ['unParam']};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier: 'unParam'}};
             queryDirectoryService.addConfigQueryParameter(config);
             
             const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, null);
@@ -147,48 +151,41 @@ describe('Find Configuration', () => {
 
         it('url - method - param array avec pour valeur unParam', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: ['unParam']};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier: 'unParam'}};
             queryDirectoryService.addConfigQueryParameter(config);
             
-            const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, ['unParam']);
+            const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, {premier: 'unParam'});
             
             expect(resultat).not.toBe(null);
             expect(resultat.method).toBe('GET');
             expect(resultat.url).toBe('uneUrl');
-            expect(resultat.params.length).toBe(1);
-            expect(resultat.params[0]).toBe('unParam');
+            expect(Object.keys(resultat.params).length).toBe(1);
         });
 
         it('url - method - param array avec pour valeur 5', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: [5]};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier: 5}};
             queryDirectoryService.addConfigQueryParameter(config);
             
-            const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, [5]);
+            const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, {premier: 5});
             
             expect(resultat).not.toBe(null);
             expect(resultat.method).toBe('GET');
             expect(resultat.url).toBe('uneUrl');
-            expect(resultat.params.length).toBe(1);
-            expect(resultat.params[0]).toBe(5);
+            expect(Object.keys(resultat.params).length).toBe(1);
         });
 
         it('url - method - param array avec pour valeur unParam, 2, deuxParam', () => {
 
-            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: ['unParam', 2, 'deuxParam']};
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier : 'unParam', second: 2, troisieme: 'deuxParam'}};
             queryDirectoryService.addConfigQueryParameter(config);
             
-            console.log(queryDirectoryService.getConfigQueryParameters());
-            const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, ['unParam', 2, 'deuxParam']);
-            console.log(resultat);
+            const resultat = queryDirectoryService.getConfigQueryParameter(config.url, config.method, {premier : 'unParam', second: 2, troisieme: 'deuxParam'});
             
             expect(resultat).not.toBe(null);
             expect(resultat.method).toBe('GET');
             expect(resultat.url).toBe('uneUrl');
-            expect(resultat.params.length).toBe(3);
-            expect(resultat.params[0]).toBe('unParam');
-            expect(resultat.params[1]).toBe(2);
-            expect(resultat.params[2]).toBe('deuxParam');
+            expect(Object.keys(resultat.params).length).toBe(3);
         });
     });
 });
