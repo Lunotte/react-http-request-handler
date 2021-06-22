@@ -7,7 +7,7 @@ import { pourTestAction } from './src/redux/hook-action';
 const Third = () => {
 
 
-    const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+    const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
     useRequest(pourTestAction, axiosConfig);
 
     return (

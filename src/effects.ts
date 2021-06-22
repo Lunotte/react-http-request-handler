@@ -1,4 +1,4 @@
-import { ConfigQueryParameter, MethodRnhrh } from './models/QueryDirectory';
+import { ConfigQueryParameter, MethodRnhrh, TypeQueryParameter } from './models/QueryDirectory';
 import { RootState } from './redux/hook-store';
 import { chargementFinishedAction, chargementStartedAction, desactiverConfigAction, chargerConfigAction } from './redux/hook-action';
 import { ConfigAxios, ConfigAxiosEtat } from './models/AxiosConfig';
@@ -8,71 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 import { fetchApi } from './services/ApiServiceFetch';
 import { default as queryDirectoryService } from './services/QueryDirectoryService';
-
-//let httpRequestManager: ConfigParamRequest[] = [];
-
-
-//
-//  @TODO
-// Il pourrait être interessant de fusionner "useRequestWithConfigAxios" avec "useRequest"
-//
-// Idee: Lister les requetes possible dans un annuaire ( comme pour useRequestWithConfigAxios )
-// Bénéfice ??? On aura les requetes listées dans le state et on pourra toujours gérer le cache + amélioration du systeme de filtre
-// qui sera basé sur les actif (comme pour useRequestWithConfigAxios)
-// 
+import { default as queryStorageService } from './services/QueryStorageService';
 
 /**
- * Ce hook permet d'appeler une requete que l'on voudrait declencher plusieurs fois
- * Ceci n'utilise pas de cache
- * @param config Information concernant la requête à executer
- */
- export function useRequestWithConfigAxios(config: ConfigAxios) {
-    console.log('Dans useRequestWithConfigAxios ----->>>> config', config);
-    
-    const dispatch = useDispatch();
-    console.log('dispatch', dispatch);
-
-    const configSelecteur = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === config.configAxiosEtat.label));
-                                                                        
-    useEffect(() => {
-        async function fetch() {
-            console.log('fetch');
-            if (configSelecteur && configSelecteur.actif) {
-                const reponse = await fetchApi(config.configAxiosEtat.axiosRequestConfig);
-                console.log(reponse);
-                
-                if (reponse != null) {
-                    if (config.actionToDispatch) {
-                        dispatch(config.actionToDispatch(reponse.data));
-                    }
-                    dispatch(desactiverConfigAction(config.configAxiosEtat.label));
-                }
-            }
-        }
-        fetch();
-    }, [config, configSelecteur]);
-}
-
-// ---------------- Comme le commentaire pour useRequestWithoutDispatch2
-// /**
-//  * Charger la configuration des requêtes qui seront executées
-//  * @param configs 
-//  */
-// export function useToLoadConfig(configs: ConfigAxios[]) {
-//     console.log('Dans useToLoadConfig ====>>>> configs', configs);
-    
-//     const dispatch = useDispatch();
-//     dispatch(chargerConfigAction(configs.map(config => config.configAxiosEtat)));
-
-//     configs.forEach(config => {
-//         useRequestWithConfigAxios(config);
-//     })
-// }
-
-
-
-/**
- * Faire une requete sans avoir à faire une action post execution
+ * Faire une requete sans avoir à faire un dispatch post execution
+ * Si codeAdditionel ALORS l'algo sera utilisé SINON on retourne la données sous la forme {loading: boolean, data: any}
+ * 
  * @param config 
  * @param justeReponse 
  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
@@ -92,7 +33,7 @@ import { default as queryDirectoryService } from './services/QueryDirectoryServi
                 if (codeAdditionel) {
                     codeAdditionel(retour);
                 } else {
-                    setState({ loading: false, data: retour});
+                    setState({ loading: false, data: retour });
                 }
             }
         }
@@ -102,56 +43,93 @@ import { default as queryDirectoryService } from './services/QueryDirectoryServi
     return state;
 }
 
-// ---------------------------- On peut garder cette portion pour plus tard quand on va 
-// ---------------------------- mettre en place le service de gestion des requetes pré-chargée
-// /**
-//  * Faire une requete sans avoir à faire une action post execution
-//  * @param config 
-//  * @param justeReponse 
-//  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
-//  * @returns 
-//  */
-//  export function useRequestWithoutDispatch2(configLabel: string, justeReponse: boolean = true, codeAdditionel?: (param?: any) => void, postData?: any) {
-//     const [state, setState] = useState({
-//         loading: true,
-//         data: null,
-//     });
-     
-//     const configSelecteur: ConfigAxiosEtat = useSelector((state: RootState) => state.lib.configs.find((con: ConfigAxiosEtat) => con.label === configLabel));
-//     console.log('configSelecteur', configSelecteur);
-     
-//     let axiosRequest = configSelecteur?.axiosRequestConfig;
-     
-//     if (postData) {
-//         axiosRequest = { ...axiosRequest, data: postData};
-//     }
-//     console.log('axiosRequest2', axiosRequest);
 
-//     useEffect(() => {
-//         async function fetch() {
-//             if (configSelecteur) {
-//                 console.log('configSelecteur', configSelecteur);
-                
-//                 const reponse = await fetchApi(axiosRequest);
-//                 const retour = justeReponse ? reponse.data : reponse;
-//                 if (codeAdditionel) {
-//                     codeAdditionel(retour);
-//                 } else {
-//                     setState({ loading: false, data: retour});
-//                 }
-//             }
-//         }
-//         fetch();
-//     }, [axiosRequest?.method, axiosRequest?.url, axiosRequest?.data]);
+/**
+ * Faire une requete sans avoir à faire un dispatch post execution
+ * Si codeAdditionel ALORS l'algo sera utilisé SINON on retourne la données sous la forme {loading: boolean, data: any}
+ * 
+ * @param config 
+ * @param justeReponse 
+ * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
+ * @return loading: boolean, data: any
+ */
+ export function useRequestWithoutDispatch2(config: string, codeAdditionel?: (param?: any) => void) {
+    const [state, setState] = useState({
+        loading: true,
+        data: null,
+    });
 
-//     return state;
-// }
+    useEffect(() => {
+        async function fetch() {
 
-// interface ConfigParamRequest {
-//     url: string;
-//     method: string;
-//     params: any;
-// }
+            const configSelected = queryStorageService.getConfigAxios(config);
+
+            if (configSelected != null) {
+                const reponse = await fetchApi(configSelected.configAxiosEtat.axiosRequestConfig);
+                const retour = configSelected.justeReponse ? reponse.data : reponse;
+                if (codeAdditionel) {
+                    codeAdditionel(retour);
+                } else {
+                    setState({ loading: false, data: retour });
+                }
+            }
+        }
+        fetch();
+    }, [config]);
+
+    return state;
+}
+
+/**
+ * Va executer une requête Http
+ * @param actionToDispatch Action principal à dispatch lorsque la requête a été faite
+ * @param config Configuration des paramètres pour la requête Http
+ * @param justeReponse true par défaut, va simplement retourner la réponse, si false, retourne le header, etc...
+ * @param actionSuplementaires
+ */
+ export function useRequest2(
+    config: string,
+    filter: boolean = true, // Si on authorise le hook à s'executer
+): void {
+    const dispatch = useDispatch();
+     
+    useEffect(() => {
+        async function fetch() {
+
+            // Checker la valeur de config permet 2 choses:
+            // 1 : C'est un principe de base
+            // 2 : Comme les conditions peuvent seulement être effectuées dans le effect ou de manière général dans le Hook le plus bas.
+            //     Si la requête ne doit pas être envoyée directement quand l'utilisateur arrive sur sa page, ça nous permet d'attendre que la config
+            //     soit ajoutée pour pouvoir effectuer la requête
+
+            const configSelected = queryStorageService.getConfigAxios(config);
+            let configTmp: ConfigQueryParameter;
+            if (configSelected != null) {
+                const configAxios = configSelected.configAxiosEtat.axiosRequestConfig;
+                configTmp = { method: configAxios.method as MethodRnhrh, url: configAxios.url, params: configAxios.params };
+            }
+
+            if (filter && !queryDirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+                if (configSelected.configAxiosEtat.addToDirectory) { // On ajoute à l'annuaire
+                    queryDirectoryService.addConfigQueryParameter(configTmp);
+                }
+                dispatch(chargementStartedAction());
+
+                const reponse = await fetchApi(configSelected.configAxiosEtat.axiosRequestConfig);
+                console.log(reponse);
+
+                dispatch(configSelected.actionToDispatch(configSelected.justeReponse == null || configSelected.justeReponse === true ? reponse.data : reponse));
+
+                if (configSelected.actionToDispatchSuplementaires != null && configSelected.actionToDispatchSuplementaires.length > 0) {
+                    configSelected.actionToDispatchSuplementaires.forEach((as) => dispatch(as));
+                }
+
+                dispatch(chargementFinishedAction());
+            }
+        }
+        fetch();
+    });
+}
 
 /**
  * Va cher executer une requête Http
@@ -190,7 +168,7 @@ export function useRequest<Kind>(
 
                 const reponse = await fetchApi(config);
                 console.log(reponse);
-                
+
                 dispatch(actionToDispatch(justeReponse == null || justeReponse === true ? reponse.data : reponse));
 
                 if (actionSuplementaires != null && actionSuplementaires.length > 0) {
@@ -206,13 +184,20 @@ export function useRequest<Kind>(
 
 /**
  * A utiliser s'il faut ajouter des paramètres à la requête
- * @param param Paramètre fourni ( Exemple : profileId -> situé dans la route (navigation page du mobile) )  --->>> PATH PARAM <<---
+ * En mode PATH_PARAM, on peut concaténer avec les valeurs pré-saisies dans la config, cela ne fonctionne pas avec REQUEST_PARAM
+ * 
+ * @param params Paramètre fourni ( Exemple : profileId -> situé dans la route (parametre navigation entre les pages)) 
+ *              Les parametres données vont servir à extraire les parametres qui sont egalement present dans la navigation
+ * @param typeQueryParameter Determine si on veut faire une requete avec des paramètres split par des / ou par des &
  * @param actionToDispatch Action principal à dispatch lorsque la requête a été faite
- * @param config Configuration des paramètres pour la requête Http
- * @param filter Filtre pour savoir si la requ^^ete doit être executer maintenant ou non
+ * @param config Configuration Axios des paramètres pour la requête Http
+ * @param filter Filtre pour savoir si la requête doit être executer maintenant ou non
+ * @param justeReponse S'il on veut seulement le contenu de la réponse ou toutes les infos
+ * @param actionsSuplementaires Liste des actions en plus de "actionToDispatch"
  */
 export function useFetchAvecOuSansParametre<Kind>(
     params: string[],
+    typeQueryParameter: TypeQueryParameter,
     actionToDispatch: (reponse: Kind) => void,
     config: AxiosRequestConfig,
     filter: boolean = true,
@@ -222,33 +207,35 @@ export function useFetchAvecOuSansParametre<Kind>(
     const route = useRoute();
     const dataInRouteParam = getDataInRouteParam(params);
 
-    // Chaque paramètre va etre precede d'un /
-    let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) => 
-        avant.concat('/').concat(dataInRouteParam[maintenant]), '');
-
-    console.log(parametresConcatenes);
-    
     if (route.params == null || dataInRouteParam == null) {
         useRequest<Kind>(actionToDispatch, config, filter, justeReponse, actionSuplementaires);
     } else {
-        const apiAvecParam = { ...config };
-        if (config.url.endsWith('/')) {
-            parametresConcatenes = parametresConcatenes.substring(1);
+        let apiAvecParam = { ...config, url: config.url.endsWith('/') ? config.url.substring(0, config.url.length - 1) : config.url };
+
+        if (typeQueryParameter === 'PATH_PARAM') {
+            //    Chaque paramètre va etre precede d'un /
+            let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
+                avant.concat('/').concat(dataInRouteParam[maintenant]), '');
+            apiAvecParam = { ...apiAvecParam, url: apiAvecParam.url.concat(parametresConcatenes) };
         }
-        apiAvecParam.url = config.url.concat(parametresConcatenes);
+
+        if (typeQueryParameter === 'REQUEST_PARAM') {
+            apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
+        }
+
         useRequest<Kind>(actionToDispatch, apiAvecParam, filter, justeReponse, actionSuplementaires);
     }
 }
 
-// @TODO retourner key/value 
-// Dans useFetchAvecOuSansParametre prendre en param la clé a rechercher comme actuellement
-// Si dans la requette http on aura besoin d'ajouter un autre param en get,
-// il faudra ajouter une propriete qui prendra en param la key/value 
-// Ensuite on pourra mapper les bonne valeur d'après les clés pour construire l'url
+/**
+ * Récupèrer les paramètres dans l'url de navigation par rapport à ceux demandés en argument de la méthode
+ * @param params Liste de clés à retrouver
+ * @returns 
+ */
 export function getDataInRouteParam(params: string[]) {
     const route = useRoute();
     let data = {};
-    
+
     params.forEach((key) => {
         const param = route.params[key];
         if (param != null) {

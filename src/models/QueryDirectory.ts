@@ -17,3 +17,5 @@ export interface ParamRnhnh {
 // }
 
 export type MultiplePossibleValues = string | number | Date;
+
+export type TypeQueryParameter = 'REQUEST_PARAM' | 'PATH_PARAM';

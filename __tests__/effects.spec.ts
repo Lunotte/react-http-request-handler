@@ -42,7 +42,7 @@ describe('Remove Configuration', () => {
   it('Supprime les éléments configurés', async () => {
     //expect.assertions(5);
 
-    const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+    const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
 
     useEffectSpy = jest.spyOn(React, 'useEffect');
 

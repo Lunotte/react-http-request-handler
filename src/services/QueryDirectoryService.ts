@@ -4,7 +4,7 @@ import _ from "lodash";
 
 
 /**
- * Service de configuration des requêtes
+ * Service de stockage des requetes exécutées
  */
 class QueryDirectoryService {
 
@@ -82,8 +82,6 @@ class QueryDirectoryService {
  */
 const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean =>
 {
-    console.log(params1, params2,  _.isEqual(params1, params2));
-    
     if (params1 == null && params2 == null) {
         return true;
     } else if ((params1 == null && params2 != null && Object.keys(params2).length === 0) ||
