@@ -21,6 +21,10 @@ DerivedData
 *.ipa
 *.xcuserstate
 
+
+coverage/
+*.tgz
+
 # Android/IntelliJ
 #
 build/
@@ -120,7 +124,3 @@ buck-out/
 web-build/
 
 # @end expo-cli
-
-
-/coverage/
-*.tgz
