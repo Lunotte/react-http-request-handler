@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { default as Store } from './redux/hook-store';
-import { SettingsInitializerRnhrh } from './models/AxiosConfig';
 
 const InitializerRnhrh = (props: any) => {
 

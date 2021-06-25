@@ -26,9 +26,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { Provider } from 'react-redux';
-import { InitializerRnhrh } from './src';
-import { useRequest } from './src/effects';
-import { default as Store } from './src//redux/hook-store';
+import { InitializerRnhrh } from '../src';
+import { useRequest } from '../src/effects';
+import { default as Store } from '../src/redux/hook-store';
 import Child from './Child';
 import Navigation from './Navigation';
 

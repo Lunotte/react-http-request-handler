@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useRequest } from './src/effects';
-import { pourTestAction } from './src/redux/hook-action';
+import { useRequest } from '../src/effects';
+import { pourTestAction } from '../src/redux/hook-action';
 
 const Third = () => {
 

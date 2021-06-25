@@ -13,10 +13,10 @@ import { AxiosRequestConfig } from 'axios';
 /**
  * reduxIsActif ça peut servir
  */
-export interface SettingsInitializerRnhrh {
-    baseUrl: string,
-    reduxIsActif?: boolean;
-}
+// export interface SettingsInitializerRnhrh {
+//     baseUrl: string,
+//     reduxIsActif?: boolean;
+// }
 
 export interface ConfigAxiosEtat {
     readonly axiosRequestConfig: AxiosRequestConfig;

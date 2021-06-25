@@ -2,12 +2,11 @@ import React, { useCallback } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useFetchAvecOuSansParametre, useRequest2, useRequestWithoutDispatch, useRequestWithoutDispatch2 } from './src/effects';
-import { chargerConfigAction, pourTestAction } from './src/redux/hook-action';
+import { useFetchAvecOuSansParametre, useRequest2, useRequestWithoutDispatch, useRequestWithoutDispatch2 } from '../src/effects';
+import { pourTestAction } from '../src/redux/hook-action';
 import { AxiosRequestConfig } from 'axios';
-import { ConfigAxios, ConfigAxiosEtat } from './src';
-import { useDispatch, useSelector } from 'react-redux';
-import { default as queryStorageService } from './src/services/QueryStorageService';
+import { ConfigAxios, ConfigAxiosEtat } from '../src';
+import { default as queryAxiosService } from '../src/services/QueryAxiosService';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -30,10 +29,10 @@ const Moi = () => {
   // const dispatch = useDispatch();
   // dispatch(chargerConfigAction([configACharger]));
 
-  queryStorageService.addConfigAxios(configACharger);
-  queryStorageService.addConfigAxios(configACharger2);
-  queryStorageService.addConfigAxios(configAChargerSansDispatch);
-  console.log(queryStorageService.getAllConfigAxios());
+  queryAxiosService.addConfigAxios(configACharger);
+  queryAxiosService.addConfigAxios(configACharger2);
+  queryAxiosService.addConfigAxios(configAChargerSansDispatch);
+  console.log(queryAxiosService.getAllConfigAxios());
   
 
   const navigation = useNavigation();
