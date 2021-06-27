@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useRequest } from '../src/effects';
+import { useRequestFromName } from '../src/effects';
 import { pourTestAction } from '../src/redux/hook-action';
 
 const Child = () => {
@@ -27,7 +27,7 @@ const Child = () => {
     // const reponse = useRequestWithoutDispatch2(AXIOS_CONFIG_AUTHENTICATION, false, (data) => console.log('me voici', data));
     // console.log(reponse);
     const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
-    useRequest(pourTestAction, axiosConfig);
+   // useRequest(pourTestAction, axiosConfig);
 
     return (
        <>

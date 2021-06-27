@@ -98,3 +98,79 @@
 
 //   // afterAll(() => queryDirectoryService.removeAllQueryDirectory());
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import { AxiosRequestConfig } from "axios";
+// import * as effects from "./src/effects";
+// import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+// import * as redux from 'react-redux';
+// import { ConfigAxiosEtat, ConfigAxios } from './src';
+// import { chargementStartedAction, pourTestAction } from './src/redux/hook-action';
+// import * as ApiServiceFetch from './src/services/ApiServiceFetch';
+// import { useDispatch } from 'react-redux';
+
+// // Erreur :
+// // ReferenceError: You are trying to `import` a file after the Jest environment has been torn down.
+// //
+// // Résolue par :
+// // https://github.com/facebook/jest/issues/6434
+
+// //jest.useFakeTimers();
+
+// jest.mock('react-redux', () => ({
+//   ...jest.requireActual('react-redux'),
+//   useDispatch: jest.fn()
+// }));
+
+// const useDispatchMock = useDispatch as jest.Mock;
+
+// describe('Remove Configuration', () => {
+
+//   let useDispatchSpy;
+//   let fetchApiSpy;
+  
+//     it('Supprime les éléments configurés', async () => {
+//       const GOOGLE = 'GOOGLE';
+//       const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
+//       const configAxiosEtat: ConfigAxiosEtat = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true }
+//       const configACharger: ConfigAxios = { configAxiosEtat, actionToDispatch: pourTestAction, dataFromRoute: {params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM'} };
+
+//       const mockDispatchFn = jest.fn();
+//      // useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+//       fetchApiSpy = jest.spyOn(ApiServiceFetch, 'fetchApi');
+//       //useDispatchSpy.mockReturnValue(mockDispatchFn);
+
+//       // const mockDispatch = jest.fn();
+//       // jest.mock('react-redux', () => ({
+//       //   useSelector: jest.fn(),
+//       //   useDispatch: () => mockDispatch
+//       // }));
+//       fetchApiSpy.mockReturnValue({ status: 200, data: 'Un ensemble de données' });
+//       // const mockedDispatch = jest.fn();
+//       // mockDispatch.mockReturnValue(mockedDispatch);
+//       // mockDispatch.mockReturnValue(mockedDispatch);
+//       // mockDispatch.mockReturnValue(mockedDispatch);
+
+
+//       useDispatchMock.mockClear();
+
+//       effects.traitementUseRequest(GOOGLE, axiosConfig, true, false, pourTestAction, [], useDispatchMock);
+//       expect(useDispatchMock).toHaveBeenCalledTimes(3);
+//      // expect(mockDispatch).toBeCalledTimes(3);
+//   });
+
+// });

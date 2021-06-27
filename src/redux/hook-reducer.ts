@@ -1,4 +1,4 @@
-import { INIT_SETTINGS_ACTION } from './hook-action';
+import { CHARGEMENT_FINISHED_ACTION, CHARGEMENT_STARTED_ACTION, INIT_SETTINGS_ACTION } from './hook-action';
 import { ConfigAxiosEtat } from './../models/AxiosConfig';
 
 const initialHookState: any = {
@@ -6,11 +6,23 @@ const initialHookState: any = {
     baseUrl: null
   },
   configs: [],
+  queryInProgress: []
 };
 
 export default function hookReducer(state = initialHookState, action) {
 
   switch (action.type) {
+    case CHARGEMENT_STARTED_ACTION:
+      if (!state.queryInProgress.includes(action.label)) {
+        return {...state, queryInProgress: [...state.queryInProgress, action.label]}
+      }
+      return state;
+    case CHARGEMENT_FINISHED_ACTION:
+      if (state.queryInProgress.includes(action.label)) {
+        const queries = state.queryInProgress.filter(query => query !== action.label);
+        return {...state, queryInProgress: queries}
+      }
+      return state;
     case INIT_SETTINGS_ACTION:
       return configReducer(state, action);
     default:

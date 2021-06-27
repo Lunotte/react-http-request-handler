@@ -18,8 +18,8 @@ export const INIT_SETTINGS_ACTION = 'INIT_SETTINGS_ACTION'; // Utiliser une conf
 
 export const POUR_TEST_ACTION = 'POUR_TEST_ACTION'; // Utiliser une config précédemment chargée
 
-export const chargementStartedAction = () => ({ type: CHARGEMENT_STARTED_ACTION });
-export const chargementFinishedAction = () => ({ type: CHARGEMENT_FINISHED_ACTION });
+export const chargementStartedAction = (label: string) => ({ type: CHARGEMENT_STARTED_ACTION, label });
+export const chargementFinishedAction = (label: string) => ({ type: CHARGEMENT_FINISHED_ACTION, label });
 
 // export const chargerConfigAction = (configs: ConfigAxiosEtat[]) => {
 //     return { type: CHARGER_CONFIG_ACTION, payload: configs };

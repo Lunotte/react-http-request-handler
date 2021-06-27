@@ -42,6 +42,11 @@ class QueryDirectoryService {
         return this.configQueryParameter.some((config) => comparatorUrlMethodParams(config, url, method, params));
     }
 
+    /**
+     * Vérifier l'existance du paramètrage
+     * @param parameter Url recherchée
+     * @returns True si présent sinon False
+     */
     hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter): boolean {
         return this.hasConfigQueryParameter(parameter.url, parameter.method, parameter.params);
     }

@@ -1,3 +1,4 @@
+import { TypeQueryParameter } from './QueryDirectory';
 import { AxiosRequestConfig } from 'axios';
 
 // export interface ConfigAxios{
@@ -27,10 +28,16 @@ export interface ConfigAxiosEtat {
 }
 
 export interface ConfigAxios {
-    readonly actionToDispatch?: (data: any) => void;
-    readonly justeReponse?: boolean;
-    readonly actionToDispatchSuplementaires?: ActionToDispatch[]
     readonly configAxiosEtat: ConfigAxiosEtat;
+    readonly justeReponse?: boolean;
+    readonly actionToDispatch?: (data: any) => void;
+    readonly actionToDispatchSuplementaires?: ActionToDispatch[]
+    readonly dataFromRoute?: DataFromRoute;
+}
+
+export interface DataFromRoute {
+    params: string[],
+    typeQueryParameter: TypeQueryParameter,
 }
 
 export type ConfigAxiosTrigger = string;
