@@ -1,4 +1,4 @@
-import { SettingsInitializerRnhrh } from "../models/GestionConfig";
+import { KeyValue, SettingsInitializerRnhrh } from "../models/GestionConfig";
 
 class GestionConfig {
 
@@ -7,6 +7,7 @@ class GestionConfig {
     constructor() {
         this.parameters = {
             baseUrl: null,
+            headerUrl: [{key: 'Content-Type', value: 'application/json'}],
             reduxIsActif: false,
             useAsyncStorage: false
         }
@@ -24,7 +25,11 @@ class GestionConfig {
         return this.parameters.baseUrl;
     }
 
-    getParameterUseAsyncStorage(): boolean {
+    getParameterHeaderUrl(): KeyValue[] {
+        return this.parameters.headerUrl;
+    }
+
+    isUseAsyncStorage(): boolean {
         return this.parameters.useAsyncStorage;
     }
 

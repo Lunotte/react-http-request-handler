@@ -1,4 +1,3 @@
-import { ConfigAxios, ActionToDispatch } from './models/AxiosConfig';
 import { ConfigQueryParameter, MethodRnhrh, TypeQueryParameter } from './models/QueryDirectory';
 import { chargementFinishedAction, chargementStartedAction } from './redux/hook-action';
 import { AxiosRequestConfig } from 'axios';
@@ -8,6 +7,7 @@ import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { fetchApi } from './services/ApiServiceFetch';
 import { default as queryDirectoryService } from './services/QueryDirectoryService';
 import { default as queryAxiosService } from './services/QueryAxiosService';
+import { ConfigAxios, ActionToDispatch } from '.';
 
 
 
@@ -37,13 +37,10 @@ import { default as queryAxiosService } from './services/QueryAxiosService';
         data: null,
     });
      
-    const dispatch = useDispatch();
-
     useEffect(() => {
         async function fetch() {
             if (config && filter) {
                 return traitementUseRequestWithoutDispatch(
-                    dispatch,
                     config,
                     justeReponse,
                     false,
@@ -63,23 +60,21 @@ import { default as queryAxiosService } from './services/QueryAxiosService';
  * Faire une requete sans avoir à faire un dispatch post execution
  * Si codeAdditionel ALORS l'algo sera utilisé SINON on retourne la données sous la forme {loading: boolean, data: any}
  * 
- * @param config 
- * @param justeReponse 
+ * @param label 
+ * @param filter 
  * @param codeAdditionel Peut posseder un param qui sera le resultat de la requete
  * @return Si codeAdditionnel ? loading: boolean, data: resutat : loading: boolean, data: null
  */
- export function useRequestWithoutDispatchFromName(config: string, filter: boolean = true, codeAdditionel?: (param?: any) => void) {
+ export function useRequestWithoutDispatchFromName(label: string, filter: boolean = true, codeAdditionel?: (param?: any) => void) {
     const [state, setState] = useState({
         loading: false,
         data: null,
     });
      
-    const dispatch = useDispatch();
-     
     useEffect(() => {
         async function fetch() {
 
-            const configSelected = queryAxiosService.getConfigAxios(config);
+            const configSelected = queryAxiosService.getConfigAxios(label);
             if (configSelected != null) {
 
                 let configTmp: ConfigQueryParameter;
@@ -88,7 +83,6 @@ import { default as queryAxiosService } from './services/QueryAxiosService';
                 
                 if (filter && !queryDirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
                     return traitementUseRequestWithoutDispatch(
-                        dispatch,
                         configAxios,
                         configSelected.justeReponse,
                         configSelected.configAxiosEtat.addToDirectory,
@@ -100,13 +94,12 @@ import { default as queryAxiosService } from './services/QueryAxiosService';
             }
         }
         fetch();
-    }, [config, filter]);
+    }, [label, filter]);
 
     return state;
 }
 
 async function traitementUseRequestWithoutDispatch(
-    dispatch: Dispatch<any>,
     axiosRequestConfig: AxiosRequestConfig,
     justeReponse: boolean,
     addToDirectory: boolean,
@@ -221,16 +214,19 @@ export async function traitementUseRequest(
         dispatch(chargementStartedAction(label));
 
         const reponse = await fetchApi(axiosRequestConfig);
+        console.log(reponse);
         
-        if (addToDirectory) { // On ajoute à l'annuaire
-            queryDirectoryService.addConfigQueryParameter(configTmp);
+        if (reponse != null) {
+            if (addToDirectory) { // On ajoute à l'annuaire
+                queryDirectoryService.addConfigQueryParameter(configTmp);
+            }
+    
+            dispatch(actionToDispatch(justeReponse == null || justeReponse === true ? reponse.data : reponse));
+            if (actionToDispatchSuplementaires != null && actionToDispatchSuplementaires.length > 0) {
+                actionToDispatchSuplementaires.forEach((as) => dispatch(as));
+            }
+            dispatch(chargementFinishedAction(label));
         }
-
-        dispatch(actionToDispatch(justeReponse == null || justeReponse === true ? reponse.data : reponse));
-        if (actionToDispatchSuplementaires != null && actionToDispatchSuplementaires.length > 0) {
-            actionToDispatchSuplementaires.forEach((as) => dispatch(as));
-        }
-        dispatch(chargementFinishedAction(label));
     }
 }
 

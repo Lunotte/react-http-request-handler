@@ -15,7 +15,7 @@ import {
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-import { InitializerRnhrh } from '../src';
+import InitializerRnhrh from './InitializerRnhrh';
 import Navigation from './Navigation';
 
 const App = () => {

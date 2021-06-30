@@ -41,4 +41,5 @@ export interface DataFromRoute {
 }
 
 export type ConfigAxiosTrigger = string;
+
 export type ActionToDispatch = { type: string; payload?: any };

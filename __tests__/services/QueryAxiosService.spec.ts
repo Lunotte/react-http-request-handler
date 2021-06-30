@@ -1,8 +1,8 @@
 import { ConfigQueryParameter } from '../../src/models/QueryDirectory';
 import { default as queryAxiosService } from '../../src/services/QueryAxiosService';
 import { AxiosRequestConfig } from 'axios';
-import { ConfigAxiosEtat, ConfigAxios } from '../../src';
 import { pourTestAction } from '../../src/redux/hook-action';
+import { ConfigAxios, ConfigAxiosEtat } from '../../src';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';

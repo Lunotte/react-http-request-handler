@@ -5,9 +5,9 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { useFetchWithParamInRouteFromParameter, useRequestFromParameter, useRequestFromName, useRequestWithoutDispatchFromParameter, useRequestWithoutDispatchFromName, useFetchWithParamInRouteFromName } from '../src/effects';
 import { pourTestAction } from '../src/redux/hook-action';
 import { AxiosRequestConfig } from 'axios';
-import { ConfigAxios, ConfigAxiosEtat } from '../src';
 import { default as queryAxiosService } from '../src/services/QueryAxiosService';
 import { useState } from 'react';
+import { ConfigAxios, ConfigAxiosEtat } from '../src';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -15,7 +15,7 @@ const AMAZON = 'AMAZON';
 
 const Moi = () => {
 
-  const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
+  const axiosConfig: AxiosRequestConfig = { url: 'https://www.go0ogle.com', method: 'GET' };
   const configAxiosEtat: ConfigAxiosEtat = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true }
   const configACharger: ConfigAxios = { configAxiosEtat, actionToDispatch: pourTestAction, dataFromRoute: {params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM'} };
 
@@ -40,7 +40,7 @@ const Moi = () => {
   // console.log('ici');
   // useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
   useRequestFromName(GOOGLE, true);
-  useRequestFromName(MICROSOFT, true);
+  //useRequestFromName(MICROSOFT, true);
 
   const navigation = useNavigation();
 

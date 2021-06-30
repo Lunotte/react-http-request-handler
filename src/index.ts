@@ -1,6 +1,12 @@
-export { ConfigAxiosEtat, ConfigAxios } from './models/AxiosConfig';
-export { SettingsInitializerRnhrh } from './models/GestionConfig';
-export { default as InitializerRnhrh } from './InitializerRnhrh';
-export { default as hookReducer } from './redux/hook-reducer';
+export { ConfigQueryParameter, MethodRnhrh, ParamRnhnh, MultiplePossibleValues, TypeQueryParameter } from './models';
+export type { SettingsInitializerRnhrh, KeyValue, ConfigAxiosEtat, ConfigAxios, ActionToDispatch } from './models';
 export { default as gestionConfig } from './services/GestionConfigService'
-//export { useRequestWithConfigAxios, useToLoadConfig, useRequestWithoutDispatch2 } from './effects';
+export { default as queryAxiosService } from './services/QueryAxiosService'
+export {
+    useRequestWithoutDispatchFromParameter,
+    useRequestWithoutDispatchFromName,
+    useRequestFromName,
+    useRequestFromParameter,
+    useFetchWithParamInRouteFromParameter,
+    useFetchWithParamInRouteFromName
+} from './effects';

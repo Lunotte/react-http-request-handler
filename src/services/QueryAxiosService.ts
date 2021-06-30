@@ -1,11 +1,10 @@
-import { ConfigAxios } from "../models/AxiosConfig";
-
+import { ConfigAxios } from "..";
 
 /**
  * Service de configuration des requêtes
  * Permet de centraliser les requêtes à faire, pour en executer une, il suffit de l'appeler par son nom 
  */
-class QueryStorageService {
+class QueryAxiosService {
 
     private configsAxios: ConfigAxios[] = [];
 
@@ -107,5 +106,5 @@ class QueryStorageService {
 
 }
 
-const queryStorageService = new QueryStorageService();
-export default queryStorageService;
+const queryAxiosService = new QueryAxiosService();
+export default queryAxiosService;
