@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { default as Store } from '../src/redux/hook-store';
+import { default as Store } from '../src/redux/rh2-store';
 
 const InitializerRnhrh = (props: any) => {
 

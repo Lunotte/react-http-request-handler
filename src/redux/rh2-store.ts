@@ -1,5 +1,5 @@
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
-import hookReducer from './hook-reducer';
+import hookReducer from './rh2-reducer';
 
 
 let composeEnhancers = compose;

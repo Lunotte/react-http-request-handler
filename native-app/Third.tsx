@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { pourTestAction } from '../src/redux/hook-action';
+import { pourTestAction } from '../src/redux/rh2-action';
 
 const Third = () => {
 

@@ -1,18 +1,18 @@
-import { ConfigAxios } from "..";
+import { Rh2AxiosConfig } from "..";
 
 /**
  * Service de configuration des requêtes
  * Permet de centraliser les requêtes à faire, pour en executer une, il suffit de l'appeler par son nom 
  */
-class QueryAxiosService {
+class Rh2AxiosConfigService {
 
-    private configsAxios: ConfigAxios[] = [];
+    private configsAxios: Rh2AxiosConfig[] = [];
 
     /**
      * Obtenir tous les éléments stockés
      * @returns Tableau de résultat
      */
-    getAllConfigAxios(): ConfigAxios[] {
+    getAllConfigAxios(): Rh2AxiosConfig[] {
         return this.configsAxios;
     }
 
@@ -21,8 +21,8 @@ class QueryAxiosService {
      * @param id Query name
      * @returns L'élément recherché s'il existe
      */
-    getConfigAxios(id: string): ConfigAxios {
-        return this.configsAxios.find(config => config.configAxiosEtat.label === id);
+    getConfigAxios(id: string): Rh2AxiosConfig {
+        return this.configsAxios.find(config => config.label === id);
     }
 
     /**
@@ -31,16 +31,16 @@ class QueryAxiosService {
      * @returns True si présent sinon False
      */
     hasConfigAxios(id: string): boolean {
-        return this.configsAxios.some((config) => config.configAxiosEtat.label === id);
+        return this.configsAxios.some((config) => config.label === id);
     }
 
-   /**
-     * Ajouter un nouveau paramètrage
-     * Si le nom existe déjà, le paramètrage ne sera pas ajouté
-     * @param configAxios nouveau paramètrage
-     */
-    addConfigAxios(configAxios: ConfigAxios): void {
-        if (!this.hasConfigAxios(configAxios.configAxiosEtat.label)) {
+    /**
+      * Ajouter un nouveau paramètrage
+      * Si le nom existe déjà, le paramètrage ne sera pas ajouté
+      * @param configAxios nouveau paramètrage
+      */
+    addConfigAxios(configAxios: Rh2AxiosConfig): void {
+        if (!this.hasConfigAxios(configAxios.label)) {
             this.configsAxios.push(configAxios);
         }
     }
@@ -50,12 +50,15 @@ class QueryAxiosService {
      * @param label Query name
      * @param auth Ident to HTTP Basic auth
      */
-    addAuthToConfigAxios(label: string, auth: {username: string, password: string}): void {
+    addAuthToConfigAxios(label: string, auth: { username: string, password: string }): void {
         if (this.hasConfigAxios(label)) {
             let config = this.getConfigAxios(label);
             this.removeConfigAxios(label);
-            const configAxios = config.configAxiosEtat.axiosRequestConfig;
-            config = { ...config, configAxiosEtat: { ...config.configAxiosEtat, axiosRequestConfig: {...configAxios, auth} } }
+            const configAxios = config.axiosRequestConfig;
+            config = {
+                ...config,
+                axiosRequestConfig: { ...configAxios, auth }
+            };
             this.addConfigAxios(config);
         }
     }
@@ -69,8 +72,11 @@ class QueryAxiosService {
         if (this.hasConfigAxios(label)) {
             let config = this.getConfigAxios(label);
             this.removeConfigAxios(label);
-            const configAxios = config.configAxiosEtat.axiosRequestConfig;
-            config = { ...config, configAxiosEtat: { ...config.configAxiosEtat, axiosRequestConfig: {...configAxios, data: body} } }
+            const configAxios = config.axiosRequestConfig;
+            config = {
+                ...config,
+                axiosRequestConfig: { ...configAxios, data: body }
+            };
             this.addConfigAxios(config);
         }
     }
@@ -81,7 +87,7 @@ class QueryAxiosService {
      * @param label Query name
      * @param configAxios Config to replace
      */
-    replaceConfig(label: string, configAxios: ConfigAxios): void {
+    replaceConfig(label: string, configAxios: Rh2AxiosConfig): void {
         if (this.hasConfigAxios(label)) {
             this.removeConfigAxios(label);
             this.addConfigAxios(configAxios);
@@ -94,7 +100,7 @@ class QueryAxiosService {
      * @param label Label
      */
     removeConfigAxios(label: string): void {
-        this.configsAxios = this.configsAxios.filter(config => config.configAxiosEtat.label !== label);
+        this.configsAxios = this.configsAxios.filter(config => config.label !== label);
     }
 
     /**
@@ -106,5 +112,5 @@ class QueryAxiosService {
 
 }
 
-const queryAxiosService = new QueryAxiosService();
-export default queryAxiosService;
+const rh2AxiosConfigService = new Rh2AxiosConfigService();
+export default rh2AxiosConfigService;

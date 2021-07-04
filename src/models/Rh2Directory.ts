@@ -11,11 +11,6 @@ export interface ParamRnhnh {
     [name: string]: MultiplePossibleValues;
 }
 
-// export interface ParamRnhnh {
-//     readonly name: string;
-//     readonly value: MultiplePossibleValues;
-// }
-
 export type MultiplePossibleValues = string | number | Date;
 
 export type TypeQueryParameter = 'REQUEST_PARAM' | 'PATH_PARAM';

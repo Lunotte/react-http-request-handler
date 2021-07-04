@@ -1,12 +1,12 @@
 import { AxiosRequestConfig } from "axios";
-import { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh } from "../models/QueryDirectory";
+import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
 import _ from "lodash";
 
 
 /**
  * Service de stockage des requetes exécutées
  */
-class QueryDirectoryService {
+class Rh2DirectoryService {
 
     private configQueryParameter: ConfigQueryParameter[] = [];
 
@@ -26,8 +26,6 @@ class QueryDirectoryService {
      * @returns L'élément recherché s'il existe
      */
     getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): ConfigQueryParameter {
-      //  console.log(url, method);
-        
         return this.configQueryParameter.find(config => comparatorUrlMethodParams(config, url, method, params));
     }
     
@@ -66,8 +64,6 @@ class QueryDirectoryService {
     removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig): void {
         this.configQueryParameter = this.configQueryParameter.filter(config =>
             !comparatorUrlMethodParams(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
-       // console.log(this.configQueryParameter);
-        
     }
 
     /**
@@ -110,5 +106,5 @@ const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean =>
 const comparatorUrlMethodParams = (config, url, method, params): boolean =>   
     config.url === url && config.method === method && compareParams(config.params, params);
 
-const queryDirectoryService = new QueryDirectoryService();
-export default queryDirectoryService;
+const rh2DirectoryService = new Rh2DirectoryService();
+export default rh2DirectoryService;

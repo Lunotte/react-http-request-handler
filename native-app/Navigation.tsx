@@ -1,13 +1,15 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { useFetchWithParamInRouteFromParameter, useRequestFromParameter, useRequestFromName, useRequestWithoutDispatchFromParameter, useRequestWithoutDispatchFromName, useFetchWithParamInRouteFromName } from '../src/effects';
-import { pourTestAction } from '../src/redux/hook-action';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { useFetchWithParamInRouteFromParameter, useRequestFromParameter, useRequestFromName, useRequestWithoutDispatchFromParameter, useRequestWithoutDispatchFromName, useFetchWithParamInRouteFromName } from '../src/Rh2Effects';
+import { pourTestAction } from '../src/redux/rh2-action';
 import { AxiosRequestConfig } from 'axios';
-import { default as queryAxiosService } from '../src/services/QueryAxiosService';
+import { default as rh2AxiosConfigService } from '../src/services/Rh2AxiosConfigService';
 import { useState } from 'react';
-import { ConfigAxios, ConfigAxiosEtat } from '../src';
+import { Rh2AxiosConfig, rh2ConfigService } from '../src';
+import { rh2Error, rh2Errors } from '../src/redux/rh2-selector';
+import { useDispatch } from 'react-redux';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -15,34 +17,57 @@ const AMAZON = 'AMAZON';
 
 const Moi = () => {
 
-  const axiosConfig: AxiosRequestConfig = { url: 'https://www.go0ogle.com', method: 'GET' };
-  const configAxiosEtat: ConfigAxiosEtat = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true }
-  const configACharger: ConfigAxios = { configAxiosEtat, actionToDispatch: pourTestAction, dataFromRoute: {params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM'} };
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  rh2ConfigService.initializeParameters({
+    errorHandler: (param) => dispatch(pourTestAction('Test Par la conf générale')),
+    modeDebug: true
+  });
+
+  const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+  const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true, dataFromRoute: { params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' } }
 
   const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
-  const configAxiosEtat2: ConfigAxiosEtat = { axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false }
-  const configACharger2: ConfigAxios = { configAxiosEtat: configAxiosEtat2, actionToDispatch: pourTestAction };
-  
+  const configACharger2: Rh2AxiosConfig = {
+    axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false,
+    successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
+  };
+
   const axiosConfigSansDispatch: AxiosRequestConfig = { url: 'https://www.amazon.com', method: 'GET' };
-  const configAxiosEtatSansDispatch: ConfigAxiosEtat = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON }
-  const configAChargerSansDispatch: ConfigAxios = { configAxiosEtat: configAxiosEtatSansDispatch, justeReponse: true };
-  
+  const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, justeReponse: true };
+
   // const dispatch = useDispatch();
   // dispatch(chargerConfigAction([configACharger]));
 
-  queryAxiosService.addConfigAxios(configACharger);
-  queryAxiosService.addConfigAxios(configACharger2);
+  rh2AxiosConfigService.addConfigAxios(configACharger);
+  rh2AxiosConfigService.addConfigAxios(configACharger2);
 
-  // queryAxiosService.addConfigAxios(configACharger2);
-  // queryAxiosService.addConfigAxios(configAChargerSansDispatch);
-  // console.log(queryAxiosService.getAllConfigAxios());
+
+  // const erreurs = rh2Errors();
+  // console.log(erreurs);
+
+  // const erreursGoogle = rh2Error(MICROSOFT);
+  // console.log(erreursGoogle);
+
+  // const erreursMicrosoft = rh2Error(MICROSOFT);
+  // console.log(erreursMicrosoft);
+
+  // rh2AxiosConfigService.addConfigAxios(configACharger2);
+  // rh2AxiosConfigService.addConfigAxios(configAChargerSansDispatch);
+  // console.log(rh2AxiosConfigService.getAllConfigAxios());
 
   // console.log('ici');
-  // useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-  useRequestFromName(GOOGLE, true);
-  //useRequestFromName(MICROSOFT, true);
+  //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
+  //  useRequestFromName(GOOGLE, true);
 
-  const navigation = useNavigation();
+  // const toto3 = useRequestWithoutDispatchFromName(MICROSOFT, true, (resultat) => {
+  //   console.log('JE SUIS EN TRAIN DESSAYER QUELQUES CHOSE ...');
+  //   dispatch(pourTestAction(resultat));
+  //   Alert.alert('Gros con', 'On les aime les cons :)')
+  // });
+  // console.log(toto3);
+  useRequestFromName(MICROSOFT, true);
 
   const onMe = () => {
     console.log('Onme');
@@ -53,7 +78,7 @@ const Moi = () => {
     });
   }
 
-  return <View><Text>Moi</Text><Button title="Click me" onPress={() => onMe()}/></View>
+  return <View><Text>Moi</Text><Button title="Click me" onPress={() => onMe()} /></View>
 }
 
 const Moi2 = ({ route, navigation }) => {
@@ -78,21 +103,23 @@ const Moi2 = ({ route, navigation }) => {
   // useFetchWithParamInRouteFromName(GOOGLE, true);
   // useFetchWithParamInRouteFromParameter(['itemId'], 'REQUEST_PARAM', pourTestAction, { url: 'https://www.google.com', method: 'GET' });
 
+  useRequestFromName(MICROSOFT, state != null);
+
+  // useRequestFromName(MICROSOFT, state === 4);
 
   const onCall = () => {
     console.log('onCall');
     setstate(state + 1);
-
-   // useRequest2('GOOGLE');
+    // useRequest2('GOOGLE');
   }
 
 
 
   // const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
   // useRequestWithoutDispatchFromParameter(['itemId', 'otherParam'], 'REQUEST_PARAM', pourTestAction, axiosConfig);
-  
- // return <Text>Moi2</Text>
-  return <View><Text>Moi2</Text><Text>{state}</Text><Button title="Call" onPress={() => onCall()}/></View>
+
+  // return <Text>Moi2</Text>
+  return <View><Text>Moi2</Text><Text>{state}</Text><Button title="Call" onPress={() => onCall()} /></View>
 }
 
 

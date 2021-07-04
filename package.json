@@ -1,6 +1,6 @@
 {
   "name": "react-native-http-request-handler",
-  "version": "0.0.32",
+  "version": "0.0.38",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -23,7 +23,8 @@
     "react-native": "^0.64.2",
     "react-native-web": "^0.17.1",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.0"
+    "redux": "^4.1.0",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -61,7 +62,8 @@
     "react-native": "^0.64.2",
     "react-native-web": "^0.17.1",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.0"
+    "redux": "^4.1.0",
+    "reselect": "^4.0.0"
   },
   "jest": {
     "preset": "react-native",
