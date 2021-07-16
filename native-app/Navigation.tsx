@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
-import { useFetchWithParamInRouteFromParameter, useRequestFromParameter, useRequestFromName, useRequestWithoutDispatchFromParameter, useRequestWithoutDispatchFromName, useFetchWithParamInRouteFromName } from '../src/Rh2Effects';
+import { useFetchWithParamInRouteFromParameter, useRequestFromParameter, useRequestFromName, useRequestNotPreloadedWithParameter, useRequestPreloadedWithName, useFetchWithParamInRouteFromName } from '../src/services/Rh2EffectsService';
 import { pourTestAction } from '../src/redux/rh2-action';
 import { AxiosRequestConfig } from 'axios';
 import { default as rh2AxiosConfigService } from '../src/services/Rh2AxiosConfigService';
@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Rh2AxiosConfig, rh2ConfigService } from '../src';
 import { rh2Error, rh2Errors } from '../src/redux/rh2-selector';
 import { useDispatch } from 'react-redux';
+import { Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired } from '../src/models/Rh2Effect';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -38,10 +39,9 @@ const Moi = () => {
   const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, justeReponse: true };
 
   // const dispatch = useDispatch();
-  // dispatch(chargerConfigAction([configACharger]));
 
-  rh2AxiosConfigService.addConfigAxios(configACharger);
-  rh2AxiosConfigService.addConfigAxios(configACharger2);
+  // rh2AxiosConfigService.addConfigAxios(configACharger);
+  // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
   // const erreurs = rh2Errors();
@@ -61,13 +61,21 @@ const Moi = () => {
   //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
   //  useRequestFromName(GOOGLE, true);
 
-  // const toto3 = useRequestWithoutDispatchFromName(MICROSOFT, true, (resultat) => {
+  // const toto3 = useRequestPreloadedWithName(MICROSOFT, true, (resultat) => {
   //   console.log('JE SUIS EN TRAIN DESSAYER QUELQUES CHOSE ...');
   //   dispatch(pourTestAction(resultat));
   //   Alert.alert('Gros con', 'On les aime les cons :)')
   // });
   // console.log(toto3);
-  useRequestFromName(MICROSOFT, true);
+  
+  // useRequestFromName(MICROSOFT, true);
+
+  const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+  const configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = { config: axiosConfig3 };
+
+  const resultat = useRequestNotPreloadedWithParameter(configuration, true);
+  console.log(resultat);
+  
 
   const onMe = () => {
     console.log('Onme');
@@ -87,15 +95,15 @@ const Moi2 = ({ route, navigation }) => {
 
   //useRequest2('GOOGLE');
   //const axiosConfigSansDispatch: AxiosRequestConfig = { url: 'https://www.amazon.com', method: 'GET' };
-  // const toto = useRequestWithoutDispatchFromParameter(axiosConfigSansDispatch, true);
+  // const toto = useRequestNotPreloadedWithParameter(axiosConfigSansDispatch, true);
   // console.log(toto);
 
-  // const toto2 = useRequestWithoutDispatchFromParameter(axiosConfigSansDispatch, state === 2, true, (toto) => console.log('C\'est qui le meilleur', toto));
+  // const toto2 = useRequestNotPreloadedWithParameter(axiosConfigSansDispatch, state === 2, true, (toto) => console.log('C\'est qui le meilleur', toto));
   // console.log(toto2);
 
-  // const toto3 = useRequestWithoutDispatchFromName(GOOGLE, state === 5);
+  // const toto3 = useRequestPreloadedWithName(GOOGLE, state === 5);
   // console.log(toto3);
-  // const toto = useRequestWithoutDispatchFromName((state % 2) == 0 ? 'GOOGLE' : 'MICROSOFT');
+  // const toto = useRequestPreloadedWithName((state % 2) == 0 ? 'GOOGLE' : 'MICROSOFT');
   //console.log(toto.data);
 
   //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
@@ -116,7 +124,7 @@ const Moi2 = ({ route, navigation }) => {
 
 
   // const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
-  // useRequestWithoutDispatchFromParameter(['itemId', 'otherParam'], 'REQUEST_PARAM', pourTestAction, axiosConfig);
+  // useRequestNotPreloadedWithParameter(['itemId', 'otherParam'], 'REQUEST_PARAM', pourTestAction, axiosConfig);
 
   // return <Text>Moi2</Text>
   return <View><Text>Moi2</Text><Text>{state}</Text><Button title="Call" onPress={() => onCall()} /></View>

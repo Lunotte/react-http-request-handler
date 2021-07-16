@@ -91,6 +91,8 @@ class Rh2AxiosConfigService {
         if (this.hasConfigAxios(label)) {
             this.removeConfigAxios(label);
             this.addConfigAxios(configAxios);
+        } else {
+            this.addConfigAxios(configAxios);
         }
     }
 

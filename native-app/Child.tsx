@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useRequestFromName } from '../src/Rh2Effects';
+import { useRequestFromName } from '../src/services/Rh2EffectsService';
 import { pourTestAction } from '../src/redux/rh2-action';
 
 const Child = () => {

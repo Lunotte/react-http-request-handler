@@ -1,3 +1,7 @@
+
+/**
+ * errorHandler: Manipuler un callback specifique
+ */
 export interface SettingsInitializerRnhrh {
     baseUrl?: string; // Si la valeur est null alors on considère que les urls possèdent le chemin complet
     headerUrl?: KeyValue[]; // Par défaut : [{key: 'Content-Type', value: 'application/json'}]

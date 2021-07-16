@@ -9,4 +9,4 @@ export {
     useRequestFromParameter,
     useFetchWithParamInRouteFromParameter,
     useFetchWithParamInRouteFromName
-} from './Rh2Effects';
+} from './services/Rh2EffectsService';

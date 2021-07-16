@@ -42,6 +42,11 @@ describe('Replace Configuration', () => {
         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger2);
         expect(rh2AxiosConfigService.getAllConfigAxios().length).toBe(1);
     });
+
+    it('Replace a configuration even doesn\'t exist ', () => {
+        rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
+        expect(rh2AxiosConfigService.hasConfigAxios(GOOGLE)).toBe(true);
+    });
     afterEach(() => rh2AxiosConfigService.removeAllConfigAxios());
 });
 
