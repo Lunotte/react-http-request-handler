@@ -321,6 +321,8 @@ export function useFetchWithParamInRouteFromName(// useRh2WithNameTakeParamsInRo
 
 /**
  * 
+ *  !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
+ * 
  * @param params 
  * @param typeQueryParameter 
  * @param config 
