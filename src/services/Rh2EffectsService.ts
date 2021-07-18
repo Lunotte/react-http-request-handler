@@ -39,15 +39,17 @@ export async function useRequestNotPreloadedWithParameter(// useRh2WithParameter
         data: null,
     });
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         async function fetch() {
             return traitementUseRequestAllConfiguration(
-                {...configuration, action: setState, addToDirectory: false}
+                { ...configuration, action: setState, addToDirectory: false, dispatch, label: null }
             )
         }
         fetch();
     }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, filter]);
-    
+
     return state;
 }
 
@@ -58,7 +60,7 @@ export async function useRequestNotPreloadedWithParameter(// useRh2WithParameter
  * @param filter If true, trigger the request
  * @returns 
  */
-export async function useRequestPreloadedWithName(
+export async function useRequestPreloadedWithName(// useRh2WithName     -> Soit on garde et renomme avec ce nom, soit on supprime cette méthode
     label: string,
     filter: boolean = true
 ): Promise<{
@@ -69,9 +71,11 @@ export async function useRequestPreloadedWithName(
         loading: false,
         data: null,
     });
-     
+
     useEffect(() => {
         async function fetch() {
+
+            const dispatch = useDispatch();
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
 
@@ -81,11 +85,13 @@ export async function useRequestPreloadedWithName(
             console.log('configTmp', configTmp);
             return traitementUseRequestAllConfiguration(
                 {
+                    label,
                     config: configSelected?.axiosRequestConfig,
                     justeReponse: configSelected?.justeReponse,
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
+                    dispatch,
                     addToDirectory: configSelected?.addToDirectory
                 }
             )
@@ -97,7 +103,7 @@ export async function useRequestPreloadedWithName(
 }
 
 function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryParameter {
-   return { method: configAxios?.method as MethodRnhrh, url: configAxios?.url, params: configAxios?.params } as ConfigQueryParameter;
+    return { method: configAxios?.method as MethodRnhrh, url: configAxios?.url, params: configAxios?.params } as ConfigQueryParameter;
 }
 
 
@@ -106,36 +112,37 @@ async function traitementUseRequestAllConfiguration(
     filter: boolean = true,
 ) {
 
-	if (configuration.config != null) {
-        
+    if (configuration.config != null) {
+
         const configAxios = configuration.config;
         const configTmp = configToManageDirectory(configAxios);
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
-			configuration.action({ loading: true, data: null });
-			const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
-			
-			// Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
-			if (configuration.addToDirectory) { // On ajoute à l'annuaire
-				rh2DirectoryService.addConfigQueryParameter(configTmp);
-			}
 
-			if (reponse.isSuccess) {
-				if (configuration.successHandler) {
-					configuration.successHandler(reponse.responseSuccess);
-				}
-				
-				configuration.action({ loading: false, data: reponse.responseSuccess });
-			} else {
-				if (configuration.errorHandler) {
-					configuration.errorHandler(reponse);
-				} else if (rh2ConfigService.getParameters().errorHandler) { // Si dans la config global on a défini un handler
-					rh2ConfigService.getParameters().errorHandler(reponse);
-				}
-				configuration.action({ loading: false, data: null });
-			}
-		}
-	}
+            configuration.action({ loading: true, data: null });
+
+            if (configuration.label) { // @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
+                configuration.dispatch(chargementStartedAction(configuration.label));
+            }
+
+            const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
+
+            // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
+            if (configuration.addToDirectory) { // On ajoute à l'annuaire
+                rh2DirectoryService.addConfigQueryParameter(configTmp);
+            }
+
+            if (reponse.isSuccess) {
+                treatmentIfSuccessInUseRequest(configuration, reponse);
+            } else {
+                treatmentIfErrorInUseRequest(configuration, reponse);
+            }
+
+            if (configuration.label) {
+                configuration.dispatch(chargementFinishedAction(configuration.label));
+            }
+        }
+    }
 }
 
 
@@ -144,95 +151,95 @@ async function traitementUseRequestAllConfiguration(
  * @param label Name of the query to execute
  * @param filter If True, execute the request
  */
- export function useRequestFromName(// useRh2WithName
-    label: string,
-    filter: boolean = true, // Si on authorise le hook à s'executer
-): void {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        async function fetch() {
-            const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
+//  export function useRequestFromName(// useRh2WithName
+//     label: string,
+//     filter: boolean = true, // Si on authorise le hook à s'executer
+// ): void {
+//     const dispatch = useDispatch();
+//     useEffect(() => {
+//         async function fetch() {
+//             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
 
-            traitementUseRequest(
-                {
-                    label,
-                    config: configSelected?.axiosRequestConfig,
-                    justeReponse: configSelected?.justeReponse,
-                    addToDirectory:  configSelected?.addToDirectory,
-                    successHandler: configSelected?.successHandler,
-                    errorHandler: configSelected?.errorHandler,
-                    action: dispatch,
-                },
-                filter
-            );
-        }
-        fetch();
-    });
-}
+//             traitementUseRequest(
+//                 {
+//                     label,
+//                     config: configSelected?.axiosRequestConfig,
+//                     justeReponse: configSelected?.justeReponse,
+//                     addToDirectory:  configSelected?.addToDirectory,
+//                     successHandler: configSelected?.successHandler,
+//                     errorHandler: configSelected?.errorHandler,
+//                     action: dispatch,
+//                 },
+//                 filter
+//             );
+//         }
+//         fetch();
+//     });
+// }
 
-/**
- * Va cher executer une requête Http
- * @param actionToDispatch Action principal à dispatch lorsque la requête a été faite
- * @param config Configuration des paramètres pour la requête Http
- * @param justeReponse true par défaut, va simplement retourner la réponse, si false, retourne le header, etc...
- * @param actionToDispatchSuplementaires
- */
-export function useRequestFromParameter<Kind>( // useRh2WithParametersAndNeedDispatch -> nom à changer
-    configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerRequired,
-    filter: boolean = true
-): void {
-    const dispatch = useDispatch();
+// /**
+//  * Va cher executer une requête Http
+//  * @param actionToDispatch Action principal à dispatch lorsque la requête a été faite
+//  * @param config Configuration des paramètres pour la requête Http
+//  * @param justeReponse true par défaut, va simplement retourner la réponse, si false, retourne le header, etc...
+//  * @param actionToDispatchSuplementaires
+//  */
+// export function useRequestFromParameter<Kind>( // useRh2WithParametersAndNeedDispatch -> nom à changer
+//     configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerRequired,
+//     filter: boolean = true
+// ): void {
+//     const dispatch = useDispatch();
 
-    useEffect(() => {
-        async function fetch() {
-            traitementUseRequest(
-                {
-                    label: null,
-                    config: configuration.config,
-                    justeReponse: configuration.justeReponse,
-                    addToDirectory:  false,
-                    successHandler: configuration.successHandler,
-                    errorHandler: configuration.errorHandler,
-                    action: dispatch,
-                },
-                filter
-            );
-        }
-        fetch();
-    }, [rh2DirectoryService, filter]);
-}
+//     useEffect(() => {
+//         async function fetch() {
+//             traitementUseRequest(
+//                 {
+//                     label: null,
+//                     config: configuration.config,
+//                     justeReponse: configuration.justeReponse,
+//                     addToDirectory:  false,
+//                     successHandler: configuration.successHandler,
+//                     errorHandler: configuration.errorHandler,
+//                     action: dispatch,
+//                 },
+//                 filter
+//             );
+//         }
+//         fetch();
+//     }, [rh2DirectoryService, filter]);
+// }
 
 
-export async function traitementUseRequest(
-    configuration: Rh2EffectTreatmentUseRequest,
-    filter: boolean = true,
-) {
-    if (configuration.config != null) {
-        
-        const configAxios = configuration.config;
-        const configTmp = configToManageDirectory(configAxios);
+// export async function traitementUseRequest(
+//     configuration: Rh2EffectTreatmentUseRequest,
+//     filter: boolean = true,
+// ) {
+//     if (configuration.config != null) {
 
-        if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
-            console.log('Le filtre est OK');
-            configuration.action(chargementStartedAction(configuration.label));
+//         const configAxios = configuration.config;
+//         const configTmp = configToManageDirectory(configAxios);
 
-            const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
-            console.log('La réponse', reponse.isSuccess);
-            if (reponse != null) {
-                if (configuration.addToDirectory) { // On ajoute à l'annuaire
-                    rh2DirectoryService.addConfigQueryParameter(configTmp);
-                }
+//         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+//             console.log('Le filtre est OK');
+//             configuration.action(chargementStartedAction(configuration.label));
 
-                if (reponse.isSuccess) {
-                    treatmentIfSuccessInUseRequest(configuration, reponse);
-                } else {
-                    treatmentIfErrorInUseRequest(configuration, reponse);
-                }
-                configuration.action(chargementFinishedAction(configuration.label));
-            }
-        }
-    }
-}
+//             const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
+//             console.log('La réponse', reponse.isSuccess);
+//             if (reponse != null) {
+//                 if (configuration.addToDirectory) { // On ajoute à l'annuaire
+//                     rh2DirectoryService.addConfigQueryParameter(configTmp);
+//                 }
+
+//                 if (reponse.isSuccess) {
+//                     treatmentIfSuccessInUseRequest(configuration, reponse);
+//                 } else {
+//                     treatmentIfErrorInUseRequest(configuration, reponse);
+//                 }
+//                 configuration.action(chargementFinishedAction(configuration.label));
+//             }
+//         }
+//     }
+// }
 
 function treatmentIfSuccessInUseRequest(configuration, reponse) {
     if (configuration.successHandler) {
@@ -240,6 +247,7 @@ function treatmentIfSuccessInUseRequest(configuration, reponse) {
     } else {
         isModeDebugThenDisplayWarn('La méthode successHandler n\'a pas été défini');
     }
+    configuration.action({ loading: false, data: reponse.responseSuccess });
 }
 
 function treatmentIfErrorInUseRequest(configuration, reponse) {
@@ -247,8 +255,11 @@ function treatmentIfErrorInUseRequest(configuration, reponse) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
         rh2ConfigService.getParameters().errorHandler(reponse);
+    } else {
+        isModeDebugThenDisplayWarn('La méthode errorHandler n\'a pas été défini');
     }
-    configuration.action(apiErrordAction(configuration.label, reponse));
+    configuration.action({ loading: false, data: null });
+    configuration.dispatch(apiErrordAction(configuration.label, reponse));
 }
 
 
@@ -275,9 +286,10 @@ export function useFetchWithParamInRouteFromParameter(
 ) {
     const route = useRoute();
     if (configuration.config != null) {
-        
+
         traitementUseFetch(
             {
+                label: null,
                 config: configuration.config,
                 justeReponse: configuration.justeReponse,
                 params: configuration.params,
@@ -306,6 +318,7 @@ export function useFetchWithParamInRouteFromName(// useRh2WithNameTakeParamsInRo
     if (configSelected != null) {
         traitementUseFetch(
             {
+                label,
                 config: configSelected.axiosRequestConfig,
                 justeReponse: configSelected.justeReponse,
                 params: configSelected.dataFromRoute.params,
@@ -336,19 +349,28 @@ async function traitementUseFetch(
     configuration: Rh2EffectTreatmentWithParamInRouteFromParameter,
     filter: boolean = true
 ) {
+    const [state, setState] = useState({
+        loading: true,
+        data: null,
+    });
 
+    const dispatch = useDispatch();
     const dataInRouteParam = getDataInRouteParam(configuration.params, configuration.route);
 
     if (configuration.route.params == null || dataInRouteParam == null) {
         isModeDebugThenDisplayWarn('Aucun paramètre dans la route ou récupéré dans la route');
-        
-        useRequestFromParameter(
-            {
-                config: configuration.config,
-                successHandler: configuration.successHandler,
-                justeReponse: configuration.justeReponse,
-                errorHandler: configuration.errorHandler
-            },
+
+        // useRequestFromParameter(
+        //     {
+        //         config: configuration.config,
+        //         successHandler: configuration.successHandler,
+        //         justeReponse: configuration.justeReponse,
+        //         errorHandler: configuration.errorHandler
+        //     },
+        //     filter
+        // );
+        traitementUseRequestAllConfiguration(
+            { ...configuration, action: setState, addToDirectory: false, dispatch, label: null },
             filter
         );
     } else {
@@ -361,7 +383,7 @@ async function traitementUseFetch(
             //    Chaque paramètre va etre precede d'un /
             let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
                 avant.concat('/').concat(dataInRouteParam[maintenant]), '');
-            
+
             apiAvecParam = { ...apiAvecParam, url: apiAvecParam.url.concat(parametresConcatenes) };
         }
 
@@ -369,12 +391,17 @@ async function traitementUseFetch(
             apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
         }
 
-        useRequestFromParameter(
+        traitementUseRequestAllConfiguration(
             {
+                label: null,
                 config: apiAvecParam,
-                successHandler: configuration.successHandler,
                 justeReponse: configuration.justeReponse,
-                errorHandler: configuration.errorHandler
+                successHandler: configuration.successHandler,
+                errorHandler: configuration.errorHandler,
+                action: setState,
+                dispatch,
+                addToDirectory: false
+
             },
             filter
         );

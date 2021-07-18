@@ -25,11 +25,12 @@ export interface Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired extends Rh
 export interface Rh2EffectManageConfigAndReturnData {
     readonly addToDirectory: boolean;
     readonly action: any;
+    readonly dispatch: any;
 }
 
 export interface Rh2EffectTreatmentUseRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectAxiosConfigHandlerSuccessHandlerRequired { }
 
-export interface Rh2EffectTreatmentUseRequestAllConfiguration extends Rh2EffectManageConfigAndReturnData, Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired {
+export interface Rh2EffectTreatmentUseRequestAllConfiguration extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired {
     //readonly configTmp?: ConfigQueryParameter;
 }
 
@@ -38,8 +39,14 @@ export interface Rh2EffectFromParameter {
     readonly typeQueryParameter: TypeQueryParameter;
 }
 
+// export interface Rh2EffectWithParamInRouteFromParameter extends Rh2EffectFromParameter, Rh2EffectAxiosConfigHandlerSuccessHandlerRequired { }
+// export interface Rh2EffectTreatmentWithParamInRouteFromParameter extends Rh2EffectWithParamInRouteFromParameter {
+//     route: RouteProp<ParamListBase, string>
+// }
+
+
 export interface Rh2EffectWithParamInRouteFromParameter extends Rh2EffectFromParameter, Rh2EffectAxiosConfigHandlerSuccessHandlerRequired { }
-export interface Rh2EffectTreatmentWithParamInRouteFromParameter extends Rh2EffectWithParamInRouteFromParameter {
+export interface Rh2EffectTreatmentWithParamInRouteFromParameter extends Rh2EffectWithParamInRouteFromParameter, Rh2EffectLabelFilter {
     route: RouteProp<ParamListBase, string>
 }
 
