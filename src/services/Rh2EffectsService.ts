@@ -1,16 +1,16 @@
-import { Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired, Rh2EffectTreatmentUseRequest, Rh2EffectTreatmentUseRequestAllConfiguration, Rh2EffectAxiosConfigHandlerSuccessHandlerRequired, Rh2EffectTreatmentWithParamInRouteFromParameter, Rh2EffectWithParamInRouteFromParameter } from './../models/Rh2Effect';
-import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
-import { apiErrordAction, chargementFinishedAction, chargementStartedAction } from '../redux/rh2-action';
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
+import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
-import { fetchApi } from './FetchApiService';
-import { default as rh2DirectoryService } from './Rh2DirectoryService';
-import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
-import { default as rh2ConfigService } from './Rh2ConfigService';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
-import { AxiosRequestConfig } from 'axios';
+import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
+import { apiErrordAction, chargementFinishedAction, chargementStartedAction } from '../redux/rh2-action';
+import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute, Rh2EffectTreatmentToManageParameters, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
+import { fetchApi } from './FetchApiService';
+import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
+import { default as rh2ConfigService } from './Rh2ConfigService';
+import { default as rh2DirectoryService } from './Rh2DirectoryService';
 
 /*************************************************************************** */
 
@@ -21,16 +21,16 @@ import { AxiosRequestConfig } from 'axios';
 
 
 /**
- * 
+ * Get data from configuration
  * 
  * @param configuration Request to execute
  * @param filter If true, trigger the request
  * @returns 
  */
 export function useRh2WithParameters(
-    configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired,
+    configuration: Rh2EffectSuccessNotRequiredHandler,
     filter: boolean = true
-):{
+): {
     loading: boolean;
     data: any;
 } {
@@ -43,7 +43,7 @@ export function useRh2WithParameters(
 
     useEffect(() => {
         async function fetch() {
-            return traitementUseRequestAllConfiguration(
+            return traitementToManageRequest(
                 { ...configuration, action: setState, addToDirectory: false, dispatch, label: null }
             )
         }
@@ -55,6 +55,7 @@ export function useRh2WithParameters(
 
 
 /**
+ * Get data from label
  * 
  * @param label Name of the request pre loaded
  * @param filter If true, trigger the request
@@ -79,10 +80,7 @@ export function useRh2WithName(
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
 
-            const configAxios = configSelected?.axiosRequestConfig;
-            const configTmp = configToManageDirectory(configAxios);
-
-            return traitementUseRequestAllConfiguration(
+            return traitementToManageRequest(
                 {
                     label,
                     config: configSelected?.axiosRequestConfig,
@@ -105,12 +103,10 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
     return { method: configAxios?.method as MethodRnhrh, url: configAxios?.url, params: configAxios?.params } as ConfigQueryParameter;
 }
 
-
-async function traitementUseRequestAllConfiguration(
-    configuration: Rh2EffectTreatmentUseRequestAllConfiguration,
+async function traitementToManageRequest(
+    configuration: Rh2EffectTreatmentToManageRequest,
     filter: boolean = true,
 ) {
-
     if (configuration.config != null) {
 
         const configAxios = configuration.config;
@@ -119,11 +115,7 @@ async function traitementUseRequestAllConfiguration(
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
             configuration.action({ loading: true, data: null });
-
-            if (configuration.label) { // @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
-                configuration.dispatch(chargementStartedAction(configuration.label));
-            }
-            
+            loadingStartedDispatch(configuration);
             const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
 
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
@@ -137,13 +129,23 @@ async function traitementUseRequestAllConfiguration(
                 treatmentIfErrorInUseRequest(configuration, reponse);
             }
 
-            if (configuration.label) {
-                configuration.dispatch(chargementFinishedAction(configuration.label));
-            }
+            loadingCompletedDispatch(configuration);
         }
     }
 }
 
+// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
+function loadingStartedDispatch(configuration: Rh2EffectTreatmentToManageRequest) {
+    if (configuration.label) {
+        configuration.dispatch(chargementStartedAction(configuration.label));
+    }
+}
+// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
+function loadingCompletedDispatch(configuration: Rh2EffectTreatmentToManageRequest) {
+    if (configuration.label) {
+        configuration.dispatch(chargementFinishedAction(configuration.label));
+    }
+}
 
 
 function treatmentIfSuccessInUseRequest(configuration, reponse) {
@@ -200,7 +202,7 @@ function treatmentIfErrorInUseRequest(configuration, reponse) {
  * @param actionToDispatchSuplementaires Liste des actions en plus de "actionToDispatch"
  */
 export function useRh2WithParametersTakeParamsInRoute(
-    configuration: Rh2EffectWithParamInRouteFromParameter,
+    configuration: Rh2EffectTakeParamsInRoute,
     filter: boolean = true,
 ) {
     const route = useRoute();
@@ -211,21 +213,27 @@ export function useRh2WithParametersTakeParamsInRoute(
 
     const dispatch = useDispatch();
 
-    traitementUseFetch(
-        {
-            label: null,
-            config: configuration.config,
-            justeReponse: configuration.justeReponse,
-            params: configuration.params,
-            typeQueryParameter: configuration.typeQueryParameter,
-            route,
-            successHandler: configuration.successHandler,
-            errorHandler: configuration.errorHandler,
-            action: setState,
-            dispatch
-        },
-        filter
-    )
+    useEffect(() => {
+        async function fetch() {
+            traitementToManageParameters(
+                {
+                    label: null,
+                    config: configuration.config,
+                    justeReponse: configuration.justeReponse,
+                    params: configuration.params,
+                    typeQueryParameter: configuration.typeQueryParameter,
+                    route,
+                    successHandler: configuration.successHandler,
+                    errorHandler: configuration.errorHandler,
+                    action: setState,
+                    dispatch
+                },
+                filter
+            )
+        }
+        fetch();
+    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, filter]);
+    return state;
 }
 
 /**
@@ -250,8 +258,8 @@ export function useRh2WithNameTakeParamsInRoute(
     useEffect(() => {
         async function fetch() {
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-            
-            return traitementUseFetch(
+
+            return traitementToManageParameters(
                 {
                     label,
                     config: configSelected?.axiosRequestConfig,
@@ -274,26 +282,20 @@ export function useRh2WithNameTakeParamsInRoute(
 
 /**
  * 
- * @param params 
- * @param typeQueryParameter 
- * @param config 
- * @param justeReponse 
- * @param route 
- * @param successHandler Ce champ est obligatoire pour obtenir un résultat
- * @param errorHandler 
+ * @param configuration 
  * @param filter 
  */
-async function traitementUseFetch(
-    configuration: Rh2EffectTreatmentWithParamInRouteFromParameter,
+async function traitementToManageParameters(
+    configuration: Rh2EffectTreatmentToManageParameters,
     filter: boolean = true
 ) {
     if (configuration.config != null) {
         const dataInRouteParam = getDataInRouteParam(configuration.params, configuration.route);
-        
+
         if (configuration.route.params == null || dataInRouteParam == null) {
             isModeDebugThenDisplayWarn('Aucun paramètre dans la route ou récupéré dans la route');
 
-            traitementUseRequestAllConfiguration(
+            traitementToManageRequest(
                 { ...configuration, addToDirectory: false, label: null },
                 filter
             );
@@ -317,7 +319,7 @@ async function traitementUseFetch(
                 apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
             }
 
-            traitementUseRequestAllConfiguration(
+            traitementToManageRequest(
                 {
                     ...configuration,
                     label: null,
@@ -334,11 +336,12 @@ async function traitementUseFetch(
 /**
  * Récupèrer les paramètres dans l'url de navigation par rapport à ceux demandés en argument de la méthode
  * @param params Liste de clés à retrouver
- * @returns 
+ * @param route Hook useRoute seulement disponible pour la version native
+ * @returns La liste des éléments retrouvés
  */
 export function getDataInRouteParam(params: string[], route: RouteProp<ParamListBase, string>) {
     let data = {};
-    
+
     params.forEach((key) => {
         const param = route.params[key];
         if (param != null) {

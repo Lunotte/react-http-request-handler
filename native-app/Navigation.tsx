@@ -1,20 +1,21 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
-import { pourTestAction } from '../src/redux/rh2-action';
+import { createStackNavigator } from '@react-navigation/stack';
 import { AxiosRequestConfig } from 'axios';
-import { default as rh2AxiosConfigService } from '../src/services/Rh2AxiosConfigService';
-import { useState } from 'react';
-import { Rh2AxiosConfig, rh2ConfigService } from '../src';
-import { rh2Error, rh2Errors } from '../src/redux/rh2-selector';
+import React, { useState } from 'react';
+import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired } from '../src/models/Rh2Effect';
-import { useRh2WithNameTakeParamsInRoute, useRh2WithParametersTakeParamsInRoute, useRh2WithParameters, useRh2WithName } from '../src/services/Rh2EffectsService';
+import { Rh2AxiosConfig, rh2ConfigService } from '../src';
+import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
+import { pourTestAction } from '../src/redux/rh2-action';
+import { useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
 const AMAZON = 'AMAZON';
+
+
+const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+const configuration: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3 };
 
 const Moi = () => {
 
@@ -41,8 +42,8 @@ const Moi = () => {
 
   // const dispatch = useDispatch();
 
-  rh2AxiosConfigService.addConfigAxios(configACharger);
-  rh2AxiosConfigService.addConfigAxios(configACharger2);
+  // rh2AxiosConfigService.addConfigAxios(configACharger);
+  // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
   // const erreurs = rh2Errors();
@@ -68,15 +69,12 @@ const Moi = () => {
   //   Alert.alert('Gros con', 'On les aime les cons :)')
   // });
   // console.log(toto3);
-  
-  // useRequestFromName(MICROSOFT, true);
 
-  const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-  const configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = { config: axiosConfig3 };
+  // useRequestFromName(MICROSOFT, true);
 
   // const resultat = useRequestNotPreloadedWithParameter(configuration, true);
   // console.log(resultat);
-  
+
   // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
   // console.log(resultat2);
 
@@ -112,12 +110,13 @@ const Moi2 = ({ route, navigation }) => {
   //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
 
   // useRh2WithNameTakeParamsInRoute(GOOGLE, true);
-  // useRh2WithParametersTakeParamsInRoute(['itemId'], 'REQUEST_PARAM', pourTestAction, { url: 'https://www.google.com', method: 'GET' });
-
+  const conf: Rh2EffectTakeParamsInRoute = { ...configuration, params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' };
+  const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
+  console.log(resultat2)
   // useRequestFromName(MICROSOFT, state === 4);
 
-  const resultat3 = useRh2WithNameTakeParamsInRoute(GOOGLE, true);
-  console.log(resultat3)
+  // const resultat3 = useRh2WithNameTakeParamsInRoute(GOOGLE, true);
+  // console.log(resultat3)
 
   const onCall = () => {
     console.log('onCall');

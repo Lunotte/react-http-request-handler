@@ -1,12 +1,12 @@
-import { SettingsInitializerRnhrh } from './../../src/models/Rh2Config';
-import { Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired, Rh2EffectWithParamInRouteFromParameter } from './../../src/models/Rh2Effect';
 import { AxiosRequestConfig } from "axios";
-import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from "../../src";
-import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
-import * as FetchApiService from '../../src/services/FetchApiService';
-import * as redux from 'react-redux';
 import React from 'react';
-import { useRh2WithNameTakeParamsInRoute, useRh2WithParametersTakeParamsInRoute, useRh2WithParameters, useRh2WithName } from "../../src/services/Rh2EffectsService";
+import * as redux from 'react-redux';
+import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from "../../src";
+import * as FetchApiService from '../../src/services/FetchApiService';
+import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
+import { useRh2WithName, useRh2WithNameTakeParamsInRoute, useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from "../../src/services/Rh2EffectsService";
+import { SettingsInitializerRnhrh } from './../../src/models/Rh2Config';
+import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from './../../src/models/Rh2Effect';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -14,19 +14,15 @@ const MICROSOFT = 'MICROSOFT';
 // Stub the initial state
 const stubInitialState = ['stub data']
 
-// let useStateSpy = jest.spyOn(React, 'useState');
-// let mockStateFn = jest.fn();
-// useStateSpy.;
-
 jest.mock('@react-navigation/native', () => ({
     // @ts-ignore
     ...jest.requireActual('@react-navigation/native'),
     useRoute: () => ({
-      params: {
-        paramTest: 'Réponse à paramTest',
-      }
+        params: {
+            paramTest: 'Réponse à paramTest',
+        }
     }),
-  }));
+}));
 
 const setState = jest.fn();
 const useStateSpy = jest.spyOn(React, 'useState')
@@ -46,7 +42,7 @@ let fetchApiSpy;
 fetchApiSpy = jest.spyOn(FetchApiService, 'fetchApi');
 
 const axiosConfigGoogle: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-const configurationGoogle: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = { config: axiosConfigGoogle };
+const configurationGoogle: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigGoogle };
 
 function resetMocksAndServices() {
     rh2AxiosConfigService.removeAllConfigAxios();
@@ -95,7 +91,7 @@ describe('useRh2WithParameters', () => {
 
     it('Cas nominal avec succcess et successHandler', async () => {
 
-        const configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = { ...configurationGoogle, successHandler: () => console.log('Success !!!') };
+        const configuration: Rh2EffectSuccessNotRequiredHandler = { ...configurationGoogle, successHandler: () => console.log('Success !!!') };
 
         const reponse = { data: 'something' };
         const mockFetchApi = async () => {
@@ -126,7 +122,7 @@ describe('useRh2WithParameters', () => {
 
     it('Cas nominal avec erreur et errorHandler', async () => {
 
-        const configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = { ...configurationGoogle, errorHandler: () => console.log('Echec ...') };
+        const configuration: Rh2EffectSuccessNotRequiredHandler = { ...configurationGoogle, errorHandler: () => console.log('Echec ...') };
 
         const reponse = { data: 'something' };
         const mockFetchApi = async () => {
@@ -145,7 +141,7 @@ describe('useRh2WithParameters', () => {
         const initSettings: SettingsInitializerRnhrh = { errorHandler: () => console.log('Hello Guys, c\'est la loose ....') };
         rh2ConfigService.initializeParameters(initSettings);
 
-        const configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = configurationGoogle;
+        const configuration: Rh2EffectSuccessNotRequiredHandler = configurationGoogle;
 
         const reponse = { data: 'something' };
         const mockFetchApi = async () => {
@@ -359,7 +355,7 @@ describe('useRh2WithParametersTakeParamsInRoute', () => {
             axiosRequestConfig: configurationGoogle.config, label: GOOGLE,
             dataFromRoute: { typeQueryParameter: 'PATH_PARAM', params: ['paramTest'] }
         }
-        const configuration: Rh2EffectWithParamInRouteFromParameter = {...configurationGoogle, params: ['paramTest'], typeQueryParameter: 'PATH_PARAM'};
+        const configuration: Rh2EffectTakeParamsInRoute = { ...configurationGoogle, params: ['paramTest'], typeQueryParameter: 'PATH_PARAM' };
 
         const reponse = { data: 'something' };
         const mockFetchApi = async () => {
