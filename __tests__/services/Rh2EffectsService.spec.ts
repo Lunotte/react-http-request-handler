@@ -6,7 +6,7 @@ import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
 import * as FetchApiService from '../../src/services/FetchApiService';
 import * as redux from 'react-redux';
 import React from 'react';
-import { useFetchWithParamInRouteFromName, useFetchWithParamInRouteFromParameter, useRequestNotPreloadedWithParameter, useRequestPreloadedWithName } from "../../src/services/Rh2EffectsService";
+import { useRh2WithNameTakeParamsInRoute, useRh2WithParametersTakeParamsInRoute, useRh2WithParameters, useRh2WithName } from "../../src/services/Rh2EffectsService";
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -68,7 +68,7 @@ beforeAll(() => {
     initMocksServices();
 });
 
-describe('useRequestNotPreloadedWithParameter', () => {
+describe('useRh2WithParameters', () => {
 
     afterEach(() => {
         resetMocksAndServices();
@@ -87,7 +87,7 @@ describe('useRequestNotPreloadedWithParameter', () => {
 
         await mockFetchApi();
 
-        await useRequestNotPreloadedWithParameter(configurationGoogle, true);
+        await useRh2WithParameters(configurationGoogle, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
         expect(setState).toHaveBeenCalledWith({ loading: false, data: reponse });
@@ -103,7 +103,7 @@ describe('useRequestNotPreloadedWithParameter', () => {
         }
         await mockFetchApi();
 
-        await useRequestNotPreloadedWithParameter(configuration, true);
+        await useRh2WithParameters(configuration, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
         expect(setState).toHaveBeenCalledWith({ loading: false, data: reponse });
@@ -118,7 +118,7 @@ describe('useRequestNotPreloadedWithParameter', () => {
         }
         await mockFetchApi();
 
-        await useRequestNotPreloadedWithParameter(configurationGoogle, true);
+        await useRh2WithParameters(configurationGoogle, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
         expect(setState).toHaveBeenCalledWith({ loading: false, data: null });
@@ -134,7 +134,7 @@ describe('useRequestNotPreloadedWithParameter', () => {
         }
         await mockFetchApi();
 
-        await useRequestNotPreloadedWithParameter(configuration, true);
+        await useRh2WithParameters(configuration, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
         expect(setState).toHaveBeenCalledWith({ loading: false, data: null });
@@ -153,7 +153,7 @@ describe('useRequestNotPreloadedWithParameter', () => {
         }
         await mockFetchApi();
 
-        await useRequestNotPreloadedWithParameter(configuration, true);
+        await useRh2WithParameters(configuration, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
         expect(setState).toHaveBeenCalledWith({ loading: false, data: null });
@@ -165,7 +165,7 @@ describe('useRequestNotPreloadedWithParameter', () => {
 
 
 
-describe('useRequestPreloadedWithName', () => {
+describe('useRh2WithName', () => {
 
     afterEach(() => {
         resetMocks();
@@ -175,7 +175,7 @@ describe('useRequestPreloadedWithName', () => {
     //     initMocksServices();
     // });
 
-    describe('useRequestPreloadedWithName', () => {
+    describe('useRh2WithName', () => {
         it('Cas nominal avec succcess', async () => {
 
             const configACharger: Rh2AxiosConfig = { axiosRequestConfig: configurationGoogle.config, label: GOOGLE }
@@ -187,7 +187,7 @@ describe('useRequestPreloadedWithName', () => {
             }
             await mockFetchApi();
 
-            await useRequestPreloadedWithName(GOOGLE, true);
+            await useRh2WithName(GOOGLE, true);
 
             expect(setState).toHaveBeenCalledTimes(2);
             expect(setState).toHaveBeenCalledWith({ loading: false, data: reponse });
@@ -206,7 +206,7 @@ describe('useRequestPreloadedWithName', () => {
             }
             await mockFetchApi();
 
-            await useRequestPreloadedWithName(GOOGLE, true);
+            await useRh2WithName(GOOGLE, true);
 
             expect(setState).toHaveBeenCalledTimes(2);
             expect(setState).toHaveBeenCalledWith({ loading: false, data: reponse });
@@ -223,7 +223,7 @@ describe('useRequestPreloadedWithName', () => {
             }
             await mockFetchApi();
 
-            await useRequestPreloadedWithName(GOOGLE, true);
+            await useRh2WithName(GOOGLE, true);
             expect(setState).toHaveBeenCalledTimes(0);
         });
     });
@@ -232,7 +232,7 @@ describe('useRequestPreloadedWithName', () => {
 });
 
 
-describe('useRequestPreloadedWithName', () => {
+describe('useRh2WithName', () => {
     it('ne doit pas s\'executer car pas ajouter à la liste des config', async () => {
 
         const configACharger: Rh2AxiosConfig = { axiosRequestConfig: configurationGoogle.config, label: GOOGLE }
@@ -244,7 +244,7 @@ describe('useRequestPreloadedWithName', () => {
         }
         await mockFetchApi();
 
-        await useRequestPreloadedWithName(MICROSOFT, true);
+        await useRh2WithName(MICROSOFT, true);
 
         expect(setState).toHaveBeenCalledTimes(0);
         resetMocksAndServices();
@@ -253,7 +253,7 @@ describe('useRequestPreloadedWithName', () => {
 
 
 
-describe('useFetchWithParamInRouteFromName', () => {
+describe('useRh2WithNameTakeParamsInRoute', () => {
 
     afterEach(() => {
         resetMocksAndServices();
@@ -273,7 +273,7 @@ describe('useFetchWithParamInRouteFromName', () => {
         }
         await mockFetchApi();
 
-        await useFetchWithParamInRouteFromName(GOOGLE, true);
+        await useRh2WithNameTakeParamsInRoute(GOOGLE, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
     });
@@ -292,7 +292,7 @@ describe('useFetchWithParamInRouteFromName', () => {
         }
         await mockFetchApi();
 
-        await useFetchWithParamInRouteFromName(GOOGLE, true);
+        await useRh2WithNameTakeParamsInRoute(GOOGLE, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
     });
@@ -314,7 +314,7 @@ describe('useFetchWithParamInRouteFromName', () => {
         }
         await mockFetchApi();
 
-        await useFetchWithParamInRouteFromName(GOOGLE, true);
+        await useRh2WithNameTakeParamsInRoute(GOOGLE, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
     });
@@ -327,7 +327,7 @@ describe('useFetchWithParamInRouteFromName', () => {
         }
         rh2AxiosConfigService.addConfigAxios(configACharger);
 
-        await useFetchWithParamInRouteFromName(GOOGLE, true);
+        await useRh2WithNameTakeParamsInRoute(GOOGLE, true);
 
         expect(setState).toHaveBeenCalledTimes(0);
     });
@@ -346,13 +346,13 @@ describe('useFetchWithParamInRouteFromName', () => {
         }
         await mockFetchApi();
 
-        await useFetchWithParamInRouteFromName(GOOGLE, true);
+        await useRh2WithNameTakeParamsInRoute(GOOGLE, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
     });
 });
 
-describe('useFetchWithParamInRouteFromParameter', () => {
+describe('useRh2WithParametersTakeParamsInRoute', () => {
     it('Cas nominal', async () => {
 
         const configACharger: Rh2AxiosConfig = {
@@ -367,7 +367,7 @@ describe('useFetchWithParamInRouteFromParameter', () => {
         }
         await mockFetchApi();
 
-        await useFetchWithParamInRouteFromParameter(configuration, true);
+        await useRh2WithParametersTakeParamsInRoute(configuration, true);
 
         expect(setState).toHaveBeenCalledTimes(2);
         resetMocksAndServices();

@@ -27,7 +27,7 @@ import { AxiosRequestConfig } from 'axios';
  * @param filter If true, trigger the request
  * @returns 
  */
-export function useRequestNotPreloadedWithParameter(// useRh2WithParameters
+export function useRh2WithParameters(
     configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired,
     filter: boolean = true
 ):{
@@ -60,7 +60,7 @@ export function useRequestNotPreloadedWithParameter(// useRh2WithParameters
  * @param filter If true, trigger the request
  * @returns 
  */
-export function useRequestPreloadedWithName(// useRh2WithName     -> Soit on garde et renomme avec ce nom, soit on supprime cette méthode
+export function useRh2WithName(
     label: string,
     filter: boolean = true
 ): {
@@ -82,7 +82,6 @@ export function useRequestPreloadedWithName(// useRh2WithName     -> Soit on gar
             const configAxios = configSelected?.axiosRequestConfig;
             const configTmp = configToManageDirectory(configAxios);
 
-            console.log('configTmp', configTmp);
             return traitementUseRequestAllConfiguration(
                 {
                     label,
@@ -146,100 +145,6 @@ async function traitementUseRequestAllConfiguration(
 }
 
 
-/**
- * Execute a pre-load query
- * @param label Name of the query to execute
- * @param filter If True, execute the request
- */
-//  export function useRequestFromName(// useRh2WithName
-//     label: string,
-//     filter: boolean = true, // Si on authorise le hook à s'executer
-// ): void {
-//     const dispatch = useDispatch();
-//     useEffect(() => {
-//         async function fetch() {
-//             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-
-//             traitementUseRequest(
-//                 {
-//                     label,
-//                     config: configSelected?.axiosRequestConfig,
-//                     justeReponse: configSelected?.justeReponse,
-//                     addToDirectory:  configSelected?.addToDirectory,
-//                     successHandler: configSelected?.successHandler,
-//                     errorHandler: configSelected?.errorHandler,
-//                     action: dispatch,
-//                 },
-//                 filter
-//             );
-//         }
-//         fetch();
-//     });
-// }
-
-// /**
-//  * Va cher executer une requête Http
-//  * @param actionToDispatch Action principal à dispatch lorsque la requête a été faite
-//  * @param config Configuration des paramètres pour la requête Http
-//  * @param justeReponse true par défaut, va simplement retourner la réponse, si false, retourne le header, etc...
-//  * @param actionToDispatchSuplementaires
-//  */
-// export function useRequestFromParameter<Kind>( // useRh2WithParametersAndNeedDispatch -> nom à changer
-//     configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerRequired,
-//     filter: boolean = true
-// ): void {
-//     const dispatch = useDispatch();
-
-//     useEffect(() => {
-//         async function fetch() {
-//             traitementUseRequest(
-//                 {
-//                     label: null,
-//                     config: configuration.config,
-//                     justeReponse: configuration.justeReponse,
-//                     addToDirectory:  false,
-//                     successHandler: configuration.successHandler,
-//                     errorHandler: configuration.errorHandler,
-//                     action: dispatch,
-//                 },
-//                 filter
-//             );
-//         }
-//         fetch();
-//     }, [rh2DirectoryService, filter]);
-// }
-
-
-// export async function traitementUseRequest(
-//     configuration: Rh2EffectTreatmentUseRequest,
-//     filter: boolean = true,
-// ) {
-//     if (configuration.config != null) {
-
-//         const configAxios = configuration.config;
-//         const configTmp = configToManageDirectory(configAxios);
-
-//         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
-//             console.log('Le filtre est OK');
-//             configuration.action(chargementStartedAction(configuration.label));
-
-//             const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
-//             console.log('La réponse', reponse.isSuccess);
-//             if (reponse != null) {
-//                 if (configuration.addToDirectory) { // On ajoute à l'annuaire
-//                     rh2DirectoryService.addConfigQueryParameter(configTmp);
-//                 }
-
-//                 if (reponse.isSuccess) {
-//                     treatmentIfSuccessInUseRequest(configuration, reponse);
-//                 } else {
-//                     treatmentIfErrorInUseRequest(configuration, reponse);
-//                 }
-//                 configuration.action(chargementFinishedAction(configuration.label));
-//             }
-//         }
-//     }
-// }
 
 function treatmentIfSuccessInUseRequest(configuration, reponse) {
     if (configuration.successHandler) {
@@ -267,10 +172,18 @@ function treatmentIfErrorInUseRequest(configuration, reponse) {
 /**
  * 
  * 
- * !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
+ * 
+ * ------------------------------------------------------------------------
+ * 
+ *             !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
+ * 
+ * ------------------------------------------------------------------------
  * 
  * 
- * 
+ */
+
+
+/**
  * A utiliser s'il faut ajouter des paramètres à la requête
  * En mode PATH_PARAM, on peut concaténer avec les valeurs pré-saisies dans la config, cela ne fonctionne pas avec REQUEST_PARAM
  * 
@@ -286,7 +199,7 @@ function treatmentIfErrorInUseRequest(configuration, reponse) {
  * @param justeReponse S'il on veut seulement le contenu de la réponse ou toutes les infos
  * @param actionToDispatchSuplementaires Liste des actions en plus de "actionToDispatch"
  */
-export function useFetchWithParamInRouteFromParameter(
+export function useRh2WithParametersTakeParamsInRoute(
     configuration: Rh2EffectWithParamInRouteFromParameter,
     filter: boolean = true,
 ) {
@@ -317,16 +230,11 @@ export function useFetchWithParamInRouteFromParameter(
 
 /**
  * 
- * 
- * !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
- * 
- * 
- * 
  * Execute a pre-load query and add parameter provided by route navigation
  * @param label Name of the query to execute
  * @param filter If True, execute the request
  */
-export function useFetchWithParamInRouteFromName(// useRh2WithNameTakeParamsInRoute
+export function useRh2WithNameTakeParamsInRoute(
     label: string,
     filter: boolean = true,
 ) {
@@ -365,8 +273,6 @@ export function useFetchWithParamInRouteFromName(// useRh2WithNameTakeParamsInRo
 }
 
 /**
- * 
- *  !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
  * 
  * @param params 
  * @param typeQueryParameter 

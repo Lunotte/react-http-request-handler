@@ -3,10 +3,8 @@ export type { SettingsInitializerRnhrh, KeyValue, Rh2AxiosConfig, ActionToDispat
 export { rh2Errors, rh2Error, pourTestAction } from './redux';
 export { rh2ConfigService, rh2AxiosConfigService } from './services';
 export {
-    useRequestWithoutDispatchFromParameter,
-    useRequestWithoutDispatchFromName,
-    useRequestFromName,
-    useRequestFromParameter,
-    useFetchWithParamInRouteFromParameter,
-    useFetchWithParamInRouteFromName
+    useRh2WithParameters,
+    useRh2WithName,
+    useRh2WithParametersTakeParamsInRoute,
+    useRh2WithNameTakeParamsInRoute,
 } from './services/Rh2EffectsService';

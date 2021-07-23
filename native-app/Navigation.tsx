@@ -10,7 +10,7 @@ import { Rh2AxiosConfig, rh2ConfigService } from '../src';
 import { rh2Error, rh2Errors } from '../src/redux/rh2-selector';
 import { useDispatch } from 'react-redux';
 import { Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired } from '../src/models/Rh2Effect';
-import { useFetchWithParamInRouteFromName, useFetchWithParamInRouteFromParameter, useRequestNotPreloadedWithParameter, useRequestPreloadedWithName } from '../src/services/Rh2EffectsService';
+import { useRh2WithNameTakeParamsInRoute, useRh2WithParametersTakeParamsInRoute, useRh2WithParameters, useRh2WithName } from '../src/services/Rh2EffectsService';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -111,12 +111,12 @@ const Moi2 = ({ route, navigation }) => {
 
   //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
 
-  // useFetchWithParamInRouteFromName(GOOGLE, true);
-  // useFetchWithParamInRouteFromParameter(['itemId'], 'REQUEST_PARAM', pourTestAction, { url: 'https://www.google.com', method: 'GET' });
+  // useRh2WithNameTakeParamsInRoute(GOOGLE, true);
+  // useRh2WithParametersTakeParamsInRoute(['itemId'], 'REQUEST_PARAM', pourTestAction, { url: 'https://www.google.com', method: 'GET' });
 
   // useRequestFromName(MICROSOFT, state === 4);
 
-  const resultat3 = useFetchWithParamInRouteFromName(GOOGLE, true);
+  const resultat3 = useRh2WithNameTakeParamsInRoute(GOOGLE, true);
   console.log(resultat3)
 
   const onCall = () => {
