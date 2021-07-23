@@ -27,13 +27,13 @@ import { AxiosRequestConfig } from 'axios';
  * @param filter If true, trigger the request
  * @returns 
  */
-export async function useRequestNotPreloadedWithParameter(// useRh2WithParameters
+export function useRequestNotPreloadedWithParameter(// useRh2WithParameters
     configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired,
     filter: boolean = true
-): Promise<{
+):{
     loading: boolean;
     data: any;
-}> {
+} {
     const [state, setState] = useState({
         loading: true,
         data: null,
@@ -60,22 +60,22 @@ export async function useRequestNotPreloadedWithParameter(// useRh2WithParameter
  * @param filter If true, trigger the request
  * @returns 
  */
-export async function useRequestPreloadedWithName(// useRh2WithName     -> Soit on garde et renomme avec ce nom, soit on supprime cette méthode
+export function useRequestPreloadedWithName(// useRh2WithName     -> Soit on garde et renomme avec ce nom, soit on supprime cette méthode
     label: string,
     filter: boolean = true
-): Promise<{
+): {
     loading: boolean;
     data: any;
-}> {
+} {
     const [state, setState] = useState({
         loading: false,
         data: null,
     });
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         async function fetch() {
-
-            const dispatch = useDispatch();
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
 
@@ -124,7 +124,7 @@ async function traitementUseRequestAllConfiguration(
             if (configuration.label) { // @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
                 configuration.dispatch(chargementStartedAction(configuration.label));
             }
-
+            
             const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
 
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
@@ -265,6 +265,12 @@ function treatmentIfErrorInUseRequest(configuration, reponse) {
 
 
 /**
+ * 
+ * 
+ * !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
+ * 
+ * 
+ * 
  * A utiliser s'il faut ajouter des paramètres à la requête
  * En mode PATH_PARAM, on peut concaténer avec les valeurs pré-saisies dans la config, cela ne fonctionne pas avec REQUEST_PARAM
  * 
@@ -285,25 +291,37 @@ export function useFetchWithParamInRouteFromParameter(
     filter: boolean = true,
 ) {
     const route = useRoute();
-    if (configuration.config != null) {
+    const [state, setState] = useState({
+        loading: true,
+        data: null,
+    });
 
-        traitementUseFetch(
-            {
-                label: null,
-                config: configuration.config,
-                justeReponse: configuration.justeReponse,
-                params: configuration.params,
-                typeQueryParameter: configuration.typeQueryParameter,
-                route,
-                successHandler: configuration.successHandler,
-                errorHandler: configuration.errorHandler,
-            },
-            filter
-        )
-    }
+    const dispatch = useDispatch();
+
+    traitementUseFetch(
+        {
+            label: null,
+            config: configuration.config,
+            justeReponse: configuration.justeReponse,
+            params: configuration.params,
+            typeQueryParameter: configuration.typeQueryParameter,
+            route,
+            successHandler: configuration.successHandler,
+            errorHandler: configuration.errorHandler,
+            action: setState,
+            dispatch
+        },
+        filter
+    )
 }
 
 /**
+ * 
+ * 
+ * !!!!!!!!!!!!!!!! ONLY REACT NATIVE !!!!!!!!!!!!!!!!
+ * 
+ * 
+ * 
  * Execute a pre-load query and add parameter provided by route navigation
  * @param label Name of the query to execute
  * @param filter If True, execute the request
@@ -313,23 +331,37 @@ export function useFetchWithParamInRouteFromName(// useRh2WithNameTakeParamsInRo
     filter: boolean = true,
 ) {
     const route = useRoute();
-    const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
 
-    if (configSelected != null) {
-        traitementUseFetch(
-            {
-                label,
-                config: configSelected.axiosRequestConfig,
-                justeReponse: configSelected.justeReponse,
-                params: configSelected.dataFromRoute.params,
-                typeQueryParameter: configSelected.dataFromRoute.typeQueryParameter,
-                route,
-                successHandler: configSelected.successHandler,
-                errorHandler: configSelected.errorHandler,
-            },
-            filter
-        )
-    }
+    const [state, setState] = useState({
+        loading: true,
+        data: null,
+    });
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        async function fetch() {
+            const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
+            
+            return traitementUseFetch(
+                {
+                    label,
+                    config: configSelected?.axiosRequestConfig,
+                    justeReponse: configSelected?.justeReponse,
+                    params: configSelected?.dataFromRoute.params,
+                    typeQueryParameter: configSelected?.dataFromRoute.typeQueryParameter,
+                    route,
+                    successHandler: configSelected?.successHandler,
+                    errorHandler: configSelected?.errorHandler,
+                    action: setState,
+                    dispatch
+                },
+                filter
+            )
+        }
+        fetch();
+    }, [label, filter]);
+    return state;
 }
 
 /**
@@ -349,62 +381,47 @@ async function traitementUseFetch(
     configuration: Rh2EffectTreatmentWithParamInRouteFromParameter,
     filter: boolean = true
 ) {
-    const [state, setState] = useState({
-        loading: true,
-        data: null,
-    });
+    if (configuration.config != null) {
+        const dataInRouteParam = getDataInRouteParam(configuration.params, configuration.route);
+        
+        if (configuration.route.params == null || dataInRouteParam == null) {
+            isModeDebugThenDisplayWarn('Aucun paramètre dans la route ou récupéré dans la route');
 
-    const dispatch = useDispatch();
-    const dataInRouteParam = getDataInRouteParam(configuration.params, configuration.route);
+            traitementUseRequestAllConfiguration(
+                { ...configuration, addToDirectory: false, label: null },
+                filter
+            );
+        } else {
+            let apiAvecParam = {
+                ...configuration.config,
+                url: configuration.config.url.endsWith('/') ?
+                    configuration.config.url.substring(0, configuration.config.url.length - 1) :
+                    configuration.config.url
+            };
 
-    if (configuration.route.params == null || dataInRouteParam == null) {
-        isModeDebugThenDisplayWarn('Aucun paramètre dans la route ou récupéré dans la route');
+            if (configuration.typeQueryParameter === 'PATH_PARAM') {
+                //    Chaque paramètre va etre precede d'un /
+                let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
+                    avant.concat('/').concat(dataInRouteParam[maintenant]), '');
 
-        // useRequestFromParameter(
-        //     {
-        //         config: configuration.config,
-        //         successHandler: configuration.successHandler,
-        //         justeReponse: configuration.justeReponse,
-        //         errorHandler: configuration.errorHandler
-        //     },
-        //     filter
-        // );
-        traitementUseRequestAllConfiguration(
-            { ...configuration, action: setState, addToDirectory: false, dispatch, label: null },
-            filter
-        );
-    } else {
-        let apiAvecParam = {
-            ...configuration.config,
-            url: configuration.config.url.endsWith('/') ? configuration.config.url.substring(0, configuration.config.url.length - 1) : configuration.config.url
-        };
+                apiAvecParam = { ...apiAvecParam, url: apiAvecParam.url.concat(parametresConcatenes) };
+            }
 
-        if (configuration.typeQueryParameter === 'PATH_PARAM') {
-            //    Chaque paramètre va etre precede d'un /
-            let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
-                avant.concat('/').concat(dataInRouteParam[maintenant]), '');
+            if (configuration.typeQueryParameter === 'REQUEST_PARAM') {
+                apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
+            }
 
-            apiAvecParam = { ...apiAvecParam, url: apiAvecParam.url.concat(parametresConcatenes) };
+            traitementUseRequestAllConfiguration(
+                {
+                    ...configuration,
+                    label: null,
+                    config: apiAvecParam,
+                    addToDirectory: false
+
+                },
+                filter
+            );
         }
-
-        if (configuration.typeQueryParameter === 'REQUEST_PARAM') {
-            apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
-        }
-
-        traitementUseRequestAllConfiguration(
-            {
-                label: null,
-                config: apiAvecParam,
-                justeReponse: configuration.justeReponse,
-                successHandler: configuration.successHandler,
-                errorHandler: configuration.errorHandler,
-                action: setState,
-                dispatch,
-                addToDirectory: false
-
-            },
-            filter
-        );
     }
 }
 
@@ -415,7 +432,7 @@ async function traitementUseFetch(
  */
 export function getDataInRouteParam(params: string[], route: RouteProp<ParamListBase, string>) {
     let data = {};
-
+    
     params.forEach((key) => {
         const param = route.params[key];
         if (param != null) {
@@ -423,17 +440,17 @@ export function getDataInRouteParam(params: string[], route: RouteProp<ParamList
         }
     });
     isModeDebugThenDisplayInfo('Liste des params obtenu dans la route', data)
-    return data;
+    return Object.keys(data).length === 0 ? null : data;
 }
 
 function isModeDebugThenDisplayWarn(message: string): void {
-    if (rh2ConfigService.isModeDebug) {
+    if (rh2ConfigService.isModeDebug()) {
         console.warn(message);
     }
 }
 
 function isModeDebugThenDisplayInfo(message: string, data?: unknown): void {
-    if (rh2ConfigService.isModeDebug) {
+    if (rh2ConfigService.isModeDebug()) {
         console.info(message, data);
     }
 }

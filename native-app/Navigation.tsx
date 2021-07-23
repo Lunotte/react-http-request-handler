@@ -2,7 +2,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
-import { useFetchWithParamInRouteFromParameter, useRequestFromParameter, useRequestFromName, useRequestNotPreloadedWithParameter, useRequestPreloadedWithName, useFetchWithParamInRouteFromName } from '../src/services/Rh2EffectsService';
 import { pourTestAction } from '../src/redux/rh2-action';
 import { AxiosRequestConfig } from 'axios';
 import { default as rh2AxiosConfigService } from '../src/services/Rh2AxiosConfigService';
@@ -11,6 +10,7 @@ import { Rh2AxiosConfig, rh2ConfigService } from '../src';
 import { rh2Error, rh2Errors } from '../src/redux/rh2-selector';
 import { useDispatch } from 'react-redux';
 import { Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired } from '../src/models/Rh2Effect';
+import { useFetchWithParamInRouteFromName, useFetchWithParamInRouteFromParameter, useRequestNotPreloadedWithParameter, useRequestPreloadedWithName } from '../src/services/Rh2EffectsService';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -29,7 +29,8 @@ const Moi = () => {
   const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
   const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true, dataFromRoute: { params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' } }
 
-  const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
+  // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
+  const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
   const configACharger2: Rh2AxiosConfig = {
     axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false,
     successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
@@ -40,8 +41,8 @@ const Moi = () => {
 
   // const dispatch = useDispatch();
 
-  // rh2AxiosConfigService.addConfigAxios(configACharger);
-  // rh2AxiosConfigService.addConfigAxios(configACharger2);
+  rh2AxiosConfigService.addConfigAxios(configACharger);
+  rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
   // const erreurs = rh2Errors();
@@ -73,9 +74,11 @@ const Moi = () => {
   const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
   const configuration: Rh2EffectAxiosConfigHandlerSuccessHandlerNotRequired = { config: axiosConfig3 };
 
-  const resultat = useRequestNotPreloadedWithParameter(configuration, true);
-  console.log(resultat);
+  // const resultat = useRequestNotPreloadedWithParameter(configuration, true);
+  // console.log(resultat);
   
+  // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
+  // console.log(resultat2);
 
   const onMe = () => {
     console.log('Onme');
@@ -111,9 +114,10 @@ const Moi2 = ({ route, navigation }) => {
   // useFetchWithParamInRouteFromName(GOOGLE, true);
   // useFetchWithParamInRouteFromParameter(['itemId'], 'REQUEST_PARAM', pourTestAction, { url: 'https://www.google.com', method: 'GET' });
 
-  useRequestFromName(MICROSOFT, state != null);
-
   // useRequestFromName(MICROSOFT, state === 4);
+
+  const resultat3 = useFetchWithParamInRouteFromName(GOOGLE, true);
+  console.log(resultat3)
 
   const onCall = () => {
     console.log('onCall');
