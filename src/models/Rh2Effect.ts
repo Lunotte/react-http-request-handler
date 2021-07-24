@@ -6,14 +6,14 @@ export interface Rh2EffectLabelFilter {
     readonly label: string;
 }
 
+/**
+ * keyOfInstance: If is not provided, first instance will be used
+ */
 export interface Rh2EffectAxiosConfigHandler {
+    readonly keyOfInstance?: string; // Instance axios
     readonly config: AxiosRequestConfig;
     readonly justeReponse?: boolean; // si true ou non défini alors vaut true sinon false
     readonly errorHandler?: OptionalParamVoidMethod
-}
-
-export interface Rh2EffectSuccessRequiredHandler extends Rh2EffectAxiosConfigHandler {
-    readonly successHandler: OptionalParamVoidMethod,
 }
 
 export interface Rh2EffectSuccessNotRequiredHandler extends Rh2EffectAxiosConfigHandler {

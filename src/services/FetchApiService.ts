@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
-import configAxiosInstance from "../config/ConfigAxiosInstance";
 import { ErreurFetchApi, ResponseFetchApi } from "../models";
+import configAxiosInstance from "./Rh2AxiosInstanceService";
 
 /**
  * Aller chercher les données
@@ -8,7 +8,7 @@ import { ErreurFetchApi, ResponseFetchApi } from "../models";
  * @param dataImmediat Si on veut récupérer l'objet data ou bien conserver les information de la requête (ex: header, config, etc...)
  * @returns 
  */
-export async function fetchApi(config: AxiosRequestConfig, dataImmediat?: boolean): Promise<ResponseFetchApi> {
+export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig, dataImmediat?: boolean): Promise<ResponseFetchApi> {
 
   let fetchSuccess: ResponseFetchApi = {
     isSuccess: false,
@@ -28,7 +28,9 @@ export async function fetchApi(config: AxiosRequestConfig, dataImmediat?: boolea
   }
 
   try {
-    const resultData = await configAxiosInstance.request(config);
+    const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(configAxiosInstance)[0];
+
+    const resultData = await configAxiosInstance[axiosInstanceToUse].request(config);
     console.log('les données ont été récupérées depuis la lib', resultData);
 
     if (resultData.status >= 200 && resultData.status < 300) {
@@ -40,27 +42,18 @@ export async function fetchApi(config: AxiosRequestConfig, dataImmediat?: boolea
       // that falls out of the range of 2xx
       console.log(error.response);
       console.log(error.response.status);
-      return { ...fetchSuccess, status: error.response.status, isError: true, responseErreur: {...fetchErreur, isResponseError: true, responseError: error.response, messageError: error.message, config: error.config } };
+      return { ...fetchSuccess, status: error.response.status, isError: true, responseErreur: { ...fetchErreur, isResponseError: true, responseError: error.response, messageError: error.message, config: error.config } };
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
       console.log(error.request);
-      return { ...fetchSuccess, isError: true, responseErreur: {...fetchErreur, isRequestError: true, requestError: error.request, messageError: error.message, config: error.config } };
+      return { ...fetchSuccess, isError: true, responseErreur: { ...fetchErreur, isRequestError: true, requestError: error.request, messageError: error.message, config: error.config } };
     } else {
       // Something happened in setting up the request that triggered an Error
       console.log('Error', error.message);
-      return { ...fetchSuccess, isError: true, responseErreur: {...fetchErreur, messageError: error.message, config: error.config } };
+      return { ...fetchSuccess, isError: true, responseErreur: { ...fetchErreur, messageError: error.message, config: error.config } };
     }
   }
 
 }
-
-// export async function postApiAuth(url: string, data: any, params?: any): Promise<AxiosPromise | undefined> {
-//   try {
-//     return await Axios({ method: 'post', url, data, params });
-
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }

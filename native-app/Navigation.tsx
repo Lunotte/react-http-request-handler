@@ -4,10 +4,12 @@ import { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Rh2AxiosConfig, rh2ConfigService } from '../src';
+import { Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from '../src';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
 import { pourTestAction } from '../src/redux/rh2-action';
-import { useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+import { useRh2WithName, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+
+
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -15,7 +17,7 @@ const AMAZON = 'AMAZON';
 
 
 const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-const configuration: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3 };
+const configuration: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3, keyOfInstance: 'Test2' };
 
 const Moi = () => {
 
@@ -23,11 +25,36 @@ const Moi = () => {
   const navigation = useNavigation();
 
   rh2ConfigService.initializeParameters({
+    axiosConfig: [{
+      key: 'Test1', axiosConfig: { baseURL: 'https://www.google.com/' }, defaultInterceptor: false,
+      headerUrl: [{ key: 'CleDeTest', value: 'value to test' }]
+    },
+    {
+      key: 'Test2', axiosConfig: { baseURL: 'http://pompoarre.fr' },
+      headerUrl: [{ key: 'YoJack', value: 'Ça farte ?' }]
+    }],
     errorHandler: (param) => dispatch(pourTestAction('Test Par la conf générale')),
     modeDebug: true
   });
 
-  const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+  // Object.values(getAxiosInstances())[0].interceptors.request.use(
+  //   async (config) => {
+  //     console.log(config);
+  //     const headers = await mapAllHeaders([{ key: 'PAMPERS', value: 'BABY DRY' }]);;
+  //     console.log('headers', headers);
+  //     if (headers) {
+  //       if (config.method !== 'OPTIONS') {
+  //         config = { ...config, headers };
+  //       }
+  //     }
+  //     return config;
+  //   },
+  //   error => {
+  //     return Promise.reject(error);
+  //   });
+
+
+  const axiosConfig: AxiosRequestConfig = { url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5', method: 'GET' };
   const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true, dataFromRoute: { params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' } }
 
   // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
@@ -42,7 +69,9 @@ const Moi = () => {
 
   // const dispatch = useDispatch();
 
-  // rh2AxiosConfigService.addConfigAxios(configACharger);
+  rh2AxiosConfigService.addConfigAxios(configACharger);
+
+
   // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
@@ -61,7 +90,9 @@ const Moi = () => {
 
   // console.log('ici');
   //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-  //  useRequestFromName(GOOGLE, true);
+  const test = useRh2WithName(GOOGLE, true);
+
+  console.log(test);
 
   // const toto3 = useRequestPreloadedWithName(MICROSOFT, true, (resultat) => {
   //   console.log('JE SUIS EN TRAIN DESSAYER QUELQUES CHOSE ...');
@@ -72,7 +103,7 @@ const Moi = () => {
 
   // useRequestFromName(MICROSOFT, true);
 
-  // const resultat = useRequestNotPreloadedWithParameter(configuration, true);
+  // const resultat = useRh2WithParameters(configuration, true);
   // console.log(resultat);
 
   // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);

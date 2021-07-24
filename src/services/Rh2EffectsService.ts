@@ -79,9 +79,11 @@ export function useRh2WithName(
         async function fetch() {
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
+            console.log(configSelected);
 
             return traitementToManageRequest(
                 {
+                    keyOfInstance: configSelected.keyOfInstance,
                     label,
                     config: configSelected?.axiosRequestConfig,
                     justeReponse: configSelected?.justeReponse,
@@ -116,7 +118,7 @@ async function traitementToManageRequest(
 
             configuration.action({ loading: true, data: null });
             loadingStartedDispatch(configuration);
-            const reponse: ResponseFetchApi = await fetchApi(configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
+            const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance, configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
 
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
             if (configuration.addToDirectory) { // On ajoute à l'annuaire
@@ -217,14 +219,9 @@ export function useRh2WithParametersTakeParamsInRoute(
         async function fetch() {
             traitementToManageParameters(
                 {
+                    ...configuration,
                     label: null,
-                    config: configuration.config,
-                    justeReponse: configuration.justeReponse,
-                    params: configuration.params,
-                    typeQueryParameter: configuration.typeQueryParameter,
                     route,
-                    successHandler: configuration.successHandler,
-                    errorHandler: configuration.errorHandler,
                     action: setState,
                     dispatch
                 },
@@ -261,6 +258,7 @@ export function useRh2WithNameTakeParamsInRoute(
 
             return traitementToManageParameters(
                 {
+                    keyOfInstance: configSelected?.keyOfInstance,
                     label,
                     config: configSelected?.axiosRequestConfig,
                     justeReponse: configSelected?.justeReponse,

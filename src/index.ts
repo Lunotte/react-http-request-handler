@@ -1,10 +1,9 @@
-export { ConfigQueryParameter, MethodRnhrh, ParamRnhnh, MultiplePossibleValues, TypeQueryParameter } from './models';
-export type { SettingsInitializerRnhrh, KeyValue, Rh2AxiosConfig, ActionToDispatch, ResponseFetchApi, ErreurFetchApi, Rh2State, Rh2StateErreurApi } from './models';
-export { rh2Errors, rh2Error, pourTestAction } from './redux';
-export { rh2ConfigService, rh2AxiosConfigService } from './services';
+export * from 'axios';
+export { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh, TypeQueryParameter } from './models';
+export type { ActionToDispatch, ErreurFetchApi, KeyValue, ResponseFetchApi, Rh2AxiosConfig, Rh2State, Rh2StateErreurApi, SettingsInitializerRnhrh } from './models';
+export { pourTestAction, rh2Error, rh2Errors } from './redux';
+export { getAxiosInstances, rh2AxiosConfigService, rh2ConfigService } from './services';
 export {
-    useRh2WithParameters,
-    useRh2WithName,
-    useRh2WithParametersTakeParamsInRoute,
-    useRh2WithNameTakeParamsInRoute,
+    useRh2WithName, useRh2WithNameTakeParamsInRoute, useRh2WithParameters, useRh2WithParametersTakeParamsInRoute
 } from './services/Rh2EffectsService';
+

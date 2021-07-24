@@ -1,13 +1,15 @@
 import { KeyValue, SettingsInitializerRnhrh } from "../models/Rh2Config";
+import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 
 class Rh2ConfigService {
 
     private parameters: SettingsInitializerRnhrh;
 
+    public HEADER_URL: KeyValue[] = [{ key: 'Content-Type', value: 'application/json' }]
+
     constructor() {
         this.parameters = {
-            baseUrl: null,
-            headerUrl: [{key: 'Content-Type', value: 'application/json'}],
+            axiosConfig: [],
             reduxIsActif: false,
             useAsyncStorage: false,
             errorHandler: null,
@@ -16,10 +18,11 @@ class Rh2ConfigService {
     }
 
     initializeParameters(parameters: SettingsInitializerRnhrh) {
+        console.log(parameters);
+
         this.parameters = {
             ...this.parameters,
-            baseUrl: parameters.baseUrl == null ? this.parameters.baseUrl : parameters.baseUrl,
-            headerUrl: parameters.headerUrl == null ? this.parameters.headerUrl : parameters.headerUrl,
+            axiosConfig: parameters.axiosConfig,
             reduxIsActif: parameters.reduxIsActif == null ? this.parameters.reduxIsActif : parameters.reduxIsActif,
             useAsyncStorage: parameters.useAsyncStorage == null ? this.parameters.useAsyncStorage : parameters.useAsyncStorage,
             errorHandler: parameters.errorHandler == null ? this.parameters.errorHandler : parameters.errorHandler,
@@ -31,12 +34,8 @@ class Rh2ConfigService {
         return this.parameters;
     }
 
-    getParameterBaseUrl(): string {
-        return this.parameters.baseUrl;
-    }
-
-    getParameterHeaderUrl(): KeyValue[] {
-        return this.parameters.headerUrl;
+    getParametersAxiosConfigs(): AxiosRequestConfigExtended[] {
+        return this.parameters.axiosConfig;
     }
 
     isUseAsyncStorage(): boolean {
