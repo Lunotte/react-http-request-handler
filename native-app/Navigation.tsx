@@ -1,13 +1,13 @@
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from '../src';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
 import { pourTestAction } from '../src/redux/rh2-action';
-import { useRh2WithName, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+import { useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
 
 
 
@@ -17,7 +17,14 @@ const AMAZON = 'AMAZON';
 
 
 const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-const configuration: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3, keyOfInstance: 'Test2' };
+let configuration3: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3, keyOfInstance: 'Test2' };
+
+
+let CancelToken = axios.CancelToken;
+let source;// = CancelToken.source();
+
+const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
+let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis, keyOfInstance: 'Test2' };
 
 const Moi = () => {
 
@@ -90,9 +97,10 @@ const Moi = () => {
 
   // console.log('ici');
   //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-  const test = useRh2WithName(GOOGLE, true);
+  // const test = useRh2WithName(GOOGLE, true);
+  // console.log(test);
 
-  console.log(test);
+  // source.cancel('test cancellation');
 
   // const toto3 = useRequestPreloadedWithName(MICROSOFT, true, (resultat) => {
   //   console.log('JE SUIS EN TRAIN DESSAYER QUELQUES CHOSE ...');
@@ -103,19 +111,30 @@ const Moi = () => {
 
   // useRequestFromName(MICROSOFT, true);
 
-  // const resultat = useRh2WithParameters(configuration, true);
-  // console.log(resultat);
+  const resultat = useRh2WithParameters(configurationBis, true);
+  console.log(resultat);
 
   // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
   // console.log(resultat2);
 
+  const [state, setstate] = useState<number>(0);
+
   const onMe = () => {
+    if (source != null) {
+      source.cancel('test cancellation');
+    }
+    setstate(state + 1);
+
     console.log('Onme');
+    source = axios.CancelToken.source();
+    configurationBis = { ...configurationBis, config: { ...configurationBis.config, params: state, cancelToken: source.token } };
+    console.log('configuration dans navigation ', configurationBis);
+
     //navigation.navigate({name: 'Details', params: [{jack: '5'}]});
-    navigation.navigate('Details', {
-      itemId: 86,
-      otherParam: 'anything you want here',
-    });
+    // navigation.navigate('Details', {
+    //   itemId: 86,
+    //   otherParam: 'anything you want here',
+    // });
   }
 
   return <View><Text>Moi</Text><Button title="Click me" onPress={() => onMe()} /></View>
@@ -141,7 +160,7 @@ const Moi2 = ({ route, navigation }) => {
   //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
 
   // useRh2WithNameTakeParamsInRoute(GOOGLE, true);
-  const conf: Rh2EffectTakeParamsInRoute = { ...configuration, params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' };
+  const conf: Rh2EffectTakeParamsInRoute = { ...configuration3, params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' };
   const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
   console.log(resultat2)
   // useRequestFromName(MICROSOFT, state === 4);

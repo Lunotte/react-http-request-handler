@@ -48,7 +48,7 @@ export function useRh2WithParameters(
             )
         }
         fetch();
-    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, filter]);
+    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, configuration.config?.params, filter]);
 
     return state;
 }
@@ -229,7 +229,7 @@ export function useRh2WithParametersTakeParamsInRoute(
             )
         }
         fetch();
-    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, filter]);
+    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, configuration.config?.params, filter]);
     return state;
 }
 

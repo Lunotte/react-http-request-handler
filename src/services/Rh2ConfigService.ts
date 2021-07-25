@@ -18,8 +18,6 @@ class Rh2ConfigService {
     }
 
     initializeParameters(parameters: SettingsInitializerRnhrh) {
-        console.log(parameters);
-
         this.parameters = {
             ...this.parameters,
             axiosConfig: parameters.axiosConfig,
