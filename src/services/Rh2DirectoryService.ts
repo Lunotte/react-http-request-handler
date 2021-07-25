@@ -1,65 +1,65 @@
 import { AxiosRequestConfig } from "axios";
-import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
 import _ from "lodash";
+import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
 
 
 /**
- * Service de stockage des requetes exécutées
+ * Storage service for executed requests
  */
 class Rh2DirectoryService {
 
     private configQueryParameter: ConfigQueryParameter[] = [];
 
     /**
-     * Obtenir tous les éléments stockés
-     * @returns Tableau de résultat
+     * Get all stored items
+     * @returns Result table
      */
     getConfigQueryParameters(): ConfigQueryParameter[] {
         return this.configQueryParameter;
     }
 
     /**
-     * Obtenir un élément stocké
-     * @param url Url recherchée
-     * @param method Méthode recherchée
-     * @param params Paramètres recherchés
-     * @returns L'élément recherché s'il existe
+     * Get a stored item
+     * @param url Url searched
+     * @param method Method searched
+     * @param params Settings searched
+     * @returns The element searched if it exists
      */
     getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): ConfigQueryParameter {
         return this.configQueryParameter.find(config => comparatorUrlMethodParams(config, url, method, params));
     }
-    
+
     /**
-     * Vérifier l'existance du paramètrage
-     * @param url Url recherchée
-     * @param method Méthode recherchée
-     * @param params Paramètres recherchés
-     * @returns True si présent sinon False
+     * Check the setting
+     * @param url Url searched
+     * @param method Method searched
+     * @param params Settings searched
+     * @returns True if present else False
      */
     hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): boolean {
         return this.configQueryParameter.some((config) => comparatorUrlMethodParams(config, url, method, params));
     }
 
     /**
-     * Vérifier l'existance du paramètrage
-     * @param parameter Url recherchée
-     * @returns True si présent sinon False
+     * Check the setting
+     * @param parameter Url searched
+     * @returns True If present else False
      */
     hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter): boolean {
         return this.hasConfigQueryParameter(parameter.url, parameter.method, parameter.params);
     }
-    
+
     /**
-     * Ajouter un nouveau paramètrage
-     * @param configTmp nouveau paramètrage
+     * Add a new setting
+     * @param configTmp new setting
      */
     addConfigQueryParameter(configTmp: ConfigQueryParameter): void {
         this.configQueryParameter.push(configTmp);
     }
 
     /**
-     * Supprime l’élément envoyer en paranètre
-     * @param axiosRequestConfig Élément à supprimer
+     * Removes the element send as a paraneter
+     * @param axiosRequestConfig Item to delete
      */
     removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig): void {
         this.configQueryParameter = this.configQueryParameter.filter(config =>
@@ -67,7 +67,7 @@ class Rh2DirectoryService {
     }
 
     /**
-     * Vide tous les éléments
+     * Empty all items
      */
     removeAllQueryDirectory(): void {
         this.configQueryParameter = []
@@ -76,17 +76,16 @@ class Rh2DirectoryService {
 }
 
 /**
- * Comparer les paramètres de deux sources d'approvisionnement
+ * Compare the parameters of two sources of supply
  * @param params1 
  * @param params2 
- * @returns True si Les paramètres sont identiques, null ou vide sinon False
+ * @returns True If the parameters are identical, null or empty otherwise False
  */
-const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean =>
-{
+const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean => {
     if (params1 == null && params2 == null) {
         return true;
     } else if ((params1 == null && params2 != null && Object.keys(params2).length === 0) ||
-                params2 == null && params1 != null && Object.keys(params1).length === 0) {
+        params2 == null && params1 != null && Object.keys(params1).length === 0) {
         return true;
     } else if (params1 != null && params2 != null) {
         return _.isEqual(params1, params2);
@@ -96,14 +95,14 @@ const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean =>
 }
 
 /**
- * Comparer l'url, le type de méthode et les paramètres
- * @param config Configuration en mémoire
- * @param url Url reçue
- * @param method Method reçue
- * @param params Params reçu
- * @returns True si la comparaison est strictement identique
+ * Compare url, method type and parameters
+ * @param config Configuration in memory
+ * @param url Url received
+ * @param method Method received
+ * @param params Params received
+ * @returns True if the comparison is strictly identical
  */
-const comparatorUrlMethodParams = (config, url, method, params): boolean =>   
+const comparatorUrlMethodParams = (config, url, method, params): boolean =>
     config.url === url && config.method === method && compareParams(config.params, params);
 
 const rh2DirectoryService = new Rh2DirectoryService();

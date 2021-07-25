@@ -6,6 +6,7 @@ import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
 import { apiErrordAction, chargementFinishedAction, chargementStartedAction } from '../redux/rh2-action';
+import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute, Rh2EffectTreatmentToManageParameters, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
@@ -14,8 +15,8 @@ import { default as rh2DirectoryService } from './Rh2DirectoryService';
 
 /*************************************************************************** */
 
-//          Les requêtes qui ne sont pas pré-chargées n’auront pas
-//          la possibilité d’être stockées dans l’annuaire
+//          Requests that are not pre-loaded will not have
+//          the possibility of being stored in the directory
 
 /*************************************************************************** */
 
@@ -79,7 +80,7 @@ export function useRh2WithName(
         async function fetch() {
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-            console.log(configSelected);
+            isModeDebugThenDisplayInfo('The following configuration was found', configSelected);
 
             return traitementToManageRequest(
                 {
@@ -150,22 +151,23 @@ function loadingCompletedDispatch(configuration: Rh2EffectTreatmentToManageReque
 }
 
 
-function treatmentIfSuccessInUseRequest(configuration, reponse) {
+function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
     if (configuration.successHandler) {
         configuration.successHandler(reponse.responseSuccess);
     } else {
-        isModeDebugThenDisplayWarn('La méthode successHandler n\'a pas été défini');
+        isModeDebugThenDisplayWarn('The method successHandler has not provided');
     }
     configuration.action({ loading: false, data: reponse.responseSuccess });
 }
 
-function treatmentIfErrorInUseRequest(configuration, reponse) {
+function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
+    isModeDebugThenDisplayWarn('An error is to be handled', configuration.label, reponse);
     if (configuration.errorHandler) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
         rh2ConfigService.getParameters().errorHandler(reponse);
     } else {
-        isModeDebugThenDisplayWarn('La méthode errorHandler n\'a pas été défini');
+        isModeDebugThenDisplayWarn('The method errorHandler has not provided');
     }
     configuration.action({ loading: false, data: null });
     configuration.dispatch(apiErrordAction(configuration.label, reponse));
@@ -188,20 +190,8 @@ function treatmentIfErrorInUseRequest(configuration, reponse) {
 
 
 /**
- * A utiliser s'il faut ajouter des paramètres à la requête
- * En mode PATH_PARAM, on peut concaténer avec les valeurs pré-saisies dans la config, cela ne fonctionne pas avec REQUEST_PARAM
- * 
- * Ce mode ne permet pas l'ajout en mémoire des requêtes
- * 
- * @param params Paramètre fourni ( Exemple : profileId -> situé dans la route (parametre navigation entre les pages)) 
- *              Les parametres données vont servir à extraire les parametres qui sont egalement present dans la navigation
- * @param typeQueryParameter Determine si on veut faire une requete avec des paramètres split par des / ou par des &
- * @param actionToDispatch Action principal à dispatch lorsque la requête a été faite
- * @param config Configuration Axios des paramètres pour la requête Http
- * @param addToDirectory Doit on ajouter en mémoire la requête qui vient d'être executée
- * @param filter Filtre pour savoir si la requête doit être executer maintenant ou non
- * @param justeReponse S'il on veut seulement le contenu de la réponse ou toutes les infos
- * @param actionToDispatchSuplementaires Liste des actions en plus de "actionToDispatch"
+ * To be used if you need to add parameters to the request and you are in react native
+ * In PATH_PARAM mode, we can concatenate with the values pre-entered in the config, it does not work with REQUEST_PARAM
  */
 export function useRh2WithParametersTakeParamsInRoute(
     configuration: Rh2EffectTakeParamsInRoute,
@@ -217,7 +207,7 @@ export function useRh2WithParametersTakeParamsInRoute(
 
     useEffect(() => {
         async function fetch() {
-            traitementToManageParameters(
+            treatmentToManageParameters(
                 {
                     ...configuration,
                     label: null,
@@ -234,8 +224,8 @@ export function useRh2WithParametersTakeParamsInRoute(
 }
 
 /**
- * 
  * Execute a pre-load query and add parameter provided by route navigation
+ * 
  * @param label Name of the query to execute
  * @param filter If True, execute the request
  */
@@ -256,7 +246,9 @@ export function useRh2WithNameTakeParamsInRoute(
         async function fetch() {
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
 
-            return traitementToManageParameters(
+            isModeDebugThenDisplayInfo('The following configuration was found', configSelected);
+
+            return treatmentToManageParameters(
                 {
                     keyOfInstance: configSelected?.keyOfInstance,
                     label,
@@ -278,12 +270,7 @@ export function useRh2WithNameTakeParamsInRoute(
     return state;
 }
 
-/**
- * 
- * @param configuration 
- * @param filter 
- */
-async function traitementToManageParameters(
+async function treatmentToManageParameters(
     configuration: Rh2EffectTreatmentToManageParameters,
     filter: boolean = true
 ) {
@@ -291,7 +278,7 @@ async function traitementToManageParameters(
         const dataInRouteParam = getDataInRouteParam(configuration.params, configuration.route);
 
         if (configuration.route.params == null || dataInRouteParam == null) {
-            isModeDebugThenDisplayWarn('Aucun paramètre dans la route ou récupéré dans la route');
+            isModeDebugThenDisplayWarn('No parameters in the route or recovered in the route. The classic treatment will be carried out');
 
             traitementToManageRequest(
                 { ...configuration, addToDirectory: false, label: null },
@@ -306,6 +293,7 @@ async function traitementToManageParameters(
             };
 
             if (configuration.typeQueryParameter === 'PATH_PARAM') {
+                isModeDebugThenDisplayInfo('Construction of a Path type method');
                 //    Chaque paramètre va etre precede d'un /
                 let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
                     avant.concat('/').concat(dataInRouteParam[maintenant]), '');
@@ -314,6 +302,7 @@ async function traitementToManageParameters(
             }
 
             if (configuration.typeQueryParameter === 'REQUEST_PARAM') {
+                isModeDebugThenDisplayInfo('Construction of a Query type method');
                 apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
             }
 
@@ -332,10 +321,10 @@ async function traitementToManageParameters(
 }
 
 /**
- * Récupèrer les paramètres dans l'url de navigation par rapport à ceux demandés en argument de la méthode
- * @param params Liste de clés à retrouver
- * @param route Hook useRoute seulement disponible pour la version native
- * @returns La liste des éléments retrouvés
+ * Retrieve the parameters in the navigation url in relation to those requested as argument of the method
+ * @param params List of keys to find
+ * @param route Hook useRoute only available for native version
+ * @returns The list of elements found
  */
 export function getDataInRouteParam(params: string[], route: RouteProp<ParamListBase, string>) {
     let data = {};
@@ -346,18 +335,6 @@ export function getDataInRouteParam(params: string[], route: RouteProp<ParamList
             data[key] = param;
         }
     });
-    isModeDebugThenDisplayInfo('Liste des params obtenu dans la route', data)
+    isModeDebugThenDisplayInfo('List of params obtained in the route', data)
     return Object.keys(data).length === 0 ? null : data;
-}
-
-function isModeDebugThenDisplayWarn(message: string): void {
-    if (rh2ConfigService.isModeDebug()) {
-        console.warn(message);
-    }
-}
-
-function isModeDebugThenDisplayInfo(message: string, data?: unknown): void {
-    if (rh2ConfigService.isModeDebug()) {
-        console.info(message, data);
-    }
 }

@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from '../src';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
 import { pourTestAction } from '../src/redux/rh2-action';
-import { useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+import { useRh2WithName, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
 
 
 
@@ -24,7 +24,7 @@ let CancelToken = axios.CancelToken;
 let source;// = CancelToken.source();
 
 const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis, keyOfInstance: 'Test2' };
+let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis, keyOfInstance: 'Test1' };
 
 const Moi = () => {
 
@@ -33,7 +33,7 @@ const Moi = () => {
 
   rh2ConfigService.initializeParameters({
     axiosConfig: [{
-      key: 'Test1', axiosConfig: { baseURL: 'https://www.google.com/' }, defaultInterceptor: false,
+      key: 'Test1', axiosConfig: { baseURL: 'https://www.sdfgoogle.com/' }, defaultInterceptor: false,
       headerUrl: [{ key: 'CleDeTest', value: 'value to test' }]
     },
     {
@@ -64,17 +64,17 @@ const Moi = () => {
   const axiosConfig: AxiosRequestConfig = { url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5', method: 'GET' };
   const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true, dataFromRoute: { params: ['itemId'], typeQueryParameter: 'REQUEST_PARAM' } }
 
-  // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
-  const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
-  const configACharger2: Rh2AxiosConfig = {
-    axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false,
-    successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
-  };
+  // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
+  // const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
+  // const configACharger2: Rh2AxiosConfig = {
+  //   axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false,
+  //   successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
+  // };
 
-  const axiosConfigSansDispatch: AxiosRequestConfig = { url: 'https://www.amazon.com', method: 'GET' };
-  const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, justeReponse: true };
+  // const axiosConfigSansDispatch: AxiosRequestConfig = { url: 'https://www.amazon.com', method: 'GET' };
+  // const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, justeReponse: true };
 
-  // const dispatch = useDispatch();
+  // // const dispatch = useDispatch();
 
   rh2AxiosConfigService.addConfigAxios(configACharger);
 
@@ -97,8 +97,8 @@ const Moi = () => {
 
   // console.log('ici');
   //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-  // const test = useRh2WithName(GOOGLE, true);
-  // console.log(test);
+  const test = useRh2WithName(GOOGLE, true);
+  console.log(test);
 
   // source.cancel('test cancellation');
 
@@ -111,8 +111,8 @@ const Moi = () => {
 
   // useRequestFromName(MICROSOFT, true);
 
-  const resultat = useRh2WithParameters(configurationBis, true);
-  console.log(resultat);
+  // const resultat = useRh2WithParameters(configurationBis, true);
+  // console.log(resultat);
 
   // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
   // console.log(resultat2);

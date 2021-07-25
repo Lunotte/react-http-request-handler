@@ -9,14 +9,15 @@
 import React from 'react';
 import {
   StyleSheet,
-  useColorScheme,
+  useColorScheme
 } from 'react-native';
-
 import {
-  Colors,
+  Colors
 } from 'react-native/Libraries/NewAppScreen';
+import { Rh2InitializationParameter } from '../src';
 import InitializerRnhrh from './InitializerRnhrh';
 import Navigation from './Navigation';
+
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -24,10 +25,12 @@ const App = () => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-  
+
+  const initSettings: Rh2InitializationParameter = { modeDebug: false };
+
   return (
-    <InitializerRnhrh>
-       <Navigation />
+    <InitializerRnhrh rh2Settings={initSettings}>
+      <Navigation />
     </InitializerRnhrh>
   );
 };
