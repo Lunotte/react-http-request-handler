@@ -1,34 +1,37 @@
-import { KeyValue, SettingsInitializerRnhrh } from "../models/Rh2Config";
+import { KeyValue, Rh2InitializationParameter } from "../models/Rh2Config";
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 
+/**
+ * Application configuration
+ */
 class Rh2ConfigService {
 
-    private parameters: SettingsInitializerRnhrh;
+    private parameters: Rh2InitializationParameter;
 
     public HEADER_URL: KeyValue[] = [{ key: 'Content-Type', value: 'application/json' }]
 
     constructor() {
         this.parameters = {
             axiosConfig: [],
-            reduxIsActif: false,
-            useAsyncStorage: false,
+            // reduxIsActif: false,
+            // useAsyncStorage: false,
             errorHandler: null,
             modeDebug: false
         }
     }
 
-    initializeParameters(parameters: SettingsInitializerRnhrh) {
+    initializeParameters(parameters: Rh2InitializationParameter) {
         this.parameters = {
             ...this.parameters,
             axiosConfig: parameters.axiosConfig,
-            reduxIsActif: parameters.reduxIsActif == null ? this.parameters.reduxIsActif : parameters.reduxIsActif,
-            useAsyncStorage: parameters.useAsyncStorage == null ? this.parameters.useAsyncStorage : parameters.useAsyncStorage,
+            // reduxIsActif: parameters.reduxIsActif == null ? this.parameters.reduxIsActif : parameters.reduxIsActif,
+            // useAsyncStorage: parameters.useAsyncStorage == null ? this.parameters.useAsyncStorage : parameters.useAsyncStorage,
             errorHandler: parameters.errorHandler == null ? this.parameters.errorHandler : parameters.errorHandler,
             modeDebug: parameters.modeDebug == null ? this.parameters.modeDebug : parameters.modeDebug
         };
     }
 
-    getParameters(): SettingsInitializerRnhrh {
+    getParameters(): Rh2InitializationParameter {
         return this.parameters;
     }
 
@@ -36,9 +39,9 @@ class Rh2ConfigService {
         return this.parameters.axiosConfig;
     }
 
-    isUseAsyncStorage(): boolean {
-        return this.parameters.useAsyncStorage;
-    }
+    // isUseAsyncStorage(): boolean {
+    //     return this.parameters.useAsyncStorage;
+    // }
 
     isModeDebug(): boolean {
         return this.parameters.modeDebug;

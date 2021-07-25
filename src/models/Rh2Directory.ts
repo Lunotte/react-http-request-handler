@@ -1,7 +1,6 @@
 export interface ConfigQueryParameter {
     readonly url: string;
     readonly method: MethodRnhrh;
-    // readonly params?: ParamRnhnh[];
     readonly params?: ParamRnhnh;
 }
 

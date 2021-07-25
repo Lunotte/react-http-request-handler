@@ -4,10 +4,10 @@ import { AxiosRequestConfig } from 'axios';
  * axiosConfig: If not provided then a default instance of axios is generated
  * errorHandler: Manipuler un callback specifique
  */
-export interface SettingsInitializerRnhrh {
+export interface Rh2InitializationParameter {
     axiosConfig?: AxiosRequestConfigExtended[];
-    reduxIsActif?: boolean; // Si l'application qui implémente la lib utilise redux
-    useAsyncStorage?: boolean; // Si l'application qui implémente la lib utilise @react-native-async-storage/async-storage
+    // reduxIsActif?: boolean; // Si l'application qui implémente la lib utilise redux
+    // useAsyncStorage?: boolean; // Si l'application qui implémente la lib utilise @react-native-async-storage/async-storage
     // et quelle veut l'utiliser nécessaire dans les cas des authentifications de type Bearer
     errorHandler?: (param?: any) => void;
     modeDebug?: boolean

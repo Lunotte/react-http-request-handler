@@ -4,10 +4,9 @@ import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from '../src';
+import { Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
-import { pourTestAction } from '../src/redux/rh2-action';
-import { useRh2WithName, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+import { useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
 
 
 
@@ -31,18 +30,18 @@ const Moi = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  rh2ConfigService.initializeParameters({
-    axiosConfig: [{
-      key: 'Test1', axiosConfig: { baseURL: 'https://www.sdfgoogle.com/' }, defaultInterceptor: false,
-      headerUrl: [{ key: 'CleDeTest', value: 'value to test' }]
-    },
-    {
-      key: 'Test2', axiosConfig: { baseURL: 'http://pompoarre.fr' },
-      headerUrl: [{ key: 'YoJack', value: 'Ça farte ?' }]
-    }],
-    errorHandler: (param) => dispatch(pourTestAction('Test Par la conf générale')),
-    modeDebug: true
-  });
+  // rh2ConfigService.initializeParameters({
+  //   axiosConfig: [{
+  //     key: 'Test1', axiosConfig: { baseURL: 'https://www.sdfgoogle.com/' }, defaultInterceptor: false,
+  //     headerUrl: [{ key: 'CleDeTest', value: 'value to test' }]
+  //   },
+  //   {
+  //     key: 'Test2', axiosConfig: { baseURL: 'http://pompoarre.fr' },
+  //     headerUrl: [{ key: 'YoJack', value: 'Ça farte ?' }]
+  //   }],
+  //   errorHandler: (param) => dispatch(pourTestAction('Test Par la conf générale')),
+  //   modeDebug: true
+  // });
 
   // Object.values(getAxiosInstances())[0].interceptors.request.use(
   //   async (config) => {
@@ -97,8 +96,8 @@ const Moi = () => {
 
   // console.log('ici');
   //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-  const test = useRh2WithName(GOOGLE, true);
-  console.log(test);
+  // const test = useRh2WithName(GOOGLE, true);
+  // console.log(test);
 
   // source.cancel('test cancellation');
 
@@ -111,8 +110,8 @@ const Moi = () => {
 
   // useRequestFromName(MICROSOFT, true);
 
-  // const resultat = useRh2WithParameters(configurationBis, true);
-  // console.log(resultat);
+  const resultat = useRh2WithParameters(configurationBis, true);
+  console.log(resultat);
 
   // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
   // console.log(resultat2);

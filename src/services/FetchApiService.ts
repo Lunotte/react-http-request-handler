@@ -1,12 +1,15 @@
 import { AxiosRequestConfig } from "axios";
 import { ErreurFetchApi, ResponseFetchApi } from "../models";
+import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from "../tools/Utils";
 import configAxiosInstance from "./Rh2AxiosInstanceService";
 
 /**
- * Aller chercher les données
- * @param config Configuration de la requète
- * @param dataImmediat Si on veut récupérer l'objet data ou bien conserver les information de la requête (ex: header, config, etc...)
- * @returns 
+ * Go get the data
+ 
+ * @param axiosInstance Axios instance that will be used to request
+ * @param config Request configuration
+ * @param dataImmediat If we want to retrieve the data object or keep the information of the request (ex: header, config, etc ...)
+ * @returns Promise<ResponseFetchApi>
  */
 export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig, dataImmediat?: boolean): Promise<ResponseFetchApi> {
 
@@ -31,28 +34,37 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
     const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(configAxiosInstance)[0];
 
     const resultData = await configAxiosInstance[axiosInstanceToUse].request(config);
-    console.log('les données ont été récupérées depuis la lib', resultData);
+    isModeDebugThenDisplayInfo('Data was fetched from lib', resultData);
 
     if (resultData.status >= 200 && resultData.status < 300) {
-      return { ...fetchSuccess, isSuccess: true, responseSuccess: (dataImmediat) ? resultData.data : resultData, status: resultData.status };
+      return {
+        ...fetchSuccess, isSuccess: true,
+        responseSuccess: (dataImmediat) ? resultData.data : resultData, status: resultData.status
+      };
     }
   } catch (error) {
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.log(error.response);
-      console.log(error.response.status);
-      return { ...fetchSuccess, status: error.response.status, isError: true, responseErreur: { ...fetchErreur, isResponseError: true, responseError: error.response, messageError: error.message, config: error.config } };
+      fetchSuccess = {
+        ...fetchSuccess, status: error.response.status, isError: true,
+        responseErreur:
+          { ...fetchErreur, isResponseError: true, responseError: error.response, messageError: error.message, config: error.config }
+      };
+      isModeDebugThenDisplayWarn('Error in response', fetchSuccess);
+      return fetchSuccess;
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
-      console.log(error.request);
-      return { ...fetchSuccess, isError: true, responseErreur: { ...fetchErreur, isRequestError: true, requestError: error.request, messageError: error.message, config: error.config } };
+      fetchSuccess = { ...fetchSuccess, isError: true, responseErreur: { ...fetchErreur, isRequestError: true, requestError: error.request, messageError: error.message, config: error.config } };
+
+      isModeDebugThenDisplayWarn('Error in request: The request was made but no response was received', fetchSuccess);
+      return fetchSuccess;
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.log('Error', error.message);
-      return { ...fetchSuccess, isError: true, responseErreur: { ...fetchErreur, messageError: error.message, config: error.config } };
+      // This case can happen if the user cancels the request.
+      fetchSuccess = { ...fetchSuccess, isError: true, responseErreur: { ...fetchErreur, messageError: error.message, config: error.config } };
+      isModeDebugThenDisplayWarn('Unrecognized error : This case can happen if the user cancels the request.', fetchSuccess);
+      return fetchSuccess;
     }
   }
 

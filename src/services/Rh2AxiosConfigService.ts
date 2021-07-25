@@ -1,43 +1,43 @@
 import { Rh2AxiosConfig } from "..";
 
 /**
- * Service de configuration des requêtes
- * Permet de centraliser les requêtes à faire, pour en executer une, il suffit de l'appeler par son nom 
+ * Query configuration service
+ * Allows you to centralize the requests to be made, to execute one, just call it by name
  */
 class Rh2AxiosConfigService {
 
     private configsAxios: Rh2AxiosConfig[] = [];
 
     /**
-     * Obtenir tous les éléments stockés
-     * @returns Tableau de résultat
+     * Get all stored items
+     * @returns Result table
      */
     getAllConfigAxios(): Rh2AxiosConfig[] {
         return this.configsAxios;
     }
 
     /**
-     * Obtenir un élément stocké
-     * @param id Query name
-     * @returns L'élément recherché s'il existe
+     * Get a stored item
+     * @param label Query name
+     * @returns The element searched if it exists
      */
     getConfigAxios(id: string): Rh2AxiosConfig {
         return this.configsAxios.find(config => config.label === id);
     }
 
     /**
-     * Vérifier l'existance du paramètrage
+     * Check the setting
      * @param id Query name
-     * @returns True si présent sinon False
+     * @returns True If present else False
      */
     hasConfigAxios(id: string): boolean {
         return this.configsAxios.some((config) => config.label === id);
     }
 
     /**
-      * Ajouter un nouveau paramètrage
-      * Si le nom existe déjà, le paramètrage ne sera pas ajouté
-      * @param configAxios nouveau paramètrage
+      * Add a new setting
+      * If the name already exists, the setting will not be added
+      * @param configAxios new setting
       */
     addConfigAxios(configAxios: Rh2AxiosConfig): void {
         if (!this.hasConfigAxios(configAxios.label)) {
@@ -98,7 +98,7 @@ class Rh2AxiosConfigService {
 
 
     /**
-     * Supprime l’élément envoyer en paramètre
+     * Delete the element sent as a parameter
      * @param label Label
      */
     removeConfigAxios(label: string): void {
@@ -106,7 +106,7 @@ class Rh2AxiosConfigService {
     }
 
     /**
-     * Vide tous les éléments
+     * Empty all items
      */
     removeAllConfigAxios(): void {
         this.configsAxios = []

@@ -26,7 +26,18 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  const initSettings: Rh2InitializationParameter = { modeDebug: false };
+  // const initSettings: Rh2InitializationParameter = { modeDebug: false };
+  const initSettings: Rh2InitializationParameter = {
+    axiosConfig: [{
+      key: 'Test1', axiosConfig: { baseURL: 'https://www.google.com/' }, defaultInterceptor: false,
+      headerUrl: [{ key: 'CleDeTest', value: 'value to test' }]
+    },
+    {
+      key: 'Test2', axiosConfig: { baseURL: 'http://pompoarre.fr' },
+      headerUrl: [{ key: 'YoJack', value: 'Ça farte ?' }]
+    }],
+    modeDebug: true
+  };
 
   return (
     <InitializerRnhrh rh2Settings={initSettings}>
