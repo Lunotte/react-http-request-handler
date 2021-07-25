@@ -25,6 +25,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
+    "__tests__",
+    "exemple",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js"

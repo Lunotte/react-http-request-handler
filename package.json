@@ -67,9 +67,6 @@
   },
   "jest": {
     "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/lib/"
-    ],
     "setupFiles": [
       "./__mocks__/@react-native-async-storage/async-storage.js"
     ]
