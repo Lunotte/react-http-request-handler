@@ -15,7 +15,7 @@ import {
   Colors
 } from 'react-native/Libraries/NewAppScreen';
 import { Rh2InitializationParameter } from '../src';
-import InitializerRnhrh from './InitializerRnhrh';
+import InitializerRnhrh from '../src/InitializerRnhrh';
 import Navigation from './Navigation';
 
 

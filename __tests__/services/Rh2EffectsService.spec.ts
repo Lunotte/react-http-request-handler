@@ -1,12 +1,11 @@
 import { AxiosRequestConfig } from "axios";
 import React from 'react';
 import * as redux from 'react-redux';
-import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService } from "../../src";
+import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter } from "../../src";
+import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from "../../src/models/Rh2Effect";
 import * as FetchApiService from '../../src/services/FetchApiService';
 import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
 import { useRh2WithName, useRh2WithNameTakeParamsInRoute, useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from "../../src/services/Rh2EffectsService";
-import { SettingsInitializerRnhrh } from './../../src/models/Rh2Config';
-import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from './../../src/models/Rh2Effect';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -138,7 +137,7 @@ describe('useRh2WithParameters', () => {
 
     it('Cas nominal avec erreur et errorHandler global', async () => {
 
-        const initSettings: SettingsInitializerRnhrh = { errorHandler: () => console.log('Hello Guys, c\'est la loose ....') };
+        const initSettings: Rh2InitializationParameter = { errorHandler: () => console.log('Hello Guys, c\'est la loose ....') };
         rh2ConfigService.initializeParameters(initSettings);
 
         const configuration: Rh2EffectSuccessNotRequiredHandler = configurationGoogle;
@@ -295,7 +294,7 @@ describe('useRh2WithNameTakeParamsInRoute', () => {
 
     it('Cas nominal avec affichage des logs debug', async () => {
 
-        const initSettings: SettingsInitializerRnhrh = { modeDebug: true };
+        const initSettings: Rh2InitializationParameter = { modeDebug: true };
         rh2ConfigService.initializeParameters(initSettings);
 
         const configACharger: Rh2AxiosConfig = {

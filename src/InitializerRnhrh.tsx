@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { rh2ConfigService, Rh2InitializationParameter } from '../src';
-import { default as Store } from '../src/redux/rh2-store';
+import { rh2ConfigService, Rh2InitializationParameter } from '.';
+import { default as Store } from './redux/rh2-store';
 
 const InitializerRnhrh: React.FC<{ rh2Settings?: Rh2InitializationParameter }> = ({ rh2Settings, children }) => {
 
