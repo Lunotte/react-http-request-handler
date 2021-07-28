@@ -30,12 +30,15 @@ import { default as rh2DirectoryService } from './Rh2DirectoryService';
  */
 export function useRh2WithParameters(
     configuration: Rh2EffectSuccessNotRequiredHandler,
-    filter: boolean = true
+    filter = true
 ): {
     loading: boolean;
     data: any;
 } {
-    const [state, setState] = useState({
+    const [
+        state,
+        setState
+    ] = useState({
         loading: true,
         data: null,
     });
@@ -49,7 +52,13 @@ export function useRh2WithParameters(
             )
         }
         fetch();
-    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, configuration.config?.params, filter]);
+    }, [
+        configuration.config?.method,
+        configuration.config?.url,
+        configuration.config?.data,
+        configuration.config?.params,
+        filter
+    ]);
 
     return state;
 }
@@ -64,12 +73,15 @@ export function useRh2WithParameters(
  */
 export function useRh2WithName(
     label: string,
-    filter: boolean = true
+    filter = true
 ): {
     loading: boolean;
     data: any;
 } {
-    const [state, setState] = useState({
+    const [
+        state,
+        setState
+    ] = useState({
         loading: false,
         data: null,
     });
@@ -97,7 +109,10 @@ export function useRh2WithName(
             )
         }
         fetch();
-    }, [label, filter]);
+    }, [
+        label,
+        filter
+    ]);
 
     return state;
 }
@@ -108,7 +123,7 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
 
 async function traitementToManageRequest(
     configuration: Rh2EffectTreatmentToManageRequest,
-    filter: boolean = true,
+    filter = true,
 ) {
     if (configuration.config != null) {
 
@@ -195,10 +210,13 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
  */
 export function useRh2WithParametersTakeParamsInRoute(
     configuration: Rh2EffectTakeParamsInRoute,
-    filter: boolean = true,
+    filter = true,
 ) {
     const route = useRoute();
-    const [state, setState] = useState({
+    const [
+        state,
+        setState
+    ] = useState({
         loading: true,
         data: null,
     });
@@ -219,7 +237,13 @@ export function useRh2WithParametersTakeParamsInRoute(
             )
         }
         fetch();
-    }, [configuration.config?.method, configuration.config?.url, configuration.config?.data, configuration.config?.params, filter]);
+    }, [
+        configuration.config?.method,
+        configuration.config?.url,
+        configuration.config?.data,
+        configuration.config?.params,
+        filter
+    ]);
     return state;
 }
 
@@ -231,11 +255,14 @@ export function useRh2WithParametersTakeParamsInRoute(
  */
 export function useRh2WithNameTakeParamsInRoute(
     label: string,
-    filter: boolean = true,
+    filter = true,
 ) {
     const route = useRoute();
 
-    const [state, setState] = useState({
+    const [
+        state,
+        setState
+    ] = useState({
         loading: true,
         data: null,
     });
@@ -266,13 +293,16 @@ export function useRh2WithNameTakeParamsInRoute(
             )
         }
         fetch();
-    }, [label, filter]);
+    }, [
+        label,
+        filter
+    ]);
     return state;
 }
 
 async function treatmentToManageParameters(
     configuration: Rh2EffectTreatmentToManageParameters,
-    filter: boolean = true
+    filter = true
 ) {
     if (configuration.config != null) {
         const dataInRouteParam = getDataInRouteParam(configuration.params, configuration.route);
@@ -295,7 +325,7 @@ async function treatmentToManageParameters(
             if (configuration.typeQueryParameter === 'PATH_PARAM') {
                 isModeDebugThenDisplayInfo('Construction of a Path type method');
                 //    Chaque paramètre va etre precede d'un /
-                let parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
+                const parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
                     avant.concat('/').concat(dataInRouteParam[maintenant]), '');
 
                 apiAvecParam = { ...apiAvecParam, url: apiAvecParam.url.concat(parametresConcatenes) };
@@ -327,7 +357,7 @@ async function treatmentToManageParameters(
  * @returns The list of elements found
  */
 export function getDataInRouteParam(params: string[], route: RouteProp<ParamListBase, string>) {
-    let data = {};
+    const data = {};
 
     params.forEach((key) => {
         const param = route.params[key];

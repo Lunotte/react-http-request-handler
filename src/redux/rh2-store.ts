@@ -1,4 +1,4 @@
-import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import hookReducer from './rh2-reducer';
 
 

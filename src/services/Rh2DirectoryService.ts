@@ -8,7 +8,8 @@ import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Dire
  */
 class Rh2DirectoryService {
 
-    private configQueryParameter: ConfigQueryParameter[] = [];
+    private configQueryParameter: ConfigQueryParameter[] = [
+    ];
 
     /**
      * Get all stored items
@@ -70,7 +71,8 @@ class Rh2DirectoryService {
      * Empty all items
      */
     removeAllQueryDirectory(): void {
-        this.configQueryParameter = []
+        this.configQueryParameter = [
+        ]
     }
 
 }

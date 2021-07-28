@@ -7,58 +7,58 @@ type Rh2AxiosInstance = { [key: string]: AxiosInstance };
 export const axiosInstances: Rh2AxiosInstance = getInstances();
 
 function getInstances() {
-  let listAxiosInstance: Rh2AxiosInstance;
+    let listAxiosInstance: Rh2AxiosInstance;
 
-  if (rh2ConfigService.getParametersAxiosConfigs() != null &&
+    if (rh2ConfigService.getParametersAxiosConfigs() != null &&
     rh2ConfigService.getParametersAxiosConfigs().length > 0) {
 
-    rh2ConfigService.getParametersAxiosConfigs().forEach(config => {
-      if (config.key != null && config.axiosConfig != null) {
-        const anInstance: AxiosInstance = axios.create(config.axiosConfig);
-        listAxiosInstance = { ...listAxiosInstance, [config.key]: anInstance };
-        if (config.defaultInterceptor == null || config.defaultInterceptor === true) {
-          generateInterceptors(anInstance, config.headerUrl)
-        }
-      }
-    })
-  } else {
-    listAxiosInstance = { ...listAxiosInstance, ['default']: axios.create() };
-  }
-  return listAxiosInstance;
+        rh2ConfigService.getParametersAxiosConfigs().forEach(config => {
+            if (config.key != null && config.axiosConfig != null) {
+                const anInstance: AxiosInstance = axios.create(config.axiosConfig);
+                listAxiosInstance = { ...listAxiosInstance, [config.key]: anInstance };
+                if (config.defaultInterceptor == null || config.defaultInterceptor === true) {
+                    generateInterceptors(anInstance, config.headerUrl)
+                }
+            }
+        })
+    } else {
+        listAxiosInstance = { ...listAxiosInstance, ['default']: axios.create() };
+    }
+    return listAxiosInstance;
 }
 
 function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyValue[]) {
-  axiosInstance.interceptors.request.use(
-    async (config) => {
-      const headers = await addHeaderToUrl(headersToAdd);
+    axiosInstance.interceptors.request.use(
+        async (config) => {
+            const headers = await addHeaderToUrl(headersToAdd);
 
-      if (headers) {
-        if (config.method !== 'OPTIONS') {
-          config = { ...config, headers };
-        }
-      }
-      return config;
-    },
-    error => {
-      return Promise.reject(error);
-    });
+            if (headers) {
+                if (config.method !== 'OPTIONS') {
+                    config = { ...config, headers };
+                }
+            }
+            return config;
+        },
+        error => {
+            return Promise.reject(error);
+        });
 }
 
-async function addHeaderToUrl(headersToAdd: KeyValue[]): Promise<Object> {
-  const headersDefault: KeyValue[] = rh2ConfigService.HEADER_URL;
+async function addHeaderToUrl(headersToAdd: KeyValue[]): Promise<{[k: string]: string}> {
+    const headersDefault: KeyValue[] = rh2ConfigService.HEADER_URL;
 
-  if (headersToAdd == null || headersToAdd.length === 0) {
-    return mapAllHeaders(headersDefault);
-  } else {
-    return mapAllHeaders(headersToAdd);
-  }
+    if (headersToAdd == null || headersToAdd.length === 0) {
+        return mapAllHeaders(headersDefault);
+    } else {
+        return mapAllHeaders(headersToAdd);
+    }
 
 }
 
-function mapAllHeaders(headers: KeyValue[]): Object {
-  let headerAfterBuilding = {};
-  headers.forEach((kv: KeyValue) => headerAfterBuilding[kv.key] = kv.value);
-  return headerAfterBuilding;
+function mapAllHeaders(headers: KeyValue[]): {[k: string]: string} {
+    const headerAfterBuilding = {};
+    headers.forEach((kv: KeyValue) => headerAfterBuilding[kv.key] = kv.value);
+    return headerAfterBuilding;
 }
 
 /**
@@ -68,7 +68,7 @@ function mapAllHeaders(headers: KeyValue[]): Object {
  * @returns All Axios instances generate 
  */
 export function getAxiosInstances(): Rh2AxiosInstance {
-  return axiosInstances;
+    return axiosInstances;
 }
 
 

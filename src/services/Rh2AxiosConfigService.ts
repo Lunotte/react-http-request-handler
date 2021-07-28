@@ -6,7 +6,8 @@ import { Rh2AxiosConfig } from "..";
  */
 class Rh2AxiosConfigService {
 
-    private configsAxios: Rh2AxiosConfig[] = [];
+    private configsAxios: Rh2AxiosConfig[] = [
+    ];
 
     /**
      * Get all stored items
@@ -109,7 +110,8 @@ class Rh2AxiosConfigService {
      * Empty all items
      */
     removeAllConfigAxios(): void {
-        this.configsAxios = []
+        this.configsAxios = [
+        ]
     }
 
 }

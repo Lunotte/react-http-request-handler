@@ -5,7 +5,7 @@ export interface Rh2StateErreurApi {
     error: ErreurFetchApi;
   }
   
-  export interface Rh2State {
+export interface Rh2State {
     globalConfig: any;
     configs: any[];
     queryInProgress: string[];

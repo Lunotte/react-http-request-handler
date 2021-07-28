@@ -1,4 +1,3 @@
-import { initialHookState } from './rh2-reducer';
 import { useSelector } from "react-redux";
 import { createSelector } from 'reselect';
 import { Rh2State, Rh2StateErreurApi } from '../models/Rh2State';
@@ -25,9 +24,13 @@ const selectErreur = (state: Rh2State, label: string) =>
 //     return useSelector((state: Rh2State) => selectError(state, label));
 // }
 
-const selectErrors = createSelector([selectErreurs], (erreurs) => erreurs);
+const selectErrors = createSelector([
+    selectErreurs
+], (erreurs) => erreurs);
 
-const selectError = createSelector([selectErreur], (erreur) => erreur);
+const selectError = createSelector([
+    selectErreur
+], (erreur) => erreur);
 
 /**
  * Get the list of http errors. 
