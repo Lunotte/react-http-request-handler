@@ -26,11 +26,13 @@ import { default as rh2DirectoryService } from './Rh2DirectoryService';
  * 
  * @param configuration Request to execute
  * @param filter If true, trigger the request
+ * @param data Data to send in the request's body
  * @returns 
  */
 export function useRh2WithParameters(
     configuration: Rh2EffectSuccessNotRequiredHandler,
-    filter = true
+    filter = true,
+    data?: any
 ): {
     loading: boolean;
     data: any;
@@ -48,7 +50,12 @@ export function useRh2WithParameters(
     useEffect(() => {
         async function fetch() {
             return traitementToManageRequest(
-                { ...configuration, action: setState, addToDirectory: false, dispatch, label: null }
+                { ...configuration,
+                    action: setState,
+                    addToDirectory: false,
+                    dispatch,
+                    label: null,
+                    data }
             )
         }
         fetch();
@@ -69,11 +76,13 @@ export function useRh2WithParameters(
  * 
  * @param label Name of the request pre loaded
  * @param filter If true, trigger the request
+ * @param data Data to send in the request's body
  * @returns 
  */
 export function useRh2WithName(
     label: string,
-    filter = true
+    filter = true,
+    data?: any
 ): {
     loading: boolean;
     data: any;
@@ -104,7 +113,8 @@ export function useRh2WithName(
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
                     dispatch,
-                    addToDirectory: configSelected?.addToDirectory
+                    addToDirectory: configSelected?.addToDirectory,
+                    data
                 }
             )
         }
@@ -118,7 +128,9 @@ export function useRh2WithName(
 }
 
 function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryParameter {
-    return { method: configAxios?.method as MethodRnhrh, url: configAxios?.url, params: configAxios?.params } as ConfigQueryParameter;
+    return { method: configAxios?.method as MethodRnhrh,
+        url: configAxios?.url,
+        params: configAxios?.params } as ConfigQueryParameter;
 }
 
 async function traitementToManageRequest(
@@ -132,9 +144,13 @@ async function traitementToManageRequest(
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
-            configuration.action({ loading: true, data: null });
+            configuration.action({ loading: true,
+                data: null });
             loadingStartedDispatch(configuration);
-            const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance, configuration.config, configuration.justeReponse == null || configuration.justeReponse === true);
+            const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
+                {...configuration.config,
+                    data: (configuration.data != null) ? configuration.data : configuration.config.data },
+                configuration.justeReponse == null || configuration.justeReponse === true);
 
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
             if (configuration.addToDirectory) { // On ajoute à l'annuaire
@@ -152,13 +168,15 @@ async function traitementToManageRequest(
     }
 }
 
-// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
+// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url,
+// param et type que l'on ajouterait à la place du label en tant que clé unique
 function loadingStartedDispatch(configuration: Rh2EffectTreatmentToManageRequest) {
     if (configuration.label) {
         configuration.dispatch(chargementStartedAction(configuration.label));
     }
 }
-// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url, param et type que l'on ajouterait à la place du label en tant que clé unique
+// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url,
+// param et type que l'on ajouterait à la place du label en tant que clé unique
 function loadingCompletedDispatch(configuration: Rh2EffectTreatmentToManageRequest) {
     if (configuration.label) {
         configuration.dispatch(chargementFinishedAction(configuration.label));
@@ -172,7 +190,8 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
     } else {
         isModeDebugThenDisplayWarn('The method successHandler has not provided');
     }
-    configuration.action({ loading: false, data: reponse.responseSuccess });
+    configuration.action({ loading: false,
+        data: reponse.responseSuccess });
 }
 
 function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
@@ -184,7 +203,8 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
     } else {
         isModeDebugThenDisplayWarn('The method errorHandler has not provided');
     }
-    configuration.action({ loading: false, data: null });
+    configuration.action({ loading: false,
+        data: null });
     configuration.dispatch(apiErrordAction(configuration.label, reponse));
 }
 
@@ -207,10 +227,15 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
 /**
  * To be used if you need to add parameters to the request and you are in react native
  * In PATH_PARAM mode, we can concatenate with the values pre-entered in the config, it does not work with REQUEST_PARAM
+ * 
+ * @param configuration Request to execute
+ * @param filter If True, execute the request
+ * @param data Data to send in the request's body
  */
 export function useRh2WithParametersTakeParamsInRoute(
     configuration: Rh2EffectTakeParamsInRoute,
     filter = true,
+    data?: any
 ) {
     const route = useRoute();
     const [
@@ -231,7 +256,8 @@ export function useRh2WithParametersTakeParamsInRoute(
                     label: null,
                     route,
                     action: setState,
-                    dispatch
+                    dispatch,
+                    data
                 },
                 filter
             )
@@ -252,10 +278,12 @@ export function useRh2WithParametersTakeParamsInRoute(
  * 
  * @param label Name of the query to execute
  * @param filter If True, execute the request
+ * @param data Data to send in the request's body
  */
 export function useRh2WithNameTakeParamsInRoute(
     label: string,
     filter = true,
+    data?: any
 ) {
     const route = useRoute();
 
@@ -287,7 +315,8 @@ export function useRh2WithNameTakeParamsInRoute(
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
-                    dispatch
+                    dispatch,
+                    data
                 },
                 filter
             )
@@ -311,7 +340,9 @@ async function treatmentToManageParameters(
             isModeDebugThenDisplayWarn('No parameters in the route or recovered in the route. The classic treatment will be carried out');
 
             traitementToManageRequest(
-                { ...configuration, addToDirectory: false, label: null },
+                { ...configuration,
+                    addToDirectory: false,
+                    label: null },
                 filter
             );
         } else {
@@ -328,12 +359,14 @@ async function treatmentToManageParameters(
                 const parametresConcatenes = Object.keys(dataInRouteParam).reduce((avant, maintenant) =>
                     avant.concat('/').concat(dataInRouteParam[maintenant]), '');
 
-                apiAvecParam = { ...apiAvecParam, url: apiAvecParam.url.concat(parametresConcatenes) };
+                apiAvecParam = { ...apiAvecParam,
+                    url: apiAvecParam.url.concat(parametresConcatenes) };
             }
 
             if (configuration.typeQueryParameter === 'REQUEST_PARAM') {
                 isModeDebugThenDisplayInfo('Construction of a Query type method');
-                apiAvecParam = { ...apiAvecParam, params: dataInRouteParam };
+                apiAvecParam = { ...apiAvecParam,
+                    params: dataInRouteParam };
             }
 
             traitementToManageRequest(

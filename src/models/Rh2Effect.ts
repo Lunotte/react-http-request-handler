@@ -10,6 +10,13 @@ export interface Rh2EffectLabelFilter {
 }
 
 /**
+ * @param data Data to send in the request's body
+ */
+export interface Rh2EffectDataToRequestBody {
+    readonly data?: any;
+}
+
+/**
  * @param keyOfInstance If is not provided, first Axios instance will be used
  * @param config Axios settings
  * @param justeReponse If true or not defined then return data else all information about http request
@@ -40,7 +47,7 @@ export interface Rh2EffectManageConfigAndReturnData {
     readonly dispatch: any;
 }
 
-export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectSuccessNotRequiredHandler {
+export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectSuccessNotRequiredHandler, Rh2EffectDataToRequestBody {
 }
 
 /**
@@ -53,7 +60,7 @@ export interface Rh2EffectFromParameter {
 }
 
 export interface Rh2EffectTakeParamsInRoute extends Rh2EffectFromParameter, Rh2EffectSuccessNotRequiredHandler { }
-export interface Rh2EffectTreatmentToManageParameters extends Rh2EffectTakeParamsInRoute, Rh2EffectLabelFilter {
+export interface Rh2EffectTreatmentToManageParameters extends Rh2EffectTakeParamsInRoute, Rh2EffectLabelFilter, Rh2EffectDataToRequestBody {
     route: RouteProp<ParamListBase, string>;
     readonly action: any;
     readonly dispatch: any;

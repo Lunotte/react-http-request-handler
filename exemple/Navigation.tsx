@@ -15,15 +15,19 @@ const MICROSOFT = 'MICROSOFT';
 const AMAZON = 'AMAZON';
 
 
-const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-const configuration3: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3, keyOfInstance: 'Test2' };
+const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/',
+    method: 'GET' };
+const configuration3: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3,
+    keyOfInstance: 'Test2' };
 
 
 const CancelToken = axios.CancelToken;
 let source;// = CancelToken.source();
 
-const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/', method: 'GET' };
-let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis, keyOfInstance: 'Test1' };
+const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/',
+    method: 'post' };
+let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis,
+    keyOfInstance: 'Test1' };
 
 const Moi = () => {
 
@@ -60,10 +64,21 @@ const Moi = () => {
     //   });
 
 
-    const axiosConfig: AxiosRequestConfig = { url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5', method: 'GET' };
-    const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true, dataFromRoute: { params: [
-        'itemId'
-    ], typeQueryParameter: 'REQUEST_PARAM' } }
+    const axiosConfig: AxiosRequestConfig = { url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5',
+        method: 'GET'
+    };
+    
+    const configACharger: Rh2AxiosConfig = {
+        axiosRequestConfig: axiosConfig,
+        label: GOOGLE,
+        addToDirectory: true,
+        dataFromRoute: {
+            params: [
+                'itemId'
+            ],
+            typeQueryParameter: 'REQUEST_PARAM'
+        }
+    };
 
     // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
     // const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
@@ -112,7 +127,7 @@ const Moi = () => {
 
     // useRequestFromName(MICROSOFT, true);
 
-    const resultat = useRh2WithParameters(configurationBis, true);
+    const resultat = useRh2WithParameters(configurationBis, true, {toto: 'Il part en guerre'});
     console.log(resultat);
 
     // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
@@ -131,7 +146,10 @@ const Moi = () => {
 
         console.log('Onme');
         source = axios.CancelToken.source();
-        configurationBis = { ...configurationBis, config: { ...configurationBis.config, params: state, cancelToken: source.token } };
+        configurationBis = { ...configurationBis,
+            config: { ...configurationBis.config,
+                params: state,
+                cancelToken: source.token } };
         console.log('configuration dans navigation ', configurationBis);
 
     //navigation.navigate({name: 'Details', params: [{jack: '5'}]});
@@ -167,9 +185,11 @@ const Moi2 = () => {
     //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
 
     // useRh2WithNameTakeParamsInRoute(GOOGLE, true);
-    const conf: Rh2EffectTakeParamsInRoute = { ...configuration3, params: [
-        'itemId'
-    ], typeQueryParameter: 'REQUEST_PARAM' };
+    const conf: Rh2EffectTakeParamsInRoute = { ...configuration3,
+        params: [
+            'itemId'
+        ],
+        typeQueryParameter: 'REQUEST_PARAM' };
     const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
     console.log(resultat2)
     // useRequestFromName(MICROSOFT, state === 4);
