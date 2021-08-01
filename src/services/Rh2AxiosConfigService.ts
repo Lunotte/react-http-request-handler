@@ -6,8 +6,7 @@ import { Rh2AxiosConfig } from "..";
  */
 class Rh2AxiosConfigService {
 
-    private configsAxios: Rh2AxiosConfig[] = [
-    ];
+    private configsAxios: Rh2AxiosConfig[] = [];
 
     /**
      * Get all stored items
@@ -58,7 +57,8 @@ class Rh2AxiosConfigService {
             const configAxios = config.axiosRequestConfig;
             config = {
                 ...config,
-                axiosRequestConfig: { ...configAxios, auth }
+                axiosRequestConfig: { ...configAxios,
+                    auth }
             };
             this.addConfigAxios(config);
         }
@@ -76,7 +76,8 @@ class Rh2AxiosConfigService {
             const configAxios = config.axiosRequestConfig;
             config = {
                 ...config,
-                axiosRequestConfig: { ...configAxios, data: body }
+                axiosRequestConfig: { ...configAxios,
+                    data: body }
             };
             this.addConfigAxios(config);
         }
@@ -110,8 +111,7 @@ class Rh2AxiosConfigService {
      * Empty all items
      */
     removeAllConfigAxios(): void {
-        this.configsAxios = [
-        ]
+        this.configsAxios = []
     }
 
 }

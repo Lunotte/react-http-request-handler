@@ -9,13 +9,13 @@ class Rh2ConfigService {
     private parameters: Rh2InitializationParameter;
 
     public HEADER_URL: KeyValue[] = [
-        { key: 'Content-Type', value: 'application/json' }
+        { key: 'Content-Type',
+            value: 'application/json' }
     ]
 
     constructor() {
         this.parameters = {
-            axiosConfig: [
-            ],
+            axiosConfig: [],
             // reduxIsActif: false,
             // useAsyncStorage: false,
             errorHandler: null,

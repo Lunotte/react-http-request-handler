@@ -15,14 +15,16 @@ function getInstances() {
         rh2ConfigService.getParametersAxiosConfigs().forEach(config => {
             if (config.key != null && config.axiosConfig != null) {
                 const anInstance: AxiosInstance = axios.create(config.axiosConfig);
-                listAxiosInstance = { ...listAxiosInstance, [config.key]: anInstance };
+                listAxiosInstance = { ...listAxiosInstance,
+                    [config.key]: anInstance };
                 if (config.defaultInterceptor == null || config.defaultInterceptor === true) {
                     generateInterceptors(anInstance, config.headerUrl)
                 }
             }
         })
     } else {
-        listAxiosInstance = { ...listAxiosInstance, ['default']: axios.create() };
+        listAxiosInstance = { ...listAxiosInstance,
+            ['default']: axios.create() };
     }
     return listAxiosInstance;
 }
@@ -34,7 +36,8 @@ function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyVal
 
             if (headers) {
                 if (config.method !== 'OPTIONS') {
-                    config = { ...config, headers };
+                    config = { ...config,
+                        headers };
                 }
             }
             return config;
