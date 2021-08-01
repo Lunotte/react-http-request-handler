@@ -1,7 +1,9 @@
 {
   "name": "react-native-http-request-handler",
-  "version": "0.0.32",
+  "version": "0.0.39",
   "private": true,
+  "description": "This React library using custom hooks aims to facilitate the user in handling http requests. All he has to do is configure the request that will be executed by Axios, as well as the time of the trigger. It is possible to add additional parameters for the needs of the client application. For example, requesting that a query be executed only once through our historization system; the configuration of the treatments to be carried out in the event of request errors. Redux users may be happy to dispatch the result of the request returned successfully or not, it may also be preceded by processing or not.",
+  "keywords": ["react", "react-native", "axios", "http", "request", "hook", "custom hook", "fetch", "api"],
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -11,33 +13,35 @@
     "prepare": "bob build"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.5",
-    "@react-native-community/cli": "^5.0.1",
-    "@react-navigation/devtools": "^5.1.22",
-    "@react-navigation/native": "^5.9.4",
-    "@react-navigation/stack": "^5.14.5",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "react": "^17.0.1",
     "react-dom": "^16.13.1",
-    "react-native": "^0.64.2",
-    "react-native-web": "^0.17.1",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.0"
+    "redux": "^4.1.0",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/runtime": "^7.14.0",
+    "@react-native-community/cli": "^5.0.1",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@react-navigation/devtools": "^5.1.22",
+    "@react-navigation/native": "^5.9.4",
+    "@react-navigation/stack": "^5.14.5",
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.170",
     "@types/react": "^17.0.9",
     "@types/react-native": "^0.64.10",
     "@types/react-test-renderer": "^17.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
     "babel-jest": "^27.0.2",
     "eslint": "^7.28.0",
+    "eslint-plugin-react": "^7.24.0",
     "jest": "^27.0.4",
     "metro-react-native-babel-preset": "^0.66.0",
+    "react-native": "^0.64.2",
     "react-native-builder-bob": "^0.18.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.2.0",
@@ -46,28 +50,20 @@
     "react-native-screens": "^3.4.0",
     "react-native-unimodules": "~0.13.3",
     "react-test-renderer": "17.0.1",
+    "react-native-web": "^0.17.1",
     "typescript": "^4.3.2"
   },
   "peerDependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.5",
-    "@react-native-community/cli": "^5.0.1",
-    "@react-navigation/devtools": "^5.1.22",
-    "@react-navigation/native": "^5.9.4",
-    "@react-navigation/stack": "^5.14.5",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "react": "^17.0.1",
     "react-dom": "^16.13.1",
-    "react-native": "^0.64.2",
-    "react-native-web": "^0.17.1",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.0"
+    "redux": "^4.1.0",
+    "reselect": "^4.0.0"
   },
   "jest": {
     "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/lib/"
-    ],
     "setupFiles": [
       "./__mocks__/@react-native-async-storage/async-storage.js"
     ]
@@ -75,7 +71,7 @@
   "main": "lib\\commonjs\\index.js",
   "react-native": "src\\index.ts",
   "module": "lib\\module\\index.js",
-  "types": "lib\\typescript\\src\\index.d.ts",
+  "types": "lib\\typescript\\index.d.ts",
   "files": [
     "src",
     "lib",

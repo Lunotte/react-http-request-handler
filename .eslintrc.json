@@ -1,0 +1,33 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        //"max-len": ["error", { "code": 250 , "ignoreUrls": true, "ignoreRegExpLiterals": true}],
+        "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }],
+        "array-bracket-newline": ["error", { "multiline": true, "minItems": 1 }],
+        "array-element-newline": ["error", { "multiline": true, "minItems": 1 }],
+        "indent-legacy":"warn",
+        "indent": "warn",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+    }
+}

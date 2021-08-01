@@ -1,12 +1,9 @@
-export { ConfigQueryParameter, MethodRnhrh, ParamRnhnh, MultiplePossibleValues, TypeQueryParameter } from './models';
-export type { SettingsInitializerRnhrh, KeyValue, ConfigAxiosEtat, ConfigAxios, ActionToDispatch } from './models';
-export { default as gestionConfig } from './services/GestionConfigService'
-export { default as queryAxiosService } from './services/QueryAxiosService'
+export * from 'axios';
+export { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh, TypeQueryParameter } from './models';
+export type { ActionToDispatch, ErreurFetchApi, KeyValue, ResponseFetchApi, Rh2AxiosConfig, Rh2InitializationParameter, Rh2State, Rh2StateErreurApi } from './models';
+export { pourTestAction, rh2Error, rh2Errors } from './redux';
+export { getAxiosInstances, rh2AxiosConfigService, rh2ConfigService } from './services';
 export {
-    useRequestWithoutDispatchFromParameter,
-    useRequestWithoutDispatchFromName,
-    useRequestFromName,
-    useRequestFromParameter,
-    useFetchWithParamInRouteFromParameter,
-    useFetchWithParamInRouteFromName
-} from './effects';
+    useRh2WithName, useRh2WithNameTakeParamsInRoute, useRh2WithParameters, useRh2WithParametersTakeParamsInRoute
+} from './services/Rh2EffectsService';
+
