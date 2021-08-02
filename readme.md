@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/bitbucket/Lunotte/reactnativehttprequesthandler/badge.svg?branch=master)](https://coveralls.io/bitbucket/Lunotte/reactnativehttprequesthandler?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Lunotte/react-http-request-handler/badge.svg?branch=master)](https://coveralls.io/github/Lunotte/react-http-request-handler?branch=master)
 
 ### ROADMAP
 
