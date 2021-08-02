@@ -6,5 +6,5 @@ cache:
   - node_modules
 script:
   - npm test -- --coverage # Include coverage when running tests
-after_script: # Upload coverage reports 
-  - COVERALLS_REPO_TOKEN=$coveralls_repo_token npm run coveralls
+after_success: # Upload coverage reports 
+  - npm run coveralls
