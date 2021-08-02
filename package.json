@@ -3,14 +3,25 @@
   "version": "0.0.39",
   "private": true,
   "description": "This React library using custom hooks aims to facilitate the user in handling http requests. All he has to do is configure the request that will be executed by Axios, as well as the time of the trigger. It is possible to add additional parameters for the needs of the client application. For example, requesting that a query be executed only once through our historization system; the configuration of the treatments to be carried out in the event of request errors. Redux users may be happy to dispatch the result of the request returned successfully or not, it may also be preceded by processing or not.",
-  "keywords": ["react", "react-native", "axios", "http", "request", "hook", "custom hook", "fetch", "api"],
+  "keywords": [
+    "react",
+    "react-native",
+    "axios",
+    "http",
+    "request",
+    "hook",
+    "custom hook",
+    "fetch",
+    "api"
+  ],
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest --coverage",
     "lint": "eslint .",
-    "prepare": "bob build"
+    "prepare": "bob build",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -37,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
     "babel-jest": "^27.0.2",
+    "coveralls": "^3.1.1",
     "eslint": "^7.28.0",
     "eslint-plugin-react": "^7.24.0",
     "jest": "^27.0.4",
@@ -49,8 +61,8 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.4.0",
     "react-native-unimodules": "~0.13.3",
-    "react-test-renderer": "17.0.1",
     "react-native-web": "^0.17.1",
+    "react-test-renderer": "17.0.1",
     "typescript": "^4.3.2"
   },
   "peerDependencies": {
