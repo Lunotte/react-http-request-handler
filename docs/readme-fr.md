@@ -28,6 +28,11 @@ Utilisant yarn :
 $ yarn add react-http-request-handler
 ```
 
+## Toutes les configs
+
+
+
+## Initialisation de la librairie
 
 
 

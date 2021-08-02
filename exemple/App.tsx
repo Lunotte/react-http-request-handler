@@ -30,16 +30,18 @@ const App = () => {
     const initSettings: Rh2InitializationParameter = {
         axiosConfig: [
             {
-                key: 'Test1', axiosConfig: { baseURL: 'https://www.google.com/' }, defaultInterceptor: false,
+                key: 'Test1',
+                axiosConfig: { baseURL: 'https://www.google.com/' },
+                defaultInterceptor: false,
                 headerUrl: [
-                    { key: 'CleDeTest', value: 'value to test' }
+                    { key: 'CleDeTest',
+                        value: 'value to test' }
                 ]
             },
             {
-                key: 'Test2', axiosConfig: { baseURL: 'http://pompoarre.fr' },
-                headerUrl: [
-        
-                ]
+                key: 'Test2',
+                axiosConfig: { baseURL: 'http://pompoarre.fr' },
+                headerUrl: []
             }
         ],
         modeDebug: true
