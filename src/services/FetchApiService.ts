@@ -31,6 +31,8 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
     }
 
     try {
+        isModeDebugThenDisplayInfo('L\'instance demandé à être utilisée est ' + axiosInstance + '. Parmi celles qui sont disponibles', configAxiosInstance);
+        
         const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(configAxiosInstance)[0];
 
         const resultData = await configAxiosInstance[axiosInstanceToUse].request(config);

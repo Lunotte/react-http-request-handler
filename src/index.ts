@@ -1,4 +1,5 @@
 export * from 'axios';
+export { default as InitializerRnhrh } from './InitializerRnhrh';
 export { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh, TypeQueryParameter } from './models';
 export type { ActionToDispatch, ErreurFetchApi, KeyValue, ResponseFetchApi, Rh2AxiosConfig, Rh2InitializationParameter, Rh2State, Rh2StateErreurApi } from './models';
 export { pourTestAction, rh2Error, rh2Errors } from './redux';

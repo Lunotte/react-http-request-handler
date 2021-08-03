@@ -24,7 +24,8 @@ function getInstances() {
         })
     } else {
         listAxiosInstance = { ...listAxiosInstance,
-            ['default']: axios.create() };
+            ['default']: axios.create()
+        };
     }
     return listAxiosInstance;
 }
