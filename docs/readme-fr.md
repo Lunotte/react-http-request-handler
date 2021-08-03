@@ -28,7 +28,7 @@ Utilisant yarn :
 $ yarn add react-http-request-handler
 ```
 
-## Toutes les configs
+## Toutes les configurations
 
 
 
@@ -36,9 +36,32 @@ $ yarn add react-http-request-handler
 
 
 
+### L'application peut être initialisée de 2 manières :
 
+Soit vous utiliser un wrapper dans lequel vous passez en paramètre la configuration initiale : 
 
+```jsx
+import { InitializerRnhrh, Rh2InitializationParameter } from 'react-http-request-handler';
 
+const initSettings: Rh2InitializationParameter = {
+  modeDebug: true
+};
+ 
+<InitializerRnhrh rh2Settings={initSettings}>
+  <App />
+</InitializerRnhrh>
+```
+
+Soit vous la passez plus tard via un service :
+
+```jsx
+import { Rh2InitializationParameter, rh2ConfigService } from 'react-http-request-handler';
+
+const initSettings: Rh2InitializationParameter = {
+  modeDebug: true
+};
+rh2ConfigService.initializeParameters(initSettings);
+```
 
 
 

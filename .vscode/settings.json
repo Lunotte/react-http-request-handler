@@ -10,5 +10,87 @@
     "editor.formatOnType": true,
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 200,
-    "editor.minimap.maxColumn": 150
+    "editor.minimap.maxColumn": 150,
+    "psi-header.config": {
+        "forceToTop": true,
+        "blankLinesAfter": 1,
+        "license": "MIT",
+        "author": "Charly Beaugrand",
+        "initials": "CB",
+        "authorEmail": "charlybeaugrand@gmail.com",
+        "company": "Lunotte"
+    },
+    "psi-header.changes-tracking": {
+        "isActive": true,
+        "modAuthor": "Modified By:",
+        "modDate": "Last Modified:",
+        "modDateFormat": "dd/MM/yyyy hh:nn:ss",
+        "include": [],
+        "includeGlob": [],
+        "exclude": ["markdown", "json", "jsonc", "shellscript"],
+        "excludeGlob": ["./exemple/**"],
+        "autoHeader": "autoSave",
+        "enforceHeader": true,
+        "replace": [
+            "Filename:",
+            "Project"
+        ],
+        "updateLicenseVariables": false
+    },
+    "psi-header.lang-config": [
+        {
+            "language": "javascript",
+            "begin": "/*",
+            "prefix": " * ",
+            "suffix": " *",
+            "lineLength": 80,
+            "end": " */",
+            "forceToTop": true,
+            "blankLinesAfter": 3,
+            "beforeHeader": [],
+            "afterHeader": [],
+            "rootDirFileName": "package.json",
+            "modAuthor": "Modified By:",
+            "modDate": "Last Modified:",
+            "modDateFormat": "dd/MM/yyyy hh:nn:ss",
+            "replace": [
+                "Filename:",
+                "Project"
+            ],
+            "ignoreLines": []
+        },
+        {
+            "language": "typescript",
+            "mapTo": "javascript"
+        }
+    ],
+    "psi-header.templates": [
+        {
+            "language": "javascript",
+            "template": [
+                "File: <<filename>>",
+                "Project: <<projectname>>",
+                "Created Date: <<filecreated('dd MMM yyyy')>>",
+                "Author: <<author>",
+                "-----",
+                "Last Modified: <<date>>",
+                "Modified By: <<author>>",
+                "-----",
+                "Copyright (c) <<yeartoyear(fc, now)>> <<company>>",
+                "----------\t---\t---------------------------------------------------------"
+            ],
+            "changeLogCaption": "HISTORY",
+            "changeLogHeaderLineCount": 2,
+            "changeLogEntryTemplate": [
+                "",
+                "<<dateformat(DD-MM-YYYY)>>\t<<initials>>\t"
+            ],
+            "changeLogNaturalOrder": false,
+            "changeLogFooterLineCount": 0
+        },
+        {
+            "language": "typescript",
+            "mapTo": "javascript"
+        }
+    ]
 }

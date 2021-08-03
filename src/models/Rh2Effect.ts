@@ -1,10 +1,25 @@
+/*
+ * File: Rh2Effect.ts                                                          *
+ * Project: react-http-request-handler                                         *
+ * Created Date: Su Aug yyyy                                                   *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: Tue Aug 03 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
 import { TypeQueryParameter } from '.';
 
 /**
  * @param label Name of the preloaded configuration
- */
+ */ 
 export interface Rh2EffectLabelFilter {
     readonly label: string;
 }
@@ -39,12 +54,10 @@ export interface Rh2EffectSuccessNotRequiredHandler extends Rh2EffectAxiosConfig
 /**
  * @param addToDirectory Determines if the request can be executed more than once. If True, the request call will not be sent.
  * @param action 
- * @param dispatch Utilisation de redux 
  */
 export interface Rh2EffectManageConfigAndReturnData {
     readonly addToDirectory: boolean;
     readonly action: any;
-    readonly dispatch: any;
 }
 
 export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectSuccessNotRequiredHandler, Rh2EffectDataToRequestBody {
@@ -63,7 +76,6 @@ export interface Rh2EffectTakeParamsInRoute extends Rh2EffectFromParameter, Rh2E
 export interface Rh2EffectTreatmentToManageParameters extends Rh2EffectTakeParamsInRoute, Rh2EffectLabelFilter, Rh2EffectDataToRequestBody {
     route: RouteProp<ParamListBase, string>;
     readonly action: any;
-    readonly dispatch: any;
 }
 
 type OptionalParamVoidMethod = (param?: any) => void;

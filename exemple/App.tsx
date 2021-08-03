@@ -1,10 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
+/*
+ * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\exemple\App.tsx
+ * Path: c:\Users\Lunotte\Dev\React Native\react-http-request-handler
+ * Created Date: Sunday, August 1st 2021, 8:45:24 pm
+ * Author: Charly Beaugrand
+ * 
+ * Copyright (c) 2021 Lunotte
  */
+
+
+
+
 
 import React from 'react';
 import {
@@ -15,9 +20,7 @@ import {
     Colors
 } from 'react-native/Libraries/NewAppScreen';
 import { Rh2InitializationParameter } from '../src';
-import InitializerRnhrh from '../src/InitializerRnhrh';
 import Navigation from './Navigation';
-
 
 const App = () => {
     const isDarkMode = useColorScheme() === 'dark';
@@ -48,9 +51,7 @@ const App = () => {
     };
 
     return (
-        <InitializerRnhrh rh2Settings={initSettings}>
-            <Navigation />
-        </InitializerRnhrh>
+        <Navigation />
     );
 };
 

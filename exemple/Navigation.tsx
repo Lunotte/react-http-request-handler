@@ -1,9 +1,8 @@
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
 import { useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
@@ -26,14 +25,11 @@ let source;// = CancelToken.source();
 
 const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/',
     method: 'post' };
-let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis,
-    keyOfInstance: 'Test1' };
+let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis};
 
 const Moi = () => {
-
-    const dispatch = useDispatch();
-    const navigation = useNavigation();
-
+    // const dispatch = useDispatch();
+    // const navigation = useNavigation();
     // rh2ConfigService.initializeParameters({
     //   axiosConfig: [{
     //     key: 'Test1', axiosConfig: { baseURL: 'https://www.sdfgoogle.com/' }, defaultInterceptor: false,
@@ -67,7 +63,6 @@ const Moi = () => {
     const axiosConfig: AxiosRequestConfig = { url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5',
         method: 'GET'
     };
-    
     const configACharger: Rh2AxiosConfig = {
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
@@ -127,7 +122,7 @@ const Moi = () => {
 
     // useRequestFromName(MICROSOFT, true);
 
-    const resultat = useRh2WithParameters(configurationBis, true, {toto: 'Il part en guerre'});
+    const resultat = useRh2WithParameters({...configurationBis}, true, {toto: 'Il part en guerre'});
     console.log(resultat);
 
     // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);

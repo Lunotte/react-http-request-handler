@@ -10,11 +10,16 @@ export type TypeChargementAction = {type: string, label: string};
 export type TypeActionPayload = {type: string, payload: string};
 export type TypeErrordAction = {type: string, label: string, error: ResponseFetchApi};
 
-export const chargementStartedAction = (label: string): TypeChargementAction => ({ type: CHARGEMENT_STARTED_ACTION, label });
-export const chargementFinishedAction = (label: string): TypeChargementAction => ({ type: CHARGEMENT_FINISHED_ACTION, label });
+export const chargementStartedAction = (label: string): TypeChargementAction => ({ type: CHARGEMENT_STARTED_ACTION,
+    label });
+export const chargementFinishedAction = (label: string): TypeChargementAction => ({ type: CHARGEMENT_FINISHED_ACTION,
+    label });
 
-export const apiErrordAction = (label: string, error: ResponseFetchApi): TypeErrordAction => ({ type: API_ERROR_ACTION, label, error });
+export const apiErrordAction = (label: string, error: ResponseFetchApi): TypeErrordAction => ({ type: API_ERROR_ACTION,
+    label,
+    error });
 
 export const pourTestAction = (param?: any): TypeActionPayload => {
-    return { type: POUR_TEST_ACTION, payload: param };
+    return { type: POUR_TEST_ACTION,
+        payload: param };
 }

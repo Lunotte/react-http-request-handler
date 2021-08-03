@@ -1,8 +1,8 @@
-import { ErreurFetchApi } from "./FetchApi";
+import { ResponseFetchApi } from "./FetchApi";
 
 export interface Rh2StateErreurApi {
     label: string;
-    error: ErreurFetchApi;
+    error: ResponseFetchApi;
   }
   
 export interface Rh2State {

@@ -1,17 +1,16 @@
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
-import { apiErrordAction, chargementFinishedAction, chargementStartedAction } from '../redux/rh2-action';
 import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute, Rh2EffectTreatmentToManageParameters, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';
 import { default as rh2DirectoryService } from './Rh2DirectoryService';
+import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQueryInProgressService';
 
 /*************************************************************************** */
 
@@ -45,15 +44,12 @@ export function useRh2WithParameters(
         data: null,
     });
 
-    const dispatch = useDispatch();
-
     useEffect(() => {
         async function fetch() {
             return traitementToManageRequest(
                 { ...configuration,
                     action: setState,
                     addToDirectory: false,
-                    dispatch,
                     label: null,
                     data }
             )
@@ -95,8 +91,6 @@ export function useRh2WithName(
         data: null,
     });
 
-    const dispatch = useDispatch();
-
     useEffect(() => {
         async function fetch() {
 
@@ -112,7 +106,6 @@ export function useRh2WithName(
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
-                    dispatch,
                     addToDirectory: configSelected?.addToDirectory,
                     data
                 }
@@ -146,11 +139,16 @@ async function traitementToManageRequest(
 
             configuration.action({ loading: true,
                 data: null });
-            loadingStartedDispatch(configuration);
+            loadingStarted(configuration);
+            console.log(rh2ManagerToQueryInProgressService.getQueryInProgress());
+            
             const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
                 {...configuration.config,
                     data: (configuration.data != null) ? configuration.data : configuration.config.data },
                 configuration.justeReponse == null || configuration.justeReponse === true);
+            
+            console.log(reponse);
+            
 
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
             if (configuration.addToDirectory) { // On ajoute à l'annuaire
@@ -163,23 +161,26 @@ async function traitementToManageRequest(
                 treatmentIfErrorInUseRequest(configuration, reponse);
             }
 
-            loadingCompletedDispatch(configuration);
+            console.log(rh2ManagerToQueryInProgressService.getErreurApi());
+
+            loadingCompleted(configuration);
+            console.log(rh2ManagerToQueryInProgressService.getQueryInProgress());
         }
     }
 }
 
 // @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url,
 // param et type que l'on ajouterait à la place du label en tant que clé unique
-function loadingStartedDispatch(configuration: Rh2EffectTreatmentToManageRequest) {
+function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest) {
     if (configuration.label) {
-        configuration.dispatch(chargementStartedAction(configuration.label));
+        rh2ManagerToQueryInProgressService.addQueryInProgress(configuration.label);
     }
 }
 // @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url,
 // param et type que l'on ajouterait à la place du label en tant que clé unique
-function loadingCompletedDispatch(configuration: Rh2EffectTreatmentToManageRequest) {
+function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest) {
     if (configuration.label) {
-        configuration.dispatch(chargementFinishedAction(configuration.label));
+        rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
     }
 }
 
@@ -205,7 +206,7 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
     }
     configuration.action({ loading: false,
         data: null });
-    configuration.dispatch(apiErrordAction(configuration.label, reponse));
+    rh2ManagerToQueryInProgressService.addErrorApi(configuration.label, reponse);
 }
 
 
@@ -246,8 +247,6 @@ export function useRh2WithParametersTakeParamsInRoute(
         data: null,
     });
 
-    const dispatch = useDispatch();
-
     useEffect(() => {
         async function fetch() {
             treatmentToManageParameters(
@@ -256,7 +255,6 @@ export function useRh2WithParametersTakeParamsInRoute(
                     label: null,
                     route,
                     action: setState,
-                    dispatch,
                     data
                 },
                 filter
@@ -295,7 +293,6 @@ export function useRh2WithNameTakeParamsInRoute(
         data: null,
     });
 
-    const dispatch = useDispatch();
 
     useEffect(() => {
         async function fetch() {
@@ -315,7 +312,6 @@ export function useRh2WithNameTakeParamsInRoute(
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
-                    dispatch,
                     data
                 },
                 filter
