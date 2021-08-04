@@ -1,7 +1,22 @@
+/*
+ * File: FetchApiService.ts                                                    *
+ * Project: react-http-request-handler                                         *
+ * Created Date: Su Aug yyyy                                                   *
+ * Author: <<author>                                                           *
+ * -----                                                                       *
+ * Last Modified: Wed Aug 04 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { AxiosRequestConfig } from "axios";
 import { ErreurFetchApi, ResponseFetchApi } from "../models";
 import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from "../tools/Utils";
-import configAxiosInstance from "./Rh2AxiosInstanceService";
+import { getAxiosinstance } from "./Rh2AxiosInstanceService";
 
 /**
  * Go get the data
@@ -31,11 +46,12 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
     }
 
     try {
-        isModeDebugThenDisplayInfo('L\'instance demandé à être utilisée est ' + axiosInstance + '. Parmi celles qui sont disponibles', configAxiosInstance);
+        const message = (axiosInstance == null) ? 'Aucune instance demandée, celle par défaut va être utilisée' : 'L\'instance demandée à être utilisée est ' + axiosInstance;
+        isModeDebugThenDisplayInfo(message + '. Parmi celles qui sont disponibles', getAxiosinstance());
         
-        const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(configAxiosInstance)[0];
+        const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(getAxiosinstance())[0];
 
-        const resultData = await configAxiosInstance[axiosInstanceToUse].request(config);
+        const resultData = await getAxiosinstance()[axiosInstanceToUse].request(config);
         isModeDebugThenDisplayInfo('Data was fetched from lib', resultData);
 
         if (resultData.status >= 200 && resultData.status < 300) {

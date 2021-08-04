@@ -1,3 +1,18 @@
+/*
+ * File: Utils.ts                                                              *
+ * Project: react-http-request-handler                                         *
+ * Created Date: We Jun yyyy                                                   *
+ * Author: Charly Beaugrand                                                                *
+ * -----                                                                       *
+ * Last Modified: Thu Aug 05 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { Platform } from "react-native";
 import { rh2ConfigService } from "../services";
 
@@ -14,6 +29,16 @@ export function isWeb(): boolean {
 
 export function isMobileOuWeb(): boolean {
     return isMobile() || isWeb();
+}
+
+export function isModeDebugThenDisplayError(message: string, ...data: unknown[]): void {
+    if (rh2ConfigService.isModeDebug()) {
+        if (data.length > 0) {
+            console.error(WARN + message, data);
+        } else {
+            console.error(WARN + message);
+        }
+    }
 }
 
 export function isModeDebugThenDisplayWarn(message: string, ...data: unknown[]): void {

@@ -16,18 +16,17 @@ import {
     StyleSheet,
     useColorScheme
 } from 'react-native';
-import {
-    Colors
-} from 'react-native/Libraries/NewAppScreen';
+import { Provider } from 'react-redux';
 import { Rh2InitializationParameter } from '../src';
+import Store from '../src/redux/rh2-store';
 import Navigation from './Navigation';
 
 const App = () => {
     const isDarkMode = useColorScheme() === 'dark';
 
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };
+    // const backgroundStyle = {
+    //     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    // };
 
     // const initSettings: Rh2InitializationParameter = { modeDebug: false };
     const initSettings: Rh2InitializationParameter = {
@@ -51,7 +50,11 @@ const App = () => {
     };
 
     return (
-        <Navigation />
+        <Provider store={Store}>
+            {/* <InitializerRnhrh rh2Settings={initSettings} > */}
+            <Navigation />
+            {/* </InitializerRnhrh> */}
+        </Provider>
     );
 };
 

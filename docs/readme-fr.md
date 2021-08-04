@@ -30,6 +30,77 @@ $ yarn add react-http-request-handler
 
 ## Toutes les configurations
 
+### Rh2InitializationParameter
+
+| Nom          | Type | Description                                                  | Valeur par défaut | Valeur d’exemple |
+| ------------ | ------------------------------------------------------------ | ----------------- | ---------------- | ---------------- |
+| axiosConfig  | AxiosRequestConfigExtended[] | Les requêtes qui seront exécutées pendant l’utilisation de l’application peuvent être pré-configurées. L’utilisation d’une clé sera nécessaire pour retrouver la configuration ajoutée | [] | Exemple 1 |
+| modeDebug    | boolean | Log des informations complémentaires à l’utilisateur. Ceci peut aider à comprendre de mauvais comportement | false             | `true, false`      |
+| errorHandler | function | Méthode générale qui va être utilisée en cas d’échec de la requête | n/a | Exemple 2 |
+
+
+
+### AxiosRequestConfigExtended
+
+| Nom                | Type                                | Description                                                  | Valeur par défaut                                  | Valeur d’exemple                                     |
+| ------------------ | ----------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------- |
+| key                | string                              | Clé pour retrouver l'instance Axios                          | n/a                                                | `"MY_DEFAULT_KEY"`                                   |
+| axiosConfig        | AxiosRequestConfig                  | Configuration [Axios](https://github.com/axios/axios). Si vous ne connaissez pas cette librairie, par exemple, vous pouvez valoriser la propriété baseURL pour indiquer le préfixe de chaque url qui utilisera cette instance | n/a                                                | `{ baseURL: 'http://test.fr' }`                      |
+| defaultInterceptor | boolean                             | Si true, alors un intercepteur va être crée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémenté le votre, le votre ne va pas fonctionner</b> | true                                               | `true, false`                                        |
+| headerUrl          | {key: string;<br/>value: string;}[] | Liste des en-tête à utiliser par l'interceptor               | [{key: 'Content-Type', value: 'application/json'}] | `[{key: 'Content-Type', value: 'application/json'}]` |
+
+
+
+<u>Exemple 1</u> :
+
+```typescript
+{
+  key: 'Test1',
+  axiosConfig: { 
+      baseURL: 'https://www.test.com/',
+      method: 'GET' 
+  },
+  defaultInterceptor: true,
+  headerUrl: [{
+      key: 'key',
+      value: 'value to test'
+  }]
+}
+```
+
+
+
+<u>Exemple 2</u> :
+
+```typescript
+const traitementErreur = (data: ResponseFetchApi) => {
+    let message;
+
+    switch (data.status) {
+      case 405:
+        message = 'C’est une erreur 405 !';
+        console.log(message);
+        dispatch(pourTestAction(message));
+        break;
+      case 404:
+        message = 'C’est une erreur 404 !';
+        console.log(message);
+        dispatch(pourTestAction(message));
+        break;
+      default:
+        message = 'Facheux ce problème !';
+        console.log(message);
+        dispatch(pourTestAction(message));
+        break;
+    }
+}
+
+const initSettings: Rh2InitializationParameter = {
+    modeDebug: true,
+    errorHandler: (data) => traitementErreur(data)
+};
+```
+
 
 
 ## Initialisation de la librairie
@@ -63,9 +134,7 @@ const initSettings: Rh2InitializationParameter = {
 rh2ConfigService.initializeParameters(initSettings);
 ```
 
-
-
-
+Si aucun paramétrage ne sera fourni, une instance Axios va être générée par défaut. 
 
 
 

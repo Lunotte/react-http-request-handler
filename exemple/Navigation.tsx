@@ -1,11 +1,20 @@
+/*
+ * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\exemple\Navigation.tsx
+ * Path: c:\Users\Lunotte\Dev\React Native\react-http-request-handler
+ * Created Date: Sunday, August 1st 2021, 8:45:24 pm
+ * Author: Charly Beaugrand
+ * 
+ * Copyright (c) 2021 Lunotte
+ */
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
-import { Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
+import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter } from '../src';
 import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
-import { useRh2WithParameters, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+import { useRh2WithName, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
 
 
 
@@ -25,9 +34,51 @@ let source;// = CancelToken.source();
 
 const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/',
     method: 'post' };
-let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis};
+let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis };
+
+//const dispatch = useDispatch();
+
+const traitementErreur = (data: ResponseFetchApi) => {
+    let message;
+
+    switch (data.status) {
+    case 405:
+        message = 'C’est une erreur 405 !';
+        console.log(message);
+        //  dispatch(pourTestAction(message));
+        break;
+    case 404:
+        message = 'C’est une erreur 404 !';
+        console.log(message);
+        // dispatch(pourTestAction(message));
+        break;
+    default:
+        message = 'Facheux ce problème !';
+        console.log(message);
+        // dispatch(pourTestAction(message));
+        break;
+    }
+}
+
+const initSettings: Rh2InitializationParameter = {
+    axiosConfig: [
+        {
+            key: 'Test1',
+            axiosConfig: { baseURL: 'https://www.test.com/' },
+            defaultInterceptor: false,
+            headerUrl: [
+                { key: 'KeyToTest',
+                    value: 'value to test' }
+            ]
+        }
+    ],
+    modeDebug: true,
+    errorHandler: (data) => traitementErreur(data)
+};
+rh2ConfigService.initializeParameters(null);
 
 const Moi = () => {
+
     // const dispatch = useDispatch();
     // const navigation = useNavigation();
     // rh2ConfigService.initializeParameters({
@@ -64,6 +115,7 @@ const Moi = () => {
         method: 'GET'
     };
     const configACharger: Rh2AxiosConfig = {
+        // keyOfInstance: 'Test1',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
         addToDirectory: true,
@@ -108,8 +160,8 @@ const Moi = () => {
 
     // console.log('ici');
     //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-    // const test = useRh2WithName(GOOGLE, true);
-    // console.log(test);
+    const test = useRh2WithName(GOOGLE, true);
+    console.log(test);
 
     // source.cancel('test cancellation');
 
@@ -122,8 +174,8 @@ const Moi = () => {
 
     // useRequestFromName(MICROSOFT, true);
 
-    const resultat = useRh2WithParameters({...configurationBis}, true, {toto: 'Il part en guerre'});
-    console.log(resultat);
+    // const resultat = useRh2WithParameters({...configurationBis}, true, {toto: 'Il part en guerre'});
+    // console.log(resultat);
 
     // const resultat2 = useRequestPreloadedWithName(MICROSOFT, true);
     // console.log(resultat2);

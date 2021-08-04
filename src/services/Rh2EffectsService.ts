@@ -1,3 +1,18 @@
+/*
+ * File: Rh2EffectsService.ts                                                  *
+ * Project: react-http-request-handler                                         *
+ * Created Date: Su Aug yyyy                                                   *
+ * Author: <<author>                                                           *
+ * -----                                                                       *
+ * Last Modified: Wed Aug 04 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
@@ -99,7 +114,7 @@ export function useRh2WithName(
 
             return traitementToManageRequest(
                 {
-                    keyOfInstance: configSelected.keyOfInstance,
+                    keyOfInstance: configSelected?.keyOfInstance,
                     label,
                     config: configSelected?.axiosRequestConfig,
                     justeReponse: configSelected?.justeReponse,

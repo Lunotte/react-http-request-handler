@@ -1,3 +1,18 @@
+/*
+ * File: Rh2Config.ts                                                          *
+ * Project: react-http-request-handler                                         *
+ * Created Date: Su Aug yyyy                                                   *
+ * Author: <<author>                                                           *
+ * -----                                                                       *
+ * Last Modified: Wed Aug 04 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { AxiosRequestConfig } from 'axios';
 
 /**
@@ -19,6 +34,7 @@ export interface KeyValue {
 }
 
 /**
+ * @param key Key to find instance
  * @param axiosConfig Paramètrage Axios
  * @param headerUrl An interceptor is generate to each instance of axios, per default, Content-Type: application/json is added if this parameter is null
  * @param defaultInterceptor Default is true, in the interceptor only headerUrl is used. If you want to custom interceptor of the instance, choose false. 

@@ -1,3 +1,12 @@
+/*
+ * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\src\InitializerRnhrh.tsx
+ * Path: c:\Users\Lunotte\Dev\React Native\react-http-request-handler
+ * Created Date: Sunday, August 1st 2021, 8:45:24 pm
+ * Author: Charly Beaugrand
+ * 
+ * Copyright (c) 2021 Lunotte
+ */
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import { rh2ConfigService, Rh2InitializationParameter } from '.';
