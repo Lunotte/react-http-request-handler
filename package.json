@@ -1,6 +1,6 @@
 {
   "name": "react-http-request-handler",
-  "version": "0.0.45",
+  "version": "0.0.48",
   "private": true,
   "description": "This React library using custom hooks aims to facilitate the user in handling http requests. All he has to do is configure the request that will be executed by Axios, as well as the time of the trigger. It is possible to add additional parameters for the needs of the client application. For example, requesting that a query be executed only once through our historization system; the configuration of the treatments to be carried out in the event of request errors. Redux users may be happy to dispatch the result of the request returned successfully or not, it may also be preceded by processing or not.",
   "keywords": [
@@ -54,6 +54,7 @@
     "eslint-plugin-react": "^7.24.0",
     "jest": "^27.0.4",
     "metro-react-native-babel-preset": "^0.66.0",
+    "react-native": "^0.64.2",
     "react-native-builder-bob": "^0.18.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.2.0",
