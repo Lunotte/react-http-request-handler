@@ -7,7 +7,8 @@ cache:
 addons:
   sonarcloud:
     organization: "lunotte"
-    token: ${SONAR_TOKEN}
+    token:
+      secure: ${SONAR_TOKEN}
 script:
   - npm test -- --coverage # Include coverage when running tests
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
