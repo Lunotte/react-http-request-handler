@@ -4,7 +4,14 @@ node_js:
 cache:
   directories:
   - node_modules
+addons:
+  sonarcloud:
+    organization: "lunotte"
+    token:
+      secure: "wkTTptlBRV0uDvKF3W96iAk7HjlVPf77zM9yT/rfTZM1Cx2pM1X4UTitwoMARJSAVb9sV8rByk6zUJCToY6N6tD2ynse/bbxsvMh+viiucpQVqCnLVpLdUuc/p7pa5dluIWRDr3SB5pB+9VF9gR2ldz/1fPRbT9V/bhrBkTKy4lyKX3PyOMZg5v6hCKut1ToNLRCCdPO/qQ1q1dRVvPMPEEnpa6YjQq7Kh3LHhUQyeIo6XhRo/zPn/xo8/YsLQkTe6oHVjxBgAyRk4l3NKWOW7xy2pBeSyZErXPk+SpIiEsx4FYM1YFetjTOEXsWY4KFiKhn538l8IrAXAaHxrWgXdsE6QLKbgO2dZSmfv1xwWdEqfddLzNUuKgX2VtQegametrgH/SJqIjyIHZCW5kuBegTg/FV9yePAQyp1s4FV+1ua7zztETYGotTEiKUFCtLrlyQbx05nGEf3LanwJK/WTeSeLZfC27V3pI/19U3Xu55wfuTleQBu6hL8TOf7xqVVQ1GqaPoO2/p/vb6f+QVqGzxMXFNWjdLpBMmqwQ7w5mB66/4q9Qij34O26oJRwZUFMs5KbeTZjipHQHFrWA4/NMSAGzhP/v0J/+gzCJgqLXZ7X8iJaeVElD7iVVx8/dHIHsby9rpvvbQUQQ6TKw97vhaTKKiAG/xmd2zXlkoUAM=" # encrypted value of your token
 script:
   - npm test -- --coverage # Include coverage when running tests
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
 after_success: # Upload coverage reports 
   - npm run coveralls
