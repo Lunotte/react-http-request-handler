@@ -28,7 +28,7 @@
     "axios": "0.21.1",
     "lodash": "4.17.21",
     "react": "17.0.2",
-    "react-dom": "16.14.0",
+    "react-dom": "17.0.2",
     "react-redux": "7.2.4",
     "redux": "4.1.1",
     "reselect": "4.0.0"
@@ -37,7 +37,7 @@
     "@babel/core": "7.15.0",
     "@babel/runtime": "7.14.8",
     "@react-native-community/cli": "5.0.1",
-    "@react-native-community/eslint-config": "2.0.0",
+    "@react-native-community/eslint-config": "3.0.0",
     "@react-navigation/devtools": "5.1.24",
     "@react-navigation/native": "5.9.6",
     "@react-navigation/stack": "5.14.7",
@@ -71,7 +71,7 @@
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "react": "^17.0.1",
-    "react-dom": "^16.13.1",
+    "react-dom": "^16.13.1 || ^17.0.0",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
     "reselect": "^4.0.0"
