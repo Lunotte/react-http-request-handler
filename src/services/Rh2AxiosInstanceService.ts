@@ -36,13 +36,18 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
                 listAxiosInstance = { ...listAxiosInstance,
                     [config.key]: anInstance };
                 if (config.defaultInterceptor == null || config.defaultInterceptor === true) {
+                   // console.log(anInstance);
+                    
                     generateInterceptors(anInstance, config.headerUrl)
                 }
             }
         })
-    } else {
+    }
+    
+    if (listAxiosInstance == null){
         listAxiosInstance = initInstance();
     }
+    //console.log(listAxiosInstance);
     axiosInstances = listAxiosInstance;
 }
 
@@ -51,6 +56,8 @@ export function getAxiosinstance() {
 }
 
 function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyValue[]) {
+    //console.log(axiosInstance);
+    
     axiosInstance.interceptors.request.use(
         async (config) => {
             const headers = await addHeaderToUrl(headersToAdd);
