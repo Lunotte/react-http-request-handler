@@ -11,6 +11,6 @@ cache:
   - node_modules
 script:
 - npm test -- --coverage
-#- sonar-scanner
+- sonar-scanner
 after_success:
 - npm run coveralls
