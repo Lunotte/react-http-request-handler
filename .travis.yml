@@ -1,17 +1,16 @@
 language: node_js
 node_js:
 - stable
-cache:
-  directories:
-  - node_modules
-script:
-- npm test -- --coverage
-after_success:
-- npm run coveralls
 addons:
   sonarcloud:
     organization: lunotte
     token:
       secure: CAQU2vUkt0KpE0QBfZKTE3aSjF5VjGHfpZTqOC9Qm8lK1zDgECU1BIPuNjgGyS7/tblAmEafdFL7nTqU+430Q5WJU1DQ5cNxfUbhr7g8OwivpY4assxinxu/p2eEkpOq0EUpAXuDTv6VanKX1ZsCtH9XXX5tQ2kLPTkZqMmGtx0ZMDb/FfoK5S5sxYbalM9+gYRF9moQk7XrHdepLQAN3xaHWm9HCnHpOINJn5/lL5Go08LX64Nidm0ETkdkyVarLlEndqVkrmOlVdoOd9V5XzZaNJ9BUOX5a1jHrJebzxCX2suuKau1d2wKgy1sAD3rn8U6SnIznbvQ1JbZFlIVfV4McJ88C+DUbP5e+Y28yGMOTGVBV2ppMPIlcmmhglPX+gZnxYuR6jl3VjjMQ7W1qwFkBg9P2FUGyEkllC4VNdxY2zhlx31mVk+iefhtD8T1FDQIagNDQ6PISmsJB4xJtuFw5c24VdE9fL41yYDYDmYgm/nEfGVd3+1Va5JscstYz7ZshiWiE+o+kCwglvp0e3TcaMcmRRM9BBEwXLJ77O+O4UvOo99RFm6OVwGRmS1ioKDaVAB+RAqkwijfQFGXmwBJIPcTKwvasTzfGjQpwJyst9jUUmA/O5Ahvmqfqch2DysdIqvW2y1fX+vTst1nh7i7Z++ObrbeFwDQnMd9TIo=
+cache:
+  directories:
+  - node_modules
 script:
+- npm test -- --coverage
 - sonar-scanner
+after_success:
+- npm run coveralls
