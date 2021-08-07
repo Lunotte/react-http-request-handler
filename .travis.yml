@@ -10,7 +10,7 @@ cache:
   directories:
   - node_modules
 script:
-# - npm test -- --coverage
+- npm test -- --coverage
 - sonar-scanner
 after_success:
 - npm run coveralls
