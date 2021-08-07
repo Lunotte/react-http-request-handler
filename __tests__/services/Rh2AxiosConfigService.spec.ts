@@ -1,7 +1,6 @@
-import { default as rh2AxiosConfigService } from '../../src/services/Rh2AxiosConfigService';
 import { AxiosRequestConfig } from 'axios';
-import { pourTestAction } from '../../src/redux/rh2-action';
 import { Rh2AxiosConfig } from '../../src';
+import { default as rh2AxiosConfigService } from '../../src/services/Rh2AxiosConfigService';
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';

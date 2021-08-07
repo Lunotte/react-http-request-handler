@@ -13,23 +13,10 @@
 
 
 
-import { Platform } from "react-native";
 import { rh2ConfigService } from "../services";
 
 const INFO = '[RH2 INFO] ';
 const WARN = '[RH2 WARN] ';
-
-export function isMobile(): boolean {
-    return Platform.OS === 'android' || Platform.OS === 'ios';
-}
-
-export function isWeb(): boolean {
-    return Platform.OS === 'web';
-}
-
-export function isMobileOuWeb(): boolean {
-    return isMobile() || isWeb();
-}
 
 export function isModeDebugThenDisplayError(message: string, ...data: unknown[]): void {
     if (rh2ConfigService.isModeDebug()) {
