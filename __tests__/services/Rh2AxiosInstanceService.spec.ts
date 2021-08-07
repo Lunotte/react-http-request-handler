@@ -1,19 +1,16 @@
 
 import { AxiosRequestConfig } from 'axios';
+import { KeyValue } from '../../src';
 import { AxiosRequestConfigExtended } from '../../src/models/Rh2Config';
-import { getAxiosInstances, initAxiosInstance } from '../../src/services/Rh2AxiosInstanceService';
-
-// const defaultInstance = { ['default']: axios.create() };
+import { generateHeaders, getAxiosinstance, getAxiosInstances, initAxiosInstance } from '../../src/services/Rh2AxiosInstanceService';
 
 const KEY_DEFAULT = 'default';
-
-
 
 describe('Init Axios instance', () => {
 
     it('List Axios request is null', () => {
         initAxiosInstance(null);
-        expect(Object.keys(getAxiosInstances())).toEqual([KEY_DEFAULT]);
+        expect(Object.keys(getAxiosinstance())).toEqual([KEY_DEFAULT]);
     });
 
     it('List Axios request is empty', () => {
@@ -80,65 +77,57 @@ describe('Init Axios instance', () => {
                
        console.log(getAxiosInstances());
     });
+});
 
 
-    // describe('Init Axios instance', () => {
-    
-    //     jest.mock('axios', () => {
-    //         return {
-    //             create: jest.fn(),
-    //             interceptors: {
-    //                 request: {
-    //                     use: jest.fn(),
-    //                     eject: jest.fn(),
-    //                 },
-    //                 response: {
-    //                     use: jest.fn(),
-    //                     eject: jest.fn(),
-    //                 },
-    //             }
-    //         };
-    //     });
+describe('Generate a header to interceptor', () => {
+    const HEARDER_PAR_DEFAUT = { "Content-Type": "application/json" };
 
-    // jest.mock('axios', () => {
-    //     return {
-    //         interceptors: {
-    //             request: { use: jest.fn(), eject: jest.fn() },
-    //             response: { use: jest.fn(), eject: jest.fn() },
-    //         },
-    //     };
-    // });
+    it('Header param is null', async () => {
+        
+        const axiosConfig: AxiosRequestConfig = {method: 'GET'};
+        expect(axiosConfig.headers).toBeFalsy();
+        const resultat = await generateHeaders(axiosConfig, null);
+        expect(resultat.headers).toEqual(HEARDER_PAR_DEFAUT);
+    });
 
-    //     describe('Init Axios instance', () => {
+    it('Header param is empty array', async () => {
+        
+        const axiosConfig: AxiosRequestConfig = {method: 'GET'};
+        expect(axiosConfig.headers).toBeFalsy();
+        const resultat = await generateHeaders(axiosConfig, []);
+        expect(resultat.headers).toEqual(HEARDER_PAR_DEFAUT);
+    });
 
-    //     //     beforeEach(() => {
-    //     //         (axios.create as jest.Mock).mockReset();
-    //     //         (axios.interceptors.request.use as jest.Mock).mockReset();
-    //     //         (axios.interceptors.request.eject as jest.Mock).mockReset();
-    //     //         (axios.interceptors.response.use as jest.Mock).mockReset();
-    //     //         (axios.interceptors.response.eject as jest.Mock).mockReset();
-    //     //     });
+    it('Header param 1', async () => {
+        
+        const unHeader: KeyValue[] = [
+            {
+                key: 'key-test',
+                value: 'Test a value'
+            }
+        ];
+        const axiosConfig: AxiosRequestConfig = {method: 'GET'};
+        expect(axiosConfig.headers).toBeFalsy();
+        const resultat = await generateHeaders(axiosConfig, unHeader);
+        expect(resultat.headers).toEqual({ 'key-test': 'Test a value' });
+    });
 
-    //         it('List Axios request with key and request', () => {
-                
-                                
-    //             const key = 'TEST_VALUE';
-    //             const axiosRequestConfig: AxiosRequestConfig = {baseURL: 'http://test.fr'};
-    //             const axiosRequestConfigExtended: AxiosRequestConfigExtended = {key, axiosConfig: axiosRequestConfig, defaultInterceptor: true};
-            
-    //             initAxiosInstance([axiosRequestConfigExtended]);
-    //             const axiosInstance1 = Object.values(getAxiosInstances())[0];
-
-    //             expect(axios.interceptors.request).toHaveBeenCalled();
-
-
-    //         //  expect(axiosInstance1.interceptors.request.use()).toBeCalled();
-                
-    //             console.log(getAxiosInstances());
-                
-    //             // initAxiosInstance([axiosRequestConfigExtended]);
-    //             // expect(Object.keys(getAxiosInstances())).toEqual([key]);
-    //         });
-    //     });
-    // });
+    it('Header param 2', async () => {
+        
+        const unHeader: KeyValue[] = [
+            {
+                key: 'key-test',
+                value: 'Test a value'
+            },
+            {
+                key: 'other-test',
+                value: 'Test another value'
+            }
+        ];
+        const axiosConfig: AxiosRequestConfig = {method: 'GET'};
+        expect(axiosConfig.headers).toBeFalsy();
+        const resultat = await generateHeaders(axiosConfig, unHeader);
+        expect(resultat.headers).toEqual({ 'key-test': 'Test a value', 'other-test': 'Test another value' });
+    });
 });

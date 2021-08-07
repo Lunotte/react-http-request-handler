@@ -10,7 +10,7 @@
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { KeyValue } from '../models/Rh2Config';
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 import rh2ConfigService from './Rh2ConfigService';
@@ -36,8 +36,6 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
                 listAxiosInstance = { ...listAxiosInstance,
                     [config.key]: anInstance };
                 if (config.defaultInterceptor == null || config.defaultInterceptor === true) {
-                   // console.log(anInstance);
-                    
                     generateInterceptors(anInstance, config.headerUrl)
                 }
             }
@@ -47,7 +45,6 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
     if (listAxiosInstance == null){
         listAxiosInstance = initInstance();
     }
-    //console.log(listAxiosInstance);
     axiosInstances = listAxiosInstance;
 }
 
@@ -56,23 +53,26 @@ export function getAxiosinstance() {
 }
 
 function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyValue[]) {
-    //console.log(axiosInstance);
     
     axiosInstance.interceptors.request.use(
         async (config) => {
-            const headers = await addHeaderToUrl(headersToAdd);
-
-            if (headers) {
-                if (config.method !== 'OPTIONS') {
-                    config = { ...config,
-                        headers };
-                }
-            }
-            return config;
+            return generateHeaders(config, headersToAdd);
         },
         error => {
             return Promise.reject(error);
         });
+}
+
+export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: KeyValue[]) {
+    const headers = await addHeaderToUrl(headersToAdd);
+
+    if (headers) {
+        if (config.method !== 'OPTIONS') {
+            config = { ...config,
+                headers };
+        }
+    }
+    return config;
 }
 
 async function addHeaderToUrl(headersToAdd: KeyValue[]): Promise<{[k: string]: string}> {
