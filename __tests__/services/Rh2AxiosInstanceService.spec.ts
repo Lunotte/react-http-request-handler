@@ -14,24 +14,28 @@ import {
     AxiosRequestConfig
 } from 'axios';
 import {
+    ejectInterceptor,
+    generateHeaders,
     initAxiosInstance
 } from '../../src/services/Rh2AxiosInstanceService';
-import rh2ConfigService from '../../src/services/Rh2ConfigService';
+import {
+    AxiosRequestConfigExtended, KeyValue
+} from './../../src/models/Rh2Config';
 
 const KEY_DEFAULT = 'default';
 
 describe('Init Axios instance', () => {
 
     it('List Axios request is null', () => {
-        initAxiosInstance(null);
-        expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
+        const resultat = initAxiosInstance(null);
+        expect(Object.keys(resultat)).toEqual([
             KEY_DEFAULT 
         ]);
     });
 
     it('List Axios request is empty', () => {
-        initAxiosInstance([]);
-        expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
+        const resultat = initAxiosInstance([]);
+        expect(Object.keys(resultat)).toEqual([
             KEY_DEFAULT 
         ]);
     });
@@ -43,10 +47,10 @@ describe('Init Axios instance', () => {
             key 
         };
        
-        initAxiosInstance([
+        const resultat = initAxiosInstance([
             axiosRequestConfigExtended 
         ]);
-        expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
+        expect(Object.keys(resultat)).toEqual([
             KEY_DEFAULT 
         ]);
     });
@@ -57,38 +61,103 @@ describe('Init Axios instance', () => {
             baseURL: 'http://test.fr' 
         };
         const axiosRequestConfigExtended: any = {
-            axiosConfig: axiosRequestConfig 
+            axiosConfig: axiosRequestConfig
         };
        
-        initAxiosInstance([
+        const resultat = initAxiosInstance([
             axiosRequestConfigExtended 
         ]);
-        expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
+        expect(Object.keys(resultat)).toEqual([
             KEY_DEFAULT 
         ]);
     });
 
-    // it('List Axios request with key and request', () => {
+    it('Interceptor par defaut vaut null', () => {
         
-    //     const key = 'TEST_VALUE';
-    //     const axiosRequestConfig: AxiosRequestConfig = {
-    //         baseURL: 'http://test.fr' 
-    //     };
-    //     const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
-    //         key,
-    //         axiosConfig: axiosRequestConfig 
-    //     };
+        const key = 'TEST_VALUE';
+        const axiosRequestConfig: AxiosRequestConfig = {
+            baseURL: 'http://test.fr' 
+        };
+        const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
+            key,
+            axiosConfig: axiosRequestConfig 
+        };
        
-    //     initAxiosInstance([
-    //         axiosRequestConfigExtended 
-    //     ]);
+        const resultat = initAxiosInstance([
+            axiosRequestConfigExtended 
+        ]);
 
-    //     console.log(rh2ConfigService.getAxiosInstances());
         
-    //     expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
-    //         key 
-    //     ]);
-    // });
+        expect(Object.keys(resultat)).toEqual([
+            key 
+        ]);
+        expect(Object.values(resultat)[0].interceptor).not.toBeNull();
+    });
+
+    it('Interceptor par defaut vaut true', () => {
+        
+        const key = 'TEST_VALUE';
+        const axiosRequestConfig: AxiosRequestConfig = {
+            baseURL: 'http://test.fr' 
+        };
+        const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
+            key,
+            axiosConfig: axiosRequestConfig,
+            defaultInterceptor: true
+        };
+       
+        const resultat = initAxiosInstance([
+            axiosRequestConfigExtended 
+        ]);
+
+        
+        expect(Object.keys(resultat)).toEqual([
+            key 
+        ]);
+        expect(Object.values(resultat)[0].interceptor).not.toBeNull();
+    });
+
+    it('Pas de interceptor par defaut', () => {
+        
+        const key = 'TEST_VALUE';
+        const axiosRequestConfig: AxiosRequestConfig = {
+            baseURL: 'http://test.fr' 
+        };
+        const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
+            key,
+            axiosConfig: axiosRequestConfig,
+            defaultInterceptor: false
+        };
+       
+        const resultat = initAxiosInstance([
+            axiosRequestConfigExtended 
+        ]);
+
+        
+        expect(Object.keys(resultat)).toEqual([
+            key 
+        ]);
+        expect(Object.values(resultat)[0].interceptor).toBeNull();
+    });
+
+    it('Eject Instance', () => {
+        
+        const key = 'TEST_VALUE';
+        const axiosRequestConfig: AxiosRequestConfig = {
+            baseURL: 'http://test.fr' 
+        };
+        const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
+            key,
+            axiosConfig: axiosRequestConfig,
+            defaultInterceptor: false
+        };
+       
+        const resultat = initAxiosInstance([
+            axiosRequestConfigExtended 
+        ]);
+
+        ejectInterceptor(resultat);
+    });
 
     // it('List Axios request with key and request', () => {
         
@@ -174,6 +243,54 @@ describe('Generate a header to interceptor', () => {
         const resultat = await generateHeaders(axiosConfig, []);
         expect(resultat.headers).toEqual(HEARDER_PAR_DEFAUT);
     });
+
+    it('Header param is bizarre', async () => {
+        
+        const axiosConfig: AxiosRequestConfig = {
+            method: 'GET' 
+        };
+        expect(axiosConfig.headers).toBeFalsy();
+
+        const test: any = 'sdfsdf';
+
+        const resultat = await generateHeaders(axiosConfig, [
+            test as KeyValue 
+        ]);
+        
+        expect(resultat.headers[0]).toBeFalsy();
+    });
+
+    it('Header param is bizarre', async () => {
+        
+        const axiosConfig: AxiosRequestConfig = {
+            method: 'GET' 
+        };
+        expect(axiosConfig.headers).toBeFalsy();
+
+        const test: KeyValue = {
+            key: 'Content-Type',
+            value: 'application/json' 
+        };
+
+        const resultat = await generateHeaders(axiosConfig, [
+            test
+        ]);
+        
+        expect(resultat.headers).toEqual({
+            'Content-Type': 'application/json' 
+        });
+    });
+
+    it('Header param - method is an option', async () => {
+        
+        const axiosConfig: AxiosRequestConfig = {
+            method: 'OPTIONS' 
+        };
+        expect(axiosConfig.headers).toBeFalsy();
+        const resultat = await generateHeaders(axiosConfig, []);
+        expect(resultat.headers).toBeFalsy();
+    });
+
 
     it('Header param 1', async () => {
         

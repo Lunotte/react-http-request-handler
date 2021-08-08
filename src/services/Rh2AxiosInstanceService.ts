@@ -11,13 +11,13 @@
  * ----------	---	---------------------------------------------------------  *
  */
 import axios, {
-    AxiosInstance, AxiosRequestConfig 
+    AxiosInstance, AxiosRequestConfig
 } from 'axios';
 import {
-    KeyValue 
+    KeyValue
 } from '../models/Rh2Config';
 import {
-    AxiosRequestConfigExtended 
+    AxiosRequestConfigExtended
 } from './../models/Rh2Config';
 
 export type Rh2AxiosInstance = { [key: string]: {axiosInstance : AxiosInstance, interceptor: number} };
