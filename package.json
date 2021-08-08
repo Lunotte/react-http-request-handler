@@ -77,10 +77,7 @@
     "reselect": "^4.0.0"
   },
   "jest": {
-    "preset": "react-native",
-    "setupFiles": [
-      "./__mocks__/@react-native-async-storage/async-storage.js"
-    ]
+    "preset": "react-native"
   },
   "main": "lib\\commonjs\\index.js",
   "react-native": "src\\index.ts",
