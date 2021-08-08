@@ -16,10 +16,9 @@ import {
     StyleSheet,
     useColorScheme
 } from 'react-native';
-import { Provider } from 'react-redux';
 import { Rh2InitializationParameter } from '../src';
+import Rh2Initializer from '../src/Rh2Initializer';
 import Navigation from './Navigation';
-import Store from './redux/rh2-store';
 
 const App = () => {
     const isDarkMode = useColorScheme() === 'dark';
@@ -49,12 +48,16 @@ const App = () => {
         modeDebug: true
     };
 
+    // return (
+    //     <Navigation />
+    // );
+
     return (
-        <Provider store={Store}>
-            {/* <InitializerRnhrh rh2Settings={initSettings} > */}
+        // <Provider store={Store}>
+        <Rh2Initializer rh2Settings={initSettings} >
             <Navigation />
-            {/* </InitializerRnhrh> */}
-        </Provider>
+        </Rh2Initializer>
+        // </Provider>
     );
 };
 

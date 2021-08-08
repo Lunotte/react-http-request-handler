@@ -75,7 +75,7 @@ const initSettings: Rh2InitializationParameter = {
     modeDebug: true,
     errorHandler: (data) => traitementErreur(data)
 };
-rh2ConfigService.initializeParameters(null);
+rh2ConfigService.initializeParameters(initSettings);
 
 const Moi = () => {
 

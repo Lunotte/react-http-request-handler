@@ -1,5 +1,5 @@
 /*
- * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\src\InitializerRnhrh.tsx
+ * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\src\Rh2Initializer.tsx
  * Path: c:\Users\Lunotte\Dev\React Native\react-http-request-handler
  * Created Date: Sunday, August 1st 2021, 8:45:24 pm
  * Author: Charly Beaugrand
@@ -11,11 +11,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { rh2ConfigService, Rh2InitializationParameter } from '.';
 
-const InitializerRnhrh: React.FC<{ rh2Settings?: Rh2InitializationParameter, children?: React.ReactNode }> = ({ rh2Settings, children }) => {
+const Rh2Initializer: React.FC<{ rh2Settings?: Rh2InitializationParameter, children?: React.ReactNode }> = ({ rh2Settings, children }) => {
 
-    if (rh2Settings != null) {
-        rh2ConfigService.initializeParameters(rh2Settings);
-    }
+    rh2ConfigService.initializeParameters(rh2Settings);
 
     return (
         <>
@@ -24,9 +22,9 @@ const InitializerRnhrh: React.FC<{ rh2Settings?: Rh2InitializationParameter, chi
     );
 }
 
-InitializerRnhrh.propTypes = {
+Rh2Initializer.propTypes = {
     rh2Settings: PropTypes.any,
     children: PropTypes.element
 }
 
-export default InitializerRnhrh;
+export default Rh2Initializer;

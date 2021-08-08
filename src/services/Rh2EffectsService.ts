@@ -4,7 +4,7 @@
  * Created Date: Su Aug yyyy                                                   *
  * Author: <<author>                                                           *
  * -----                                                                       *
- * Last Modified: Wed Aug 04 2021                                              *
+ * Last Modified: Sun Aug 08 2021                                              *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -206,7 +206,7 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
     if (configuration.successHandler) {
         configuration.successHandler(reponse.responseSuccess);
     } else {
-        isModeDebugThenDisplayWarn('The method successHandler has not provided');
+        isModeDebugThenDisplayWarn('The method successHandler has not provided. This is normal if you use the return of the hook');
     }
     configuration.action({ loading: false,
         data: reponse.responseSuccess });
@@ -219,7 +219,7 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
     } else if (rh2ConfigService.getParameters().errorHandler) {
         rh2ConfigService.getParameters().errorHandler(reponse);
     } else {
-        isModeDebugThenDisplayWarn('The method errorHandler has not provided');
+        isModeDebugThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
     }
     configuration.action({ loading: false,
         data: null });

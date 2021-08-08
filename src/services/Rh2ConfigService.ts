@@ -1,34 +1,43 @@
 /*
  * File: Rh2ConfigService.ts                                                   *
  * Project: react-http-request-handler                                         *
- * Created Date: Sunday, August 1st 2021, 8:45:24 pm                                                 *
- * Author: Charly Beaugrand                                                            *
+ * Project: react-http-request-handler                                         *
+ * Author: <<author>                                                           *
  * -----                                                                       *
- * Last Modified: Thu Aug 05 2021                                              *
+ * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: Sun Aug 08 2021                                              *
  * Modified By: Charly Beaugrand                                               *
- * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
 
 
-import { KeyValue, Rh2InitializationParameter } from "../models/Rh2Config";
-import { isModeDebugThenDisplayError } from "../tools/Utils";
+import { AxiosInstance } from 'axios';
+/*
+ * File: Rh2ConfigService.ts                                                   *
+ * Project: react-http-request-handler                                         *
+ * Created Date: Sunday, August 1st 2021, 8:45:24 pm                                                 *
+ * Author: Charly Beaugrand                                                            *
+ * -----                                                                       *
+ * Last Modified: Sun Aug 08 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+import { Rh2InitializationParameter } from "../models/Rh2Config";
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
-import { initAxiosInstance } from "./Rh2AxiosInstanceService";
+import { initAxiosInstance, Rh2AxiosInstance } from './Rh2AxiosInstanceService';
 
 /**
  * Application configuration
  */
 class Rh2ConfigService {
 
-    private parameters: Rh2InitializationParameter;
+    private axiosInstances: Rh2AxiosInstance;
 
-    public HEADER_URL: KeyValue[] = [
-        { key: 'Content-Type',
-            value: 'application/json' }
-    ]
+    private parameters: Rh2InitializationParameter;
 
     constructor() {
         this.parameters = {
@@ -36,12 +45,13 @@ class Rh2ConfigService {
             errorHandler: null,
             modeDebug: false
         }
+
+        this.axiosInstances = initAxiosInstance(null);
     }
 
     initializeParameters(parameters: Rh2InitializationParameter) {
-
         if (parameters == null) {
-            isModeDebugThenDisplayError('The parameter of Rh2ConfigService should be not null');
+            console.error('The parameter of Rh2ConfigService should be not null');
         } else {
             this.parameters = {
                 ...this.parameters,
@@ -49,7 +59,7 @@ class Rh2ConfigService {
                 errorHandler: parameters.errorHandler == null ? this.parameters.errorHandler : parameters.errorHandler,
                 modeDebug: parameters.modeDebug == null ? this.parameters.modeDebug : parameters.modeDebug
             };
-            initAxiosInstance(this.getParametersAxiosConfigs())
+            this.axiosInstances = initAxiosInstance(this.getParametersAxiosConfigs())
         }
     }
 
@@ -63,6 +73,20 @@ class Rh2ConfigService {
 
     isModeDebug(): boolean {
         return this.parameters.modeDebug;
+    }
+
+    /**
+     * If the user has initialized library with SettingsInitializerRnhrh and provided data for the param axiosConfig
+     * All instances requested will be accessible. You can use them to make interceptors
+     * If nothing provided, default instance has been created
+     * @returns All Axios instances generate 
+     */
+    getAxiosInstances(): Rh2AxiosInstance {
+        return this.axiosInstances;
+    }
+
+    getAxiosInstance(key: string): AxiosInstance {
+        return this.axiosInstances[key];
     }
 
 }
