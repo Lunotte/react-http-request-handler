@@ -138,7 +138,23 @@ Soit vous ne passez rien, dans ce cas une instance par défaut sera utilisée.
 
 
 
+Si pour une quelconque raison, durant l'utilisation de votre application, vous décidez d'injecter une nouvelle configuration des instances, les anciennes qui possédaient des intercepteurs seront éjecté.
 
+
+
+### Rh2ConfigService
+
+
+
+| Méthode                                                      | type                         | Description                                                  |
+| ------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------ |
+| initializeParameters(parameters: Rh2InitializationParameter) | void                         | Initialise un nouveau paramétrage                            |
+| setErrorHandler(treatment: (param?: any) => void)            | void                         | Ajoute un traitement à faire en cas d'erreur. Si valorisé, ce traitement est utilisé pour toutes les requêtes en échec sauf si override dans le paramétrage de la requête envoyée. |
+| getParameters()                                              | Rh2InitializationParameter   | Les paramètres du service                                    |
+| getParametersAxiosConfigs()                                  | AxiosRequestConfigExtended[] | Le paramètrage envoyé par le consommateur                    |
+| isModeDebug()                                                | boolean                      | Si le modeDebug est activé                                   |
+| getAxiosInstances()                                          | Rh2AxiosInstance             | Récupère les instances Axios                                 |
+| getAxiosInstance(key: string)                                | AxiosInstance                | Récupère l'instance Axios demandée en paramètre              |
 
 
 

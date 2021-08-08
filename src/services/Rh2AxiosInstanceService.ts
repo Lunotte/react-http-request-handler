@@ -10,19 +10,32 @@
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { KeyValue } from '../models/Rh2Config';
-import { AxiosRequestConfigExtended } from './../models/Rh2Config';
+import axios, {
+    AxiosInstance, AxiosRequestConfig 
+} from 'axios';
+import {
+    KeyValue 
+} from '../models/Rh2Config';
+import {
+    AxiosRequestConfigExtended 
+} from './../models/Rh2Config';
 
-export type Rh2AxiosInstance = { [key: string]: AxiosInstance };
+export type Rh2AxiosInstance = { [key: string]: {axiosInstance : AxiosInstance, interceptor: number} };
 
 const HEADER_URL: KeyValue[] = [
-    { key: 'Content-Type',
-        value: 'application/json' }
+    {
+        key: 'Content-Type',
+        value: 'application/json' 
+    }
 ]
 
 function initInstance() {
-    return { ['default']: axios.create() };
+    return {
+        ['default']: {
+            axiosInstance: axios.create(),
+            interceptor: null 
+        } 
+    };
 }
 
 export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfigExtended[]): Rh2AxiosInstance {
@@ -34,12 +47,19 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
         axiosRequestConfigExtended.forEach(config => {
             if (config.key != null && config.axiosConfig != null) {
                 const anInstance: AxiosInstance = axios.create(config.axiosConfig);
-                
-                listAxiosInstance = { ...listAxiosInstance,
-                    [config.key]: anInstance };
+
+                let interceptor: number = null;
                 if (config.defaultInterceptor == null || config.defaultInterceptor === true) {
-                    generateInterceptors(anInstance, config.headerUrl)
+                    interceptor = generateInterceptors(anInstance, config.headerUrl)
                 }
+                
+                listAxiosInstance = {
+                    ...listAxiosInstance,
+                    [config.key]: {
+                        axiosInstance: anInstance,
+                        interceptor 
+                    } 
+                };
             }
         })
     }
@@ -51,9 +71,9 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
     return listAxiosInstance;
 }
 
-function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyValue[]) {
+function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyValue[]): number {
     
-    axiosInstance.interceptors.request.use(
+    return axiosInstance.interceptors.request.use(
         async (config) => {
             return generateHeaders(config, headersToAdd);
         },
@@ -62,13 +82,21 @@ function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyVal
         });
 }
 
+export function ejectInterceptor(axiosInstances: Rh2AxiosInstance): void {
+    Object.values(axiosInstances).forEach(instance => {
+        instance.axiosInstance.interceptors.request.eject(instance.interceptor);
+    })
+}
+
 export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: KeyValue[]) {
     const headers = await addHeaderToUrl(headersToAdd);
 
     if (headers) {
         if (config.method !== 'OPTIONS') {
-            config = { ...config,
-                headers };
+            config = {
+                ...config,
+                headers 
+            };
         }
     }
     return config;
@@ -85,7 +113,8 @@ async function addHeaderToUrl(headersToAdd: KeyValue[]): Promise<{[k: string]: s
 }
 
 function mapAllHeaders(headers: KeyValue[]): {[k: string]: string} {
-    const headerAfterBuilding = {};
+    const headerAfterBuilding = {
+    };
     headers.forEach((kv: KeyValue) => headerAfterBuilding[kv.key] = kv.value);
     return headerAfterBuilding;
 }

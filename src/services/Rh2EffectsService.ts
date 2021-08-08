@@ -56,7 +56,7 @@ export function useRh2WithParameters(
         setState
     ] = useState({
         loading: true,
-        data: null,
+        data: null
     });
 
     useEffect(() => {
@@ -105,7 +105,7 @@ export function useRh2WithName(
         setState
     ] = useState({
         loading: false,
-        data: null,
+        data: null
     });
 
     useEffect(() => {
@@ -145,7 +145,7 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
 
 async function traitementToManageRequest(
     configuration: Rh2EffectTreatmentToManageRequest,
-    filter = true,
+    filter = true
 ) {
     if (configuration.config != null) {
 
@@ -157,16 +157,12 @@ async function traitementToManageRequest(
             configuration.action({ loading: true,
                 data: null });
             loadingStarted(configuration);
-            console.log(rh2ManagerToQueryInProgressService.getQueryInProgress());
             
             const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
-                {...configuration.config,
+                { ...configuration.config,
                     data: (configuration.data != null) ? configuration.data : configuration.config.data },
                 configuration.justeReponse == null || configuration.justeReponse === true);
             
-            console.log(reponse);
-            
-
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
             if (configuration.addToDirectory) { // On ajoute à l'annuaire
                 rh2DirectoryService.addConfigQueryParameter(configTmp);
@@ -178,10 +174,7 @@ async function traitementToManageRequest(
                 treatmentIfErrorInUseRequest(configuration, reponse);
             }
 
-            console.log(rh2ManagerToQueryInProgressService.getErreurApi());
-
             loadingCompleted(configuration);
-            console.log(rh2ManagerToQueryInProgressService.getQueryInProgress());
         }
     }
 }
@@ -261,7 +254,7 @@ export function useRh2WithParametersTakeParamsInRoute(
         setState
     ] = useState({
         loading: true,
-        data: null,
+        data: null
     });
 
     useEffect(() => {
@@ -307,7 +300,7 @@ export function useRh2WithNameTakeParamsInRoute(
         setState
     ] = useState({
         loading: true,
-        data: null,
+        data: null
     });
 
 

@@ -22,7 +22,16 @@
     ],
     "rules": {
         //"max-len": ["error", { "code": 250 , "ignoreUrls": true, "ignoreRegExpLiterals": true}],
+        "comma-dangle": ["error", "never"],
+        "object-curly-spacing": ["error", "always", { "arraysInObjects": true }],
         "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }],
+        "object-curly-newline": ["error", {
+            "ObjectExpression": "always",
+            "ObjectPattern": { "multiline": true },
+            "ImportDeclaration": "always",
+            "ExportDeclaration": { "multiline": true, "minProperties": 1 }
+        }],
+        "array-bracket-spacing": ["error", "always", { "arraysInArrays": false }],
         "array-bracket-newline": ["error", { "multiline": true, "minItems": 1 }],
         "array-element-newline": ["error", { "multiline": true, "minItems": 1 }],
         "indent-legacy":"warn",

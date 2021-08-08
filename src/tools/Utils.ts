@@ -4,7 +4,7 @@
  * Created Date: We Jun yyyy                                                   *
  * Author: Charly Beaugrand                                                                *
  * -----                                                                       *
- * Last Modified: Thu Aug 05 2021                                              *
+ * Last Modified: Sun Aug 08 2021                                              *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,7 +13,9 @@
 
 
 
-import { rh2ConfigService } from "../services";
+import {
+    rh2ConfigService 
+} from "../services";
 
 const INFO = '[RH2 INFO] ';
 const WARN = '[RH2 WARN] ';

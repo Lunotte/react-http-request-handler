@@ -1,4 +1,21 @@
-import { ResponseFetchApi } from "../models";
+/*
+ * File: Rh2ManagerToQueryInProgressService.ts                                 *
+ * Project: react-http-request-handler                                         *
+ * Created Date: Su Aug yyyy                                                   *
+ * Author: <<author>                                                           *
+ * -----                                                                       *
+ * Last Modified: Sun Aug 08 2021                                              *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
+import {
+    ResponseFetchApi 
+} from "../models";
 
 interface Rh2ErreurApi {
     label: string;
@@ -31,11 +48,15 @@ class Rh2ManagerToQueryInProgressService {
         if (this.erreurApi.some(error => error.label === label)) {
             const erreurApi = this.erreurApi.filter(erreur => erreur.label !== label);
             this.erreurApi = erreurApi;
-            this.erreurApi.push({ label: label,
-                error: newError });
+            this.erreurApi.push({
+                label: label,
+                error: newError 
+            });
         } else {
-            this.erreurApi.push({ label: label,
-                error: newError });
+            this.erreurApi.push({
+                label: label,
+                error: newError 
+            });
         }
     }
 

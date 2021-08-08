@@ -32,8 +32,8 @@ const App = () => {
         axiosConfig: [
             {
                 key: 'Test1',
-                axiosConfig: { baseURL: 'https://www.google.com/' },
-                defaultInterceptor: false,
+                axiosConfig: { baseURL: 'https://www.google.com/', method: 'POST' },
+                defaultInterceptor: true,
                 headerUrl: [
                     { key: 'CleDeTest',
                         value: 'value to test' }
@@ -64,20 +64,20 @@ const App = () => {
 const styles = StyleSheet.create({
     sectionContainer: {
         marginTop: 32,
-        paddingHorizontal: 24,
+        paddingHorizontal: 24
     },
     sectionTitle: {
         fontSize: 24,
-        fontWeight: '600',
+        fontWeight: '600'
     },
     sectionDescription: {
         marginTop: 8,
         fontSize: 18,
-        fontWeight: '400',
+        fontWeight: '400'
     },
     highlight: {
-        fontWeight: '700',
-    },
+        fontWeight: '700'
+    }
 });
 
 export default App;

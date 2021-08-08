@@ -28,7 +28,7 @@ import { AxiosInstance } from 'axios';
  */
 import { Rh2InitializationParameter } from "../models/Rh2Config";
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
-import { initAxiosInstance, Rh2AxiosInstance } from './Rh2AxiosInstanceService';
+import { ejectInterceptor, initAxiosInstance, Rh2AxiosInstance } from './Rh2AxiosInstanceService';
 
 /**
  * Application configuration
@@ -49,10 +49,13 @@ class Rh2ConfigService {
         this.axiosInstances = initAxiosInstance(null);
     }
 
-    initializeParameters(parameters: Rh2InitializationParameter) {
+    initializeParameters(parameters: Rh2InitializationParameter): void {
         if (parameters == null) {
             console.error('The parameter of Rh2ConfigService should be not null');
         } else {
+
+            ejectInterceptor(this.axiosInstances);
+
             this.parameters = {
                 ...this.parameters,
                 axiosConfig: parameters.axiosConfig,
@@ -61,6 +64,10 @@ class Rh2ConfigService {
             };
             this.axiosInstances = initAxiosInstance(this.getParametersAxiosConfigs())
         }
+    }
+
+    setErrorHandler(treatment: (param?: any) => void): void {
+        this.parameters = { ...this.parameters, errorHandler: treatment };
     }
 
     getParameters(): Rh2InitializationParameter {
@@ -86,7 +93,7 @@ class Rh2ConfigService {
     }
 
     getAxiosInstance(key: string): AxiosInstance {
-        return this.axiosInstances[key];
+        return this.axiosInstances[key].axiosInstance;
     }
 
 }

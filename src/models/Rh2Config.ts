@@ -4,7 +4,7 @@
  * Created Date: Su Aug yyyy                                                   *
  * Author: <<author>                                                           *
  * -----                                                                       *
- * Last Modified: Wed Aug 04 2021                                              *
+ * Last Modified: Sun Aug 08 2021                                              *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,7 +13,9 @@
 
 
 
-import { AxiosRequestConfig } from 'axios';
+import {
+    AxiosRequestConfig 
+} from 'axios';
 
 /**
  * axiosConfig: If not provided then a default instance of axios is generated

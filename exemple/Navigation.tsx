@@ -7,14 +7,30 @@
  * Copyright (c) 2021 Lunotte
  */
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import axios, { AxiosRequestConfig } from 'axios';
-import React, { useState } from 'react';
-import { Button, Text, View } from 'react-native';
-import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter } from '../src';
-import { Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute } from '../src/models/Rh2Effect';
-import { useRh2WithName, useRh2WithParametersTakeParamsInRoute } from '../src/services/Rh2EffectsService';
+import {
+    NavigationContainer
+} from '@react-navigation/native';
+import {
+    createStackNavigator
+} from '@react-navigation/stack';
+import axios, {
+    AxiosRequestConfig
+} from 'axios';
+import React, {
+    useState
+} from 'react';
+import {
+    Button, Text, View
+} from 'react-native';
+import {
+    ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService
+} from '../src';
+import {
+    Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute
+} from '../src/models/Rh2Effect';
+import {
+    useRh2WithName, useRh2WithParametersTakeParamsInRoute
+} from '../src/services/Rh2EffectsService';
 
 
 
@@ -23,18 +39,26 @@ const MICROSOFT = 'MICROSOFT';
 const AMAZON = 'AMAZON';
 
 
-const axiosConfig3: AxiosRequestConfig = { url: 'https://www.google.com/',
-    method: 'GET' };
-const configuration3: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfig3,
-    keyOfInstance: 'Test2' };
+const axiosConfig3: AxiosRequestConfig = {
+    url: 'https://www.google.com/',
+    method: 'GET' 
+};
+const configuration3: Rh2EffectSuccessNotRequiredHandler = {
+    config: axiosConfig3,
+    keyOfInstance: 'Test2' 
+};
 
 
 const CancelToken = axios.CancelToken;
 let source;// = CancelToken.source();
 
-const axiosConfigBis: AxiosRequestConfig = { url: 'https://www.google.com/',
-    method: 'post' };
-let configurationBis: Rh2EffectSuccessNotRequiredHandler = { config: axiosConfigBis };
+const axiosConfigBis: AxiosRequestConfig = {
+    url: 'https://www.google.com/',
+    method: 'post' 
+};
+let configurationBis: Rh2EffectSuccessNotRequiredHandler = {
+    config: axiosConfigBis 
+};
 
 //const dispatch = useDispatch();
 
@@ -60,22 +84,22 @@ const traitementErreur = (data: ResponseFetchApi) => {
     }
 }
 
-const initSettings: Rh2InitializationParameter = {
-    axiosConfig: [
-        {
-            key: 'Test1',
-            axiosConfig: { baseURL: 'https://www.test.com/' },
-            defaultInterceptor: false,
-            headerUrl: [
-                { key: 'KeyToTest',
-                    value: 'value to test' }
-            ]
-        }
-    ],
-    modeDebug: true,
-    errorHandler: (data) => traitementErreur(data)
-};
-rh2ConfigService.initializeParameters(initSettings);
+// const initSettings: Rh2InitializationParameter = {
+//     axiosConfig: [
+//         {
+//             key: 'Test1',
+//             axiosConfig: { baseURL: 'https://www.test.com/' },
+//             defaultInterceptor: false,
+//             headerUrl: [
+//                 { key: 'KeyToTest',
+//                     value: 'value to test' }
+//             ]
+//         }
+//     ],
+//     modeDebug: true,
+//     errorHandler: (data) => traitementErreur(data)
+// };
+
 
 const Moi = () => {
 
@@ -111,11 +135,12 @@ const Moi = () => {
     //   });
 
 
-    const axiosConfig: AxiosRequestConfig = { url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5',
+    const axiosConfig: AxiosRequestConfig = {
+        url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5',
         method: 'GET'
     };
     const configACharger: Rh2AxiosConfig = {
-        // keyOfInstance: 'Test1',
+        keyOfInstance: 'Test1',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
         addToDirectory: true,
@@ -126,6 +151,13 @@ const Moi = () => {
             typeQueryParameter: 'REQUEST_PARAM'
         }
     };
+
+    const configACharger2: Rh2AxiosConfig = {
+        axiosRequestConfig: axiosConfig,
+        label: MICROSOFT,
+        addToDirectory: true
+    };
+
 
     // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
     // const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
@@ -140,6 +172,7 @@ const Moi = () => {
     // // const dispatch = useDispatch();
 
     rh2AxiosConfigService.addConfigAxios(configACharger);
+    rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
     // rh2AxiosConfigService.addConfigAxios(configACharger2);
@@ -163,6 +196,41 @@ const Moi = () => {
     const test = useRh2WithName(GOOGLE, true);
     console.log(test);
 
+
+    // rh2ConfigService.setErrorHandler(traitementErreur);
+
+    const test2 = useRh2WithName(GOOGLE, true);
+    console.log(test2);
+
+    // const [TITI, setTITI] = useState(false);
+
+    // setTimeout( () => {  const initSettings: Rh2InitializationParameter = {
+    //     axiosConfig: [
+    //         {
+    //             key: 'Test1',
+    //             axiosConfig: { baseURL: 'https://www.test.com/' },
+    //             defaultInterceptor: false,
+    //             headerUrl: [
+    //                 { key: 'KeyToTest',
+    //                     value: 'value to test' }
+    //             ]
+    //         }
+    //     ],
+    //     modeDebug: true,
+    //     errorHandler: (data) => traitementErreur(data)
+    // };
+    //     rh2ConfigService.initializeParameters(initSettings);
+    // }, 10000);
+
+    
+    // setTimeout( () => {
+
+    //     setTITI(true);
+
+    // }, 10000);
+    
+    // const test2 = useRh2WithName(MICROSOFT, TITI);
+    // console.log(test2);
     // source.cancel('test cancellation');
 
     // const toto3 = useRequestPreloadedWithName(MICROSOFT, true, (resultat) => {
@@ -186,6 +254,7 @@ const Moi = () => {
     ] = useState<number>(0);
 
     const onMe = () => {
+        
         if (source != null) {
             source.cancel('test cancellation');
         }
@@ -193,10 +262,14 @@ const Moi = () => {
 
         console.log('Onme');
         source = axios.CancelToken.source();
-        configurationBis = { ...configurationBis,
-            config: { ...configurationBis.config,
+        configurationBis = {
+            ...configurationBis,
+            config: {
+                ...configurationBis.config,
                 params: state,
-                cancelToken: source.token } };
+                cancelToken: source.token 
+            } 
+        };
         console.log('configuration dans navigation ', configurationBis);
 
     //navigation.navigate({name: 'Details', params: [{jack: '5'}]});
@@ -232,11 +305,13 @@ const Moi2 = () => {
     //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
 
     // useRh2WithNameTakeParamsInRoute(GOOGLE, true);
-    const conf: Rh2EffectTakeParamsInRoute = { ...configuration3,
+    const conf: Rh2EffectTakeParamsInRoute = {
+        ...configuration3,
         params: [
             'itemId'
         ],
-        typeQueryParameter: 'REQUEST_PARAM' };
+        typeQueryParameter: 'REQUEST_PARAM' 
+    };
     const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
     console.log(resultat2)
     // useRequestFromName(MICROSOFT, state === 4);
@@ -263,6 +338,7 @@ const Moi2 = () => {
 const Stack = createStackNavigator();
 
 function Navigation() {
+    
     return (
         <NavigationContainer>
             <Stack.Navigator>
