@@ -89,6 +89,22 @@ describe('useRh2WithParameters', () => {
 
         await mockFetchApi();
 
+        await useRh2WithParameters(configurationGoogle, false);
+        expect(setState).toHaveBeenCalledTimes(0);
+        await useRh2WithParameters(configurationGoogle, true);
+        expect(setState).toHaveBeenCalledTimes(2);
+    });
+
+    it('Cas nominal avec succcess', async () => {
+
+        const reponse = { data: 'something' };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({ isSuccess: true,
+                responseSuccess: reponse } as ResponseFetchApi);
+        }
+
+        await mockFetchApi();
+
         await useRh2WithParameters(configurationGoogle, true);
 
         expect(setState).toHaveBeenCalledTimes(2);

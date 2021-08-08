@@ -1,6 +1,6 @@
+import { AxiosRequestConfig } from 'axios';
 import { ConfigQueryParameter } from '../../src/models/Rh2Directory';
 import { default as rh2DirectoryService } from '../../src/services/Rh2DirectoryService';
-import { AxiosRequestConfig } from 'axios';
 
 describe('Remove Configuration', () => {
 
@@ -45,11 +45,6 @@ describe('Add Configuration', () => {
 
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {}};
             rh2DirectoryService.addConfigQueryParameter(config);
-
-            console.log(rh2DirectoryService.getConfigQueryParameters());
-            console.log(rh2DirectoryService.hasConfigQueryParameter(config.url, config.method));
-            
-
             expect(rh2DirectoryService.hasConfigQueryParameter(config.url, config.method)).toBeTruthy();
         });
 
@@ -82,9 +77,15 @@ describe('Add Configuration', () => {
 
         it('url - method - param array avec pour valeur unParam, 2, deuxParam', () => {
 
+            const configT: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: null};
+            rh2DirectoryService.addConfigQueryParameter(configT);
+            expect(rh2DirectoryService.hasConfigQueryParameter(configT.url, configT.method, configT.params)).toBe(true);
+
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier : 'unParam', second: 2, troisieme: 'deuxParam'}};
             rh2DirectoryService.addConfigQueryParameter(config);
-            
+            expect(rh2DirectoryService.hasConfigQueryParameter(config.url, config.method, config.params)).toBe(true);
+
+            rh2DirectoryService.addConfigQueryParameter(config);
             expect(rh2DirectoryService.hasConfigQueryParameter(config.url, config.method, config.params)).toBe(true);
         });
     });

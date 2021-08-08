@@ -66,7 +66,9 @@ export function useRh2WithParameters(
                     action: setState,
                     addToDirectory: false,
                     label: null,
-                    data }
+                    data
+                },
+                filter
             )
         }
         fetch();

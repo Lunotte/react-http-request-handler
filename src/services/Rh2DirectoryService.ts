@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
+import { isModeDebugThenDisplayWarn } from "../tools/Utils";
 
 
 /**
@@ -54,7 +55,11 @@ class Rh2DirectoryService {
      * @param configTmp new setting
      */
     addConfigQueryParameter(configTmp: ConfigQueryParameter): void {
-        this.configQueryParameter.push(configTmp);
+        if (!this.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+            this.configQueryParameter.push(configTmp);       
+        } else {
+            isModeDebugThenDisplayWarn('New config not added because it already exist', configTmp);
+        }
     }
 
     /**

@@ -18,8 +18,8 @@ import {
 } from 'react-native';
 import { Provider } from 'react-redux';
 import { Rh2InitializationParameter } from '../src';
-import Store from '../src/redux/rh2-store';
 import Navigation from './Navigation';
+import Store from './redux/rh2-store';
 
 const App = () => {
     const isDarkMode = useColorScheme() === 'dark';

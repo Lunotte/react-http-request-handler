@@ -1,5 +1,5 @@
-import { POUR_TEST_ACTION } from '../../lib/typescript/redux/rh2-action';
 import { Rh2State } from '../../src/models/Rh2State';
+import { POUR_TEST_ACTION } from './rh2-action';
 
 export const initialHookState: Rh2State = {
     test: null,
