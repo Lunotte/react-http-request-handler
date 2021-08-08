@@ -3,70 +3,94 @@ import { isModeDebugThenDisplayError, isModeDebugThenDisplayInfo, isModeDebugThe
 
 describe('Utils file', () => {
 
-    const parameters: Rh2InitializationParameter = {modeDebug: true};
-    rh2ConfigService.initializeParameters(parameters);
+    describe('Pas de debug ', () => {
 
-    describe('isModeDebugThenDisplayInfo', () => {
-
-        console.info = jest.fn();
-
-        it('Only message', async () => {
-
-            const expectedResult = '[RH2 INFO] hello';
-            
+        it('Info', async () => {
+            console.info = jest.fn();
             isModeDebugThenDisplayInfo('hello');
-            expect(console.info).toHaveBeenCalled();
-            expect(console.info).toHaveBeenCalledWith(expectedResult);
+            expect(console.info).toHaveBeenCalledTimes(0);
         });
 
-        it('Message et 1 param', async () => {
-
-            isModeDebugThenDisplayInfo('hello', ['Jack']);
-            expect(console.info).toHaveBeenCalled();
-        });
-    });
-
-    describe('isModeDebugThenDisplayWarn', () => {
-
-        console.warn = jest.fn();
-
-        it('Only message', async () => {
-
-            const expectedResult = '[RH2 WARN] hello';
-            
+        it('Warn', async () => {
+            console.warn = jest.fn();
             isModeDebugThenDisplayWarn('hello');
-            expect(console.warn).toHaveBeenCalled();
-            expect(console.warn).toHaveBeenCalledWith(expectedResult);
+            expect(console.warn).toHaveBeenCalledTimes(0);
         });
-
-        it('Message et 1 param', async () => {
-
-            isModeDebugThenDisplayWarn('hello', ['Jack']);
-            expect(console.warn).toHaveBeenCalled();
+        it('Error', async () => {
+            console.error = jest.fn();
+            isModeDebugThenDisplayError('hello');
+            expect(console.error).toHaveBeenCalledTimes(0);
         });
     });
 
-    describe('isModeDebugThenDisplayError', () => {
+    describe('Avec debug', () => {
 
-        console.error = jest.fn();
+        beforeAll(() => {
+            const parameters: Rh2InitializationParameter = {modeDebug: true};
+            rh2ConfigService.initializeParameters(parameters);
+        });
+    
+        describe('isModeDebugThenDisplayInfo', () => {
 
-        it('Only message', async () => {
+            console.info = jest.fn();
 
-            const expectedResult = '[RH2 WARN] hello';
-            
-            isModeDebugThenDisplayError('hello');
-            expect(console.error).toHaveBeenCalled();
-            expect(console.error).toHaveBeenCalledWith(expectedResult);
+            it('Only message', async () => {
+
+                const expectedResult = '[RH2 INFO] hello';
+                
+                isModeDebugThenDisplayInfo('hello');
+                expect(console.info).toHaveBeenCalled();
+                expect(console.info).toHaveBeenCalledWith(expectedResult);
+            });
+
+            it('Message et 1 param', async () => {
+
+                isModeDebugThenDisplayInfo('hello', ['Jack']);
+                expect(console.info).toHaveBeenCalled();
+            });
         });
 
-        it('Message et 1 param', async () => {
+        describe('isModeDebugThenDisplayWarn', () => {
 
-            isModeDebugThenDisplayError('hello', ['Jack']);
-            expect(console.error).toHaveBeenCalled();
+            console.warn = jest.fn();
+
+            it('Only message', async () => {
+
+                const expectedResult = '[RH2 WARN] hello';
+                
+                isModeDebugThenDisplayWarn('hello');
+                expect(console.warn).toHaveBeenCalled();
+                expect(console.warn).toHaveBeenCalledWith(expectedResult);
+            });
+
+            it('Message et 1 param', async () => {
+
+                isModeDebugThenDisplayWarn('hello', ['Jack']);
+                expect(console.warn).toHaveBeenCalled();
+            });
+        });
+
+        describe('isModeDebugThenDisplayError', () => {
+
+            console.error = jest.fn();
+
+            it('Only message', async () => {
+
+                const expectedResult = '[RH2 WARN] hello';
+                
+                isModeDebugThenDisplayError('hello');
+                expect(console.error).toHaveBeenCalled();
+                expect(console.error).toHaveBeenCalledWith(expectedResult);
+            });
+
+            it('Message et 1 param', async () => {
+
+                isModeDebugThenDisplayError('hello', ['Jack']);
+                expect(console.error).toHaveBeenCalled();
+            });
         });
     });
 });
-
 
 
 // describe('Utils file - Pas de debug', () => {
