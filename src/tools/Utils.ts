@@ -14,7 +14,7 @@
 
 
 import {
-    rh2ConfigService 
+    rh2ConfigService
 } from "../services";
 
 const INFO = '[RH2 INFO] ';

@@ -45,19 +45,19 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
     try {
         const message = (axiosInstance == null) ? 'Aucune instance demandée, celle par défaut va être utilisée' : 'L\'instance demandée à être utilisée est ' + axiosInstance;
         isModeDebugThenDisplayInfo(message + '. Parmi celles qui sont disponibles', rh2ConfigService.getAxiosInstances());
-        
+
         const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(rh2ConfigService.getAxiosInstances())[0];
+
         const resultData = await rh2ConfigService.getAxiosInstance(axiosInstanceToUse).request(config);
+
         isModeDebugThenDisplayInfo('Data was fetched from lib', resultData);
 
-        if (resultData.status >= 200 && resultData.status < 300) {
-            return {
-                ...fetchSuccess,
-                isSuccess: true,
-                responseSuccess: (dataImmediat) ? resultData.data : resultData,
-                status: resultData.status
-            };
-        }
+        return {
+            ...fetchSuccess,
+            isSuccess: true,
+            responseSuccess: (dataImmediat) ? resultData.data : resultData,
+            status: resultData.status
+        };
     } catch (error) {
         return responseFetchApi(error);
     }
@@ -71,11 +71,13 @@ function responseFetchApi(error: any): ResponseFetchApi {
             status: error.response.status,
             isError: true,
             responseErreur:
-            { ...fetchErreur,
+            {
+                ...fetchErreur,
                 isResponseError: true,
                 responseError: error.response,
                 messageError: error.message,
-                config: error.config }
+                config: error.config
+            }
         };
         isModeDebugThenDisplayWarn('Error in response', fetchSuccess);
         return fetchSuccess;
@@ -83,24 +85,32 @@ function responseFetchApi(error: any): ResponseFetchApi {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        fetchSuccess = { ...fetchSuccess,
+        fetchSuccess = {
+            ...fetchSuccess,
             isError: true,
-            responseErreur: { ...fetchErreur,
+            responseErreur: {
+                ...fetchErreur,
                 isRequestError: true,
                 requestError: error.request,
                 messageError: error.message,
-                config: error.config } };
+                config: error.config
+            }
+        };
 
         isModeDebugThenDisplayWarn('Error in request: The request was made but no response was received', fetchSuccess);
         return fetchSuccess;
     } else {
         // Something happened in setting up the request that triggered an Error
         // This case can happen if the user cancels the request.
-        fetchSuccess = { ...fetchSuccess,
+        fetchSuccess = {
+            ...fetchSuccess,
             isError: true,
-            responseErreur: { ...fetchErreur,
+            responseErreur: {
+                ...fetchErreur,
                 messageError: error.message,
-                config: error.config } };
+                config: error.config
+            }
+        };
         isModeDebugThenDisplayWarn('Unrecognized error : This case can happen if the user cancels the request.', fetchSuccess);
         return fetchSuccess;
     }
