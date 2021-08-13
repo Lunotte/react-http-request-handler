@@ -13,9 +13,7 @@
 
 
 
-import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { AxiosRequestConfig } from 'axios';
-import { TypeQueryParameter } from '.';
 
 /**
  * @param label Name of the preloaded configuration
@@ -66,21 +64,4 @@ export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfig
     optionalParameters?: Rh2EffectData
 }
 
-/**
- * @param params List of parameters to retrieve in the route
- * @param typeQueryParameter Type of query to run by path or query
- */
-export interface Rh2EffectFromParameter {
-    readonly params: string[];
-    readonly typeQueryParameter: TypeQueryParameter;
-}
-
-export interface Rh2EffectTakeParamsInRoute extends Rh2EffectFromParameter, Rh2EffectSuccessNotRequiredHandler { }
-export interface Rh2EffectTreatmentToManageParameters extends Rh2EffectTakeParamsInRoute, Rh2EffectLabelFilter {
-    route: RouteProp<ParamListBase, string>;
-    readonly action: any;
-}
-
 type OptionalParamVoidMethod = (param?: any) => void;
-
-//export interface Rh2OptionalParameters

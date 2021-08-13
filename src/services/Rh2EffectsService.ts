@@ -10,7 +10,8 @@
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, Method } from 'axios';
+import hash from 'object-hash';
 import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
@@ -213,18 +214,42 @@ async function traitementToManageRequest(
     }
 }
 
-// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url,
-// param et type que l'on ajouterait à la place du label en tant que clé unique
-function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest) {
+interface ObjectToHash {
+    readonly baseUrl: string;
+    readonly url: string;
+    readonly method: Method;
+    readonly params: any;
+    readonly data: any;
+}
+
+function buildObjectToHash(configuration: Rh2EffectTreatmentToManageRequest): ObjectToHash {
+    return {
+        baseUrl: configuration.config.baseURL,
+        url: configuration.config.url,
+        method: configuration.config.method,
+        params: configuration.config.params,
+        data: configuration.config.data,
+    };
+}
+
+function hashConfiguration(configuration: Rh2EffectTreatmentToManageRequest) {
+    return hash(buildObjectToHash(configuration));
+}
+
+function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.addQueryInProgress(configuration.label);
+    } else {
+        const hashResult = hashConfiguration(configuration);
+        rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
-// @TODO On pourrait dipatch une action dans tous les cas; faire un hash de l'url,
-// param et type que l'on ajouterait à la place du label en tant que clé unique
-function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest) {
+function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
+    } else {
+        const hashResult = hashConfiguration(configuration);
+        rh2ManagerToQueryInProgressService.removeQueryInProgress(hashResult);
     }
 }
 
