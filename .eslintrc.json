@@ -28,8 +28,8 @@
         "object-curly-newline": ["error", {
             "ObjectExpression": "always",
             "ObjectPattern": { "multiline": true },
-            "ImportDeclaration": "always",
-            "ExportDeclaration": { "multiline": true, "minProperties": 1 }
+            "ImportDeclaration": { "multiline": true, "minProperties": 5 },
+            "ExportDeclaration": { "multiline": true, "minProperties": 5 }
         }],
         "array-bracket-spacing": ["error", "always", { "arraysInArrays": false }],
         "array-bracket-newline": ["error", { "multiline": true, "minItems": 1 }],

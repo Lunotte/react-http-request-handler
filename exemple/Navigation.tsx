@@ -1,36 +1,20 @@
 /*
- * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\exemple\Navigation.tsx
- * Path: c:\Users\Lunotte\Dev\React Native\react-http-request-handler
+ * File: Navigation.tsx
+ * Project: react-http-request-handler
  * Created Date: Sunday, August 1st 2021, 8:45:24 pm
  * Author: Charly Beaugrand
  * 
  * Copyright (c) 2021 Lunotte
  */
 
-import {
-    NavigationContainer
-} from '@react-navigation/native';
-import {
-    createStackNavigator
-} from '@react-navigation/stack';
-import axios, {
-    AxiosRequestConfig
-} from 'axios';
-import React, {
-    useState
-} from 'react';
-import {
-    Button, Text, View
-} from 'react-native';
-import {
-    ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService
-} from '../src';
-import {
-    Rh2EffectSuccessNotRequiredHandler, Rh2EffectTakeParamsInRoute
-} from '../src/models/Rh2Effect';
-import {
-    useRh2WithName, useRh2WithParametersTakeParamsInRoute
-} from '../src/services/Rh2EffectsService';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import axios, { AxiosRequestConfig } from 'axios';
+import React, { useState } from 'react';
+import { Button, Text, View } from 'react-native';
+import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
+import { Rh2EffectSuccessNotRequiredHandler } from '../src/models/Rh2Effect';
+import { useRh2WithParameters } from '../src/services/Rh2EffectsService';
 
 
 
@@ -40,7 +24,7 @@ const AMAZON = 'AMAZON';
 
 
 const axiosConfig3: AxiosRequestConfig = {
-    url: 'https://www.google.com/',
+    url: `https://www.google.com/`,
     method: 'GET' 
 };
 const configuration3: Rh2EffectSuccessNotRequiredHandler = {
@@ -193,14 +177,23 @@ const Moi = () => {
 
     // console.log('ici');
     //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
-    const test = useRh2WithName(GOOGLE, true);
-    console.log(test);
+
+    const test3 = useRh2WithParameters(configuration3, {
+        params: {
+            une: 'valeur',
+            chatte: 'chienne'
+        }
+    });
+    console.log(test3);
+    
+    // const test = useRh2WithName(GOOGLE, true);
+    // console.log(test);
 
 
-    // rh2ConfigService.setErrorHandler(traitementErreur);
+    // // rh2ConfigService.setErrorHandler(traitementErreur);
 
-    const test2 = useRh2WithName(GOOGLE, true);
-    console.log(test2);
+    // const test2 = useRh2WithName(GOOGLE, true);
+    // console.log(test2);
 
     // const [TITI, setTITI] = useState(false);
 
@@ -305,15 +298,15 @@ const Moi2 = () => {
     //useRequest2((state % 2) != 0 ? 'GOOGLE' : 'MICROSOFT');
 
     // useRh2WithNameTakeParamsInRoute(GOOGLE, true);
-    const conf: Rh2EffectTakeParamsInRoute = {
-        ...configuration3,
-        params: [
-            'itemId'
-        ],
-        typeQueryParameter: 'REQUEST_PARAM' 
-    };
-    const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
-    console.log(resultat2)
+    // const conf: Rh2EffectTakeParamsInRoute = {
+    //     ...configuration3,
+    //     params: [
+    //         'itemId'
+    //     ],
+    //     typeQueryParameter: 'REQUEST_PARAM' 
+    // };
+    // const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
+    // console.log(resultat2)
     // useRequestFromName(MICROSOFT, state === 4);
 
     // const resultat3 = useRh2WithNameTakeParamsInRoute(GOOGLE, true);

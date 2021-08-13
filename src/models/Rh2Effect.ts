@@ -1,10 +1,10 @@
 /*
  * File: Rh2Effect.ts                                                          *
  * Project: react-http-request-handler                                         *
- * Created Date: Su Aug yyyy                                                   *
+ * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Tue Aug 03 2021                                              *
+ * Last Modified: Fri Aug 13 2021                                              *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -27,8 +27,10 @@ export interface Rh2EffectLabelFilter {
 /**
  * @param data Data to send in the request's body
  */
-export interface Rh2EffectDataToRequestBody {
+export interface Rh2EffectData {
     readonly data?: any;
+    readonly params?: any;
+    readonly pathParams?: any;
 }
 
 /**
@@ -60,7 +62,8 @@ export interface Rh2EffectManageConfigAndReturnData {
     readonly action: any;
 }
 
-export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectSuccessNotRequiredHandler, Rh2EffectDataToRequestBody {
+export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectSuccessNotRequiredHandler {
+    optionalParameters?: Rh2EffectData
 }
 
 /**
@@ -73,9 +76,11 @@ export interface Rh2EffectFromParameter {
 }
 
 export interface Rh2EffectTakeParamsInRoute extends Rh2EffectFromParameter, Rh2EffectSuccessNotRequiredHandler { }
-export interface Rh2EffectTreatmentToManageParameters extends Rh2EffectTakeParamsInRoute, Rh2EffectLabelFilter, Rh2EffectDataToRequestBody {
+export interface Rh2EffectTreatmentToManageParameters extends Rh2EffectTakeParamsInRoute, Rh2EffectLabelFilter {
     route: RouteProp<ParamListBase, string>;
     readonly action: any;
 }
 
 type OptionalParamVoidMethod = (param?: any) => void;
+
+//export interface Rh2OptionalParameters
