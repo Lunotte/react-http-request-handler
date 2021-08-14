@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Fri Aug 13 2021                                              *
+ * Last Modified: 2021 08 14 - 06:02 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,22 +13,16 @@
 
 
 /* eslint-disable no-eval */
-import {
-    AxiosRequestConfig
-} from "axios";
+import { AxiosRequestConfig } from "axios";
 import React from 'react';
 import * as redux from 'react-redux';
 import {
     ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter
 } from "../../src";
-import {
-    Rh2EffectSuccessNotRequiredHandler
-} from "../../src/models/Rh2Effect";
+import { Rh2EffectAxiosConfigHandler } from "../../src/models/Rh2Effect";
 import * as FetchApiService from '../../src/services/FetchApiService';
 import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
-import {
-    useRh2WithName, useRh2WithParameters
-} from "../../src/services/Rh2EffectsService";
+import { useRh2WithName, useRh2WithParameters } from "../../src/services/Rh2EffectsService";
 import * as utils from "../../src/tools/Utils";
 
 const GOOGLE = 'GOOGLE';
@@ -68,8 +62,8 @@ const axiosConfigGoogle: AxiosRequestConfig = {
     url: 'https://www.google.com/',
     method: 'GET'
 };
-const configurationGoogle: Rh2EffectSuccessNotRequiredHandler = {
-    config: axiosConfigGoogle 
+const configurationGoogle: Rh2EffectAxiosConfigHandler = {
+    axiosRequestConfig: axiosConfigGoogle 
 };
 
 function resetMocksAndServices() {
@@ -147,7 +141,7 @@ describe('useRh2WithParameters', () => {
 
     it('Cas nominal avec succcess et successHandler', async () => {
 
-        const configuration: Rh2EffectSuccessNotRequiredHandler = {
+        const configuration: Rh2EffectAxiosConfigHandler = {
             ...configurationGoogle,
             successHandler: () => console.log('Success !!!')
         };
@@ -198,7 +192,7 @@ describe('useRh2WithParameters', () => {
 
     it('Cas nominal avec erreur et errorHandler', async () => {
 
-        const configuration: Rh2EffectSuccessNotRequiredHandler = {
+        const configuration: Rh2EffectAxiosConfigHandler = {
             ...configurationGoogle,
             errorHandler: () => console.log('Echec ...')
         };
@@ -231,7 +225,7 @@ describe('useRh2WithParameters', () => {
         };
         rh2ConfigService.initializeParameters(initSettings);
 
-        const configuration: Rh2EffectSuccessNotRequiredHandler = configurationGoogle;
+        const configuration: Rh2EffectAxiosConfigHandler = configurationGoogle;
 
         const reponse = {
             data: 'something' 
@@ -274,7 +268,7 @@ describe('useRh2WithName', () => {
         it('Cas nominal avec succcess', async () => {
 
             const configACharger: Rh2AxiosConfig = {
-                axiosRequestConfig: configurationGoogle.config,
+                axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE
             }
             rh2AxiosConfigService.addConfigAxios(configACharger);
@@ -304,7 +298,7 @@ describe('useRh2WithName', () => {
         it('Deuxième appel doit s\'executer car pas encore dans l\'annuaire', async () => {
 
             const configACharger: Rh2AxiosConfig = {
-                axiosRequestConfig: configurationGoogle.config,
+                axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE,
                 addToDirectory: true
             }
@@ -333,7 +327,7 @@ describe('useRh2WithName', () => {
         it('Troisième appel ne doit pas s\'executer car deja dans l\'annuaire', async () => {
 
             const configACharger: Rh2AxiosConfig = {
-                axiosRequestConfig: configurationGoogle.config,
+                axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE,
                 addToDirectory: true
             }
@@ -363,7 +357,7 @@ describe('useRh2WithName', () => {
     it('ne doit pas s\'executer car pas ajouter à la liste des config', async () => {
 
         const configACharger: Rh2AxiosConfig = {
-            axiosRequestConfig: configurationGoogle.config,
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
             label: GOOGLE
         }
         rh2AxiosConfigService.addConfigAxios(configACharger);
@@ -390,7 +384,7 @@ describe('useRh2WithName', () => {
     it('avec query params', async () => {
 
         const configACharger: Rh2AxiosConfig = {
-            axiosRequestConfig: configurationGoogle.config,
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
             label: GOOGLE,
             successHandler: (data) => setState(data) 
         }
@@ -424,7 +418,7 @@ describe('useRh2WithName', () => {
     it('avec body params', async () => {
 
         const configACharger: Rh2AxiosConfig = {
-            axiosRequestConfig: configurationGoogle.config,
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
             label: GOOGLE,
             successHandler: (data) => setState(data) 
         }
@@ -458,7 +452,7 @@ describe('useRh2WithName', () => {
     it('avec path params', async () => {
 
         const configACharger: Rh2AxiosConfig = {
-            axiosRequestConfig: configurationGoogle.config,
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
             label: GOOGLE,
             successHandler: (data) => setState(data) 
         }
@@ -488,7 +482,7 @@ describe('useRh2WithName', () => {
     it('with path and query params', async () => {
 
         const configACharger: Rh2AxiosConfig = {
-            axiosRequestConfig: configurationGoogle.config,
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
             label: GOOGLE,
             successHandler: (data) => setState(data),
             justeReponse: false

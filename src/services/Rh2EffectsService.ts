@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:16 pm                                        *
+ * Last Modified: 2021 08 14 - 06:01 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -20,19 +20,12 @@ import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
 import { isModeDebugThenDisplayError, isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
-import { Rh2EffectData, Rh2EffectSuccessNotRequiredHandler, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
+import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';
 import { default as rh2DirectoryService } from './Rh2DirectoryService';
 import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQueryInProgressService';
-
-/*************************************************************************** */
-
-//          Requests that are not pre-loaded will not have
-//          the possibility of being stored in the directory
-
-/*************************************************************************** */
 
 
 /**
@@ -44,7 +37,7 @@ import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQue
  * @returns 
  */
 export function useRh2WithParameters(
-    configuration: Rh2EffectSuccessNotRequiredHandler,
+    configuration: Rh2EffectAxiosConfigHandler,
     optionalParameters?: Rh2EffectData,
     filter = true
 ): {
@@ -65,7 +58,6 @@ export function useRh2WithParameters(
                 {
                     ...configuration,
                     action: setState,
-                    addToDirectory: false,
                     label: null,
                     optionalParameters
                 },
@@ -74,10 +66,10 @@ export function useRh2WithParameters(
         }
         fetch();
     }, [
-        configuration.config?.method,
-        configuration.config?.url,
-        configuration.config?.data,
-        configuration.config?.params,
+        configuration.axiosRequestConfig?.method,
+        configuration.axiosRequestConfig?.url,
+        configuration.axiosRequestConfig?.data,
+        configuration.axiosRequestConfig?.params,
         filter
     ]);
 
@@ -119,7 +111,7 @@ export function useRh2WithName(
                 {
                     keyOfInstance: configSelected?.keyOfInstance,
                     label,
-                    config: configSelected?.axiosRequestConfig,
+                    axiosRequestConfig: configSelected?.axiosRequestConfig,
                     justeReponse: configSelected?.justeReponse,
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
@@ -154,8 +146,8 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
  */
 function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): AxiosRequestConfig {
 
-    let configToUse = { ...configuration.config,
-        data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.config.data
+    let configToUse = { ...configuration.axiosRequestConfig,
+        data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.axiosRequestConfig.data
     };
     
     if (configuration.optionalParameters?.params != null || configuration.optionalParameters?.pathParams != null) {
@@ -165,7 +157,7 @@ function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): A
 
             configToUse = {
                 ...configToUse,
-                url: configuration.config.url.concat(configuration.optionalParameters.pathParams)
+                url: configuration.axiosRequestConfig.url.concat(configuration.optionalParameters.pathParams)
             };
 
         } else if (configuration.optionalParameters?.params != null) {
@@ -182,9 +174,9 @@ async function traitementToManageRequest(
     configuration: Rh2EffectTreatmentToManageRequest,
     filter: boolean
 ) {
-    if (configuration.config != null) {
+    if (configuration.axiosRequestConfig != null) {
 
-        const configAxios = configuration.config;
+        const configAxios = configuration.axiosRequestConfig;
         const configTmp = configToManageDirectory(configAxios);
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
@@ -225,11 +217,11 @@ interface ObjectToHash {
 
 function buildObjectToHash(configuration: Rh2EffectTreatmentToManageRequest): ObjectToHash {
     return {
-        baseUrl: configuration.config.baseURL,
-        url: configuration.config.url,
-        method: configuration.config.method,
-        params: configuration.config.params,
-        data: configuration.config.data,
+        baseUrl: configuration.axiosRequestConfig.baseURL,
+        url: configuration.axiosRequestConfig.url,
+        method: configuration.axiosRequestConfig.method,
+        params: configuration.axiosRequestConfig.params,
+        data: configuration.axiosRequestConfig.data,
     };
 }
 

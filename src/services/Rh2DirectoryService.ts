@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:15 pm                                        *
+ * Last Modified: 2021 08 14 - 03:15 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -96,7 +96,7 @@ class Rh2DirectoryService {
 }
 
 /**
- * Compare the parameters of two sources of supply
+ * Compare the parameters of two sources provided
  * @param params1 
  * @param params2 
  * @returns True If the parameters are identical, null or empty otherwise False

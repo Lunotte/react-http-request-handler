@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:01 pm                                        *
+ * Last Modified: 2021 08 14 - 06:01 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -41,19 +41,15 @@ export interface Rh2EffectData {
  * @param config Axios settings
  * @param justeReponse If true or not defined then return data else all information about http request
  * @param errorHandler Method to be executed to handle the errors in the event of an error in the request. If it is not provided, we see if that of the global *                        configuration is provided otherwise, nothing is done.
+ * @param successHandler
  */
 export interface Rh2EffectAxiosConfigHandler {
     readonly keyOfInstance?: string;
-    readonly config: AxiosRequestConfig;
+    readonly axiosRequestConfig: AxiosRequestConfig;
+    readonly addToDirectory?: boolean;
     readonly justeReponse?: boolean;
-    readonly errorHandler?: OptionalParamVoidMethod
-}
-
-/**
- * @param successHandler Method to run to handle the data after the query has been successfully executed otherwise nothing is done
- */
-export interface Rh2EffectSuccessNotRequiredHandler extends Rh2EffectAxiosConfigHandler {
-    readonly successHandler?: OptionalParamVoidMethod,
+    readonly errorHandler?: OptionalParamVoidMethod;
+    readonly successHandler?: OptionalParamVoidMethod;
 }
 
 /**
@@ -61,11 +57,10 @@ export interface Rh2EffectSuccessNotRequiredHandler extends Rh2EffectAxiosConfig
  * @param action 
  */
 export interface Rh2EffectManageConfigAndReturnData {
-    readonly addToDirectory: boolean;
     readonly action: any;
 }
 
-export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectSuccessNotRequiredHandler {
+export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectAxiosConfigHandler {
     optionalParameters?: Rh2EffectData
 }
 

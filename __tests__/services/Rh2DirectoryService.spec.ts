@@ -1,3 +1,21 @@
+/*
+ * File: Rh2DirectoryService.spec.ts                                           *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 08 14                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 05:23 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
+
+
+
 import { AxiosRequestConfig } from 'axios';
 import { ConfigQueryParameter } from '../../src/models/Rh2Directory';
 import { default as rh2DirectoryService } from '../../src/services/Rh2DirectoryService';

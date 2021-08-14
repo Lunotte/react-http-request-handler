@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:30 pm
+ * Last Modified: 2021 08 14 - 05:44 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -21,7 +21,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
-import { Rh2EffectSuccessNotRequiredHandler } from '../src/models/Rh2Effect';
+import { Rh2EffectAxiosConfigHandler } from '../src/models/Rh2Effect';
 import { useRh2WithParameters } from '../src/services/Rh2EffectsService';
 
 
@@ -35,7 +35,7 @@ const axiosConfig3: AxiosRequestConfig = {
     url: `https://www.google.com/`,
     method: 'GET' 
 };
-const configuration3: Rh2EffectSuccessNotRequiredHandler = {
+const configuration3: Rh2EffectAxiosConfigHandler = {
     config: axiosConfig3,
     keyOfInstance: 'Test2' 
 };
@@ -47,7 +47,7 @@ const axiosConfigBis: AxiosRequestConfig = {
     url: 'https://www.google.com/',
     method: 'post' 
 };
-let configurationBis: Rh2EffectSuccessNotRequiredHandler = {
+let configurationBis: Rh2EffectAxiosConfigHandler = {
     config: axiosConfigBis 
 };
 
