@@ -1,9 +1,26 @@
+/*
+ * File: index.ts                                                              *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 06 30                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 01:10 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
+
+
+
 import type { ActionToDispatch, Rh2AxiosConfig } from './AxiosConfig';
 import type { ErreurFetchApi, ResponseFetchApi } from './FetchApi';
 import type { KeyValue, Rh2InitializationParameter } from './Rh2Config';
-import { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh, TypeQueryParameter } from './Rh2Directory';
-import type { Rh2State } from './Rh2State';
+import { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh } from './Rh2Directory';
 
-export type { Rh2InitializationParameter, KeyValue, Rh2AxiosConfig, ActionToDispatch, ResponseFetchApi, ErreurFetchApi, Rh2State };
-export { ConfigQueryParameter, MethodRnhrh, ParamRnhnh, MultiplePossibleValues, TypeQueryParameter };
+export type { Rh2InitializationParameter, KeyValue, Rh2AxiosConfig, ActionToDispatch, ResponseFetchApi, ErreurFetchApi };
+export { ConfigQueryParameter, MethodRnhrh, ParamRnhnh, MultiplePossibleValues };
 

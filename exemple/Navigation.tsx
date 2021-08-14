@@ -1,11 +1,19 @@
 /*
- * File: Navigation.tsx
- * Project: react-http-request-handler
- * Created Date: Sunday, August 1st 2021, 8:45:24 pm
- * Author: Charly Beaugrand
- * 
- * Copyright (c) 2021 Lunotte
+ * File: Navigation.ts                                                         *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 07 26 2021                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 01:30 pm
+ * Modified By: Charly Beaugrand
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
  */
+
+
+
+
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -31,7 +39,6 @@ const configuration3: Rh2EffectSuccessNotRequiredHandler = {
     config: axiosConfig3,
     keyOfInstance: 'Test2' 
 };
-
 
 const CancelToken = axios.CancelToken;
 let source;// = CancelToken.source();
@@ -127,13 +134,7 @@ const Moi = () => {
         keyOfInstance: 'Test1',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
-        addToDirectory: true,
-        dataFromRoute: {
-            params: [
-                'itemId'
-            ],
-            typeQueryParameter: 'REQUEST_PARAM'
-        }
+        addToDirectory: true
     };
 
     const configACharger2: Rh2AxiosConfig = {
@@ -302,8 +303,7 @@ const Moi2 = () => {
     //     ...configuration3,
     //     params: [
     //         'itemId'
-    //     ],
-    //     typeQueryParameter: 'REQUEST_PARAM' 
+    //     ]
     // };
     // const resultat2 = useRh2WithParametersTakeParamsInRoute(conf, true);
     // console.log(resultat2)

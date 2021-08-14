@@ -1,10 +1,10 @@
 /*
  * File: Rh2Config.ts                                                          *
  * Project: react-http-request-handler                                         *
- * Created Date: Su Aug yyyy                                                   *
- * Author: <<author>                                                           *
+ * Created Date: 2021 07 04                                                    *
+ * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: 2021 08 14 - 01:11 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,9 +13,12 @@
 
 
 
-import {
-    AxiosRequestConfig 
-} from 'axios';
+
+
+
+
+
+import { AxiosRequestConfig } from 'axios';
 
 /**
  * axiosConfig: If not provided then a default instance of axios is generated
@@ -23,9 +26,6 @@ import {
  */
 export interface Rh2InitializationParameter {
     axiosConfig?: AxiosRequestConfigExtended[];
-    // reduxIsActif?: boolean; // Si l'application qui implémente la lib utilise redux
-    // useAsyncStorage?: boolean; // Si l'application qui implémente la lib utilise @react-native-async-storage/async-storage
-    // et quelle veut l'utiliser nécessaire dans les cas des authentifications de type Bearer
     errorHandler?: (param?: any) => void;
     modeDebug?: boolean
 }

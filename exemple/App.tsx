@@ -1,12 +1,15 @@
 /*
- * Filename: c:\Users\Lunotte\Dev\React Native\react-http-request-handler\exemple\App.tsx
- * Path: c:\Users\Lunotte\Dev\React Native\react-http-request-handler
- * Created Date: Sunday, August 1st 2021, 8:45:24 pm
- * Author: Charly Beaugrand
- * 
- * Copyright (c) 2021 Lunotte
+ * File: App.ts                                                                *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 07 26 2021                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 01:28 pm
+ * Modified By: Charly Beaugrand
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
  */
-
 
 
 

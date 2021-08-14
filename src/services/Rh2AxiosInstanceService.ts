@@ -1,24 +1,21 @@
 /*
  * File: Rh2AxiosInstanceService.ts                                            *
  * Project: react-http-request-handler                                         *
- * Created Date: Su Aug yyyy                                                   *
- * Author: <<author>                                                           *
+ * Created Date: 2021 07 24                                                    *
+ * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: 2021 08 14 - 01:14 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-import axios, {
-    AxiosInstance, AxiosRequestConfig
-} from 'axios';
-import {
-    KeyValue
-} from '../models/Rh2Config';
-import {
-    AxiosRequestConfigExtended
-} from './../models/Rh2Config';
+
+
+
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { KeyValue } from '../models/Rh2Config';
+import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 
 export type Rh2AxiosInstance = { [key: string]: {axiosInstance : AxiosInstance, interceptor: number} };
 

@@ -1,10 +1,10 @@
 /*
  * File: Rh2ManagerToQueryInProgressService.ts                                 *
  * Project: react-http-request-handler                                         *
- * Created Date: Su Aug yyyy                                                   *
- * Author: <<author>                                                           *
+ * Created Date: 2021 08 03                                                    *
+ * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: 2021 08 14 - 01:18 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,8 +13,11 @@
 
 
 
+
+
+
 import {
-    ResponseFetchApi 
+    ResponseFetchApi
 } from "../models";
 
 interface Rh2ErreurApi {

@@ -1,4 +1,22 @@
-import { AxiosResponse, AxiosError, AxiosRequestConfig } from "axios";
+/*
+ * File: FetchApi.ts                                                           *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 07 04                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 01:11 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
+
+
+
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export interface ResponseFetchApi {
     readonly isSuccess: boolean;

@@ -1,15 +1,18 @@
 /*
  * File: Rh2EffectsService.ts                                                  *
  * Project: react-http-request-handler                                         *
- * Created Date: Fri July 16 2021                                              *
+ * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Fri Aug 13 2021                                              *
+ * Last Modified: 2021 08 14 - 01:16 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
+
+
+
 import { AxiosRequestConfig, Method } from 'axios';
 import hash from 'object-hash';
 import { useEffect, useState } from 'react';
@@ -17,9 +20,7 @@ import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
 import { isModeDebugThenDisplayError, isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
-import {
-    Rh2EffectData, Rh2EffectSuccessNotRequiredHandler, Rh2EffectTreatmentToManageRequest
-} from './../models/Rh2Effect';
+import { Rh2EffectData, Rh2EffectSuccessNotRequiredHandler, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';

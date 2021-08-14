@@ -1,3 +1,18 @@
+/*
+ * File: Rh2AxiosConfigService.ts                                              *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 07 04                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 01:13 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { Rh2AxiosConfig } from "..";
 
 /**

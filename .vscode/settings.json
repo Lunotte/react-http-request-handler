@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true,
     "eslint.format.enable": true,
-    "eslint.packageManager": "yarn",
+    "eslint.packageManager": "npm",
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
     },
@@ -12,6 +12,7 @@
     "editor.wordWrapColumn": 200,
     "editor.minimap.maxColumn": 150,
     "psi-header.config": {
+        "ignoreAuthorFullName": false,
         "forceToTop": true,
         "blankLinesAfter": 1,
         "license": "MIT",
@@ -24,11 +25,11 @@
         "isActive": true,
         "modAuthor": "Modified By:",
         "modDate": "Last Modified:",
-        "modDateFormat": "dd/MM/yyyy hh:nn:ss",
+        "modDateFormat": "YYYY MM DD - hh:mm a",
         "include": [],
         "includeGlob": [],
         "exclude": ["markdown", "json", "jsonc", "shellscript"],
-        "excludeGlob": ["./exemple/**"],
+        "excludeGlob": [],
         "autoHeader": "autoSave",
         "enforceHeader": true,
         "replace": [
@@ -52,7 +53,7 @@
             "rootDirFileName": "package.json",
             "modAuthor": "Modified By:",
             "modDate": "Last Modified:",
-            "modDateFormat": "dd/MM/yyyy hh:nn:ss",
+            "modDateFormat": "YYYY MM DD - hh:mm a",
             "replace": [
                 "Filename:",
                 "Project"
@@ -70,10 +71,10 @@
             "template": [
                 "File: <<filename>>",
                 "Project: <<projectname>>",
-                "Created Date: <<filecreated('dd MMM yyyy')>>",
-                "Author: <<author>",
+                "Created Date: <<dateformat('YYYY MM DD - hh:mm a')>>",
+                "Author: <<author>>",
                 "-----",
-                "Last Modified: <<date>>",
+                "Last Modified: <<dateformat('YYYY MM DD - hh:mm a')>>",
                 "Modified By: <<author>>",
                 "-----",
                 "Copyright (c) <<yeartoyear(fc, now)>> <<company>>",

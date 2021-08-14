@@ -138,7 +138,7 @@ Soit vous ne passez rien, dans ce cas une instance par défaut sera utilisée.
 
 
 
-Si pour une quelconque raison, durant l'utilisation de votre application, vous décidez d'injecter une nouvelle configuration des instances, les anciennes qui possédaient des intercepteurs seront éjecté.
+Si pour une quelconque raison, durant l'utilisation de votre application, vous décidez d'injecter une nouvelle configuration des instances, les anciennes qui possédaient des intercepteurs seront éjectées.
 
 
 
@@ -164,5 +164,4 @@ Si pour une quelconque raison, durant l'utilisation de votre application, vous d
 
 ## Roadmap
 
-Gérer l'annulation des requêtes http via la librarie si nécessaire
-Ajouter la possibilité à la librairie de gérer les intercepteurs (Gestion du bearerQ, ?)
+Gérer l'annulation des requêtes http via la librairie si nécessaire

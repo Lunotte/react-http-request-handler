@@ -1,34 +1,26 @@
 /*
  * File: Rh2ConfigService.ts                                                   *
  * Project: react-http-request-handler                                         *
- * Project: react-http-request-handler                                         *
- * Author: <<author>                                                           *
+ * Created Date: 2021 07 04                                                    *
+ * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
- * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: 2021 08 14 - 01:14 pm                                        *
  * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
+
+
+
 
 
 
 import { AxiosInstance } from 'axios';
-/*
- * File: Rh2ConfigService.ts                                                   *
- * Project: react-http-request-handler                                         *
- * Created Date: Sunday, August 1st 2021, 8:45:24 pm                                                 *
- * Author: Charly Beaugrand                                                            *
- * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
- * Modified By: Charly Beaugrand                                               *
- * -----                                                                       *
- * Copyright (c) 2021 Lunotte                                                  *
- * ----------	---	---------------------------------------------------------  *
- */
 import { Rh2InitializationParameter } from "../models/Rh2Config";
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 import { ejectInterceptor, initAxiosInstance, Rh2AxiosInstance } from './Rh2AxiosInstanceService';
+
 
 /**
  * Application configuration

@@ -1,3 +1,18 @@
+/*
+ * File: rh2-store.ts                                                          *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 07 04                                                    *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 14 - 01:24 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import hookReducer from './rh2-reducer';
 

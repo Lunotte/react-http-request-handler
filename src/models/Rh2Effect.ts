@@ -1,10 +1,10 @@
 /*
  * File: Rh2Effect.ts                                                          *
  * Project: react-http-request-handler                                         *
- * Created Date: Fri July 16 2021                                              *
+ * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: Fri Aug 13 2021                                              *
+ * Last Modified: 2021 08 14 - 01:01 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -12,6 +12,11 @@
  */
 
 
+
+
+
+
+ 
 
 import { AxiosRequestConfig } from 'axios';
 
