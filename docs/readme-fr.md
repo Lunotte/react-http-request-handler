@@ -4,11 +4,11 @@
 
 ## Contexte
 
-Cette librairie React utilisant les hooks customisés a pour but de faciliter l'utilisateur dans sa manipulation des requêtes http. Il doit simplement configurer la requête qui sera exécutée par Axios, ainsi que le moment du déclenchement.Il est possible d’ajouter des paramêtres supplémentaires pour des besoins de l’application cliente. Par exemple, demander qu’une requête soit exécutée seulement une fois via notre système d’historisation; la configuration des traitements à effectuer en cas d’erreurs de requête. Les utilisateurs de rédux pourront trouver leur bonheur pour dispatch le résultat de la requête revenue avec succès ou non, celle-ci pourra également être précédée d’un traitement ou non.
+Cette librairie React utilisant les hooks customisés a pour but de faciliter l'utilisateur dans sa manipulation des requêtes HTTP. Il doit simplement configurer la requête qui sera exécutée par Axios, ainsi que le moment du déclenchement.Il est possible d’ajouter des paramètres supplémentaires pour des besoins de l’application cliente. Par exemple, demander qu’une requête soit exécutée seulement une fois via notre système d’historisation; la configuration des traitements à effectuer en cas d’erreurs de requête. Les utilisateurs de redux pourront trouver leur bonheur pour dispatch le résultat de la requête revenue avec succès ou non, celle-ci pourra également être précédée d’un traitement ou non.
 
 ## Fonctionnalités
 - Tout ce que Axios peut faire
-- Ajouter une config global (gestion des instances, manipulation des erreurs http, filtrage des requête pour une unique execution, etc ...)
+- Ajouter une configuration globale (gestion des instances, manipulation des erreurs HTTP, filtrage des requêtes pour une unique exécution, etc ...)
 - Possibilité d’être couplé avec Redux
 - Moins de code
 
@@ -38,7 +38,7 @@ $ yarn add react-http-request-handler
 
 ### L'application peut être initialisée de 2 manières :
 
-Soit vous utiliser un wrapper dans lequel vous passez en paramètre la configuration initiale : 
+Soit, vous utilisez un wrapper dans lequel vous passez en paramètre la configuration initiale : 
 
 ```jsx
 import { Rh2Initializer, Rh2InitializationParameter } from 'react-http-request-handler';
@@ -52,7 +52,7 @@ const initSettings: Rh2InitializationParameter = {
 </Rh2Initializer>
 ```
 
-Soit vous la passez plus tard via un service :
+Soit, vous la passez plus tard par le biais d’un service :
 
 ```jsx
 import { Rh2InitializationParameter, rh2ConfigService } from 'react-http-request-handler';
@@ -63,15 +63,214 @@ const initSettings: Rh2InitializationParameter = {
 rh2ConfigService.initializeParameters(initSettings);
 ```
 
-Soit vous ne passez rien, dans ce cas une instance par défaut sera utilisée. 
+Soit, vous ne passez rien, dans ce cas une instance par défaut sera utilisée. 
 
 Si pour une quelconque raison, durant l'utilisation de votre application, vous décidez d'injecter une nouvelle configuration des instances, les anciennes qui possédaient des intercepteurs seront éjectées.
 
+### Utilisation des deux hooks
+
+#### Hooks sans préchargement
+
+```typescript
+const axiosConfig: AxiosRequestConfig = {
+    url: `https://jsonplaceholder.typicode.com/todos/1`,
+    method: 'GET' 
+};
+const configuration: Rh2EffectAxiosConfigHandler = {
+    axiosRequestConfig: axiosConfig
+};
+
+const test = useRh2WithParameters(configuration);
+console.log(test);
+```
 
 
-### Rh2ConfigService
+
+Le résultat du log sera :
+
+```typescript
+{
+    loading: false,
+    data: {
+        userId: 1,
+        id: 1,
+        title: "delectus aut autem",
+        completed: false
+    }
+}
+```
 
 
+
+##### Autre exemple : 
+
+```jsx
+const App = () => {
+    const initSettings: Rh2InitializationParameter = {
+        axiosConfig: [
+            {
+                key: 'Test1',
+                axiosConfig: { baseURL: 'https://www.google.com/', method: 'POST' },
+                defaultInterceptor: true,
+                headerUrl: [
+                    {
+                        key: 'CleDeTest',
+                        value: 'value to test'
+                    }
+                ]
+            },
+            {
+                key: 'Test2',
+                axiosConfig: { baseURL: 'https://jsonplaceholder.typicode.com' },
+                headerUrl: []
+            }
+        ],
+        modeDebug: true
+    };
+
+    return (
+    <Provider store={Store}>
+        <Rh2Initializer rh2Settings={initSettings} >
+            <Navigation />
+        </Rh2Initializer>
+        </Provider>
+    );
+};
+```
+
+```jsx
+const dispatch = useDispatch();
+
+const axiosConfig: AxiosRequestConfig = {
+    url: `/todos/1`,
+    method: 'GET'
+};
+
+const configuration: Rh2EffectAxiosConfigHandler = {
+    axiosRequestConfig: axiosConfig,
+    justeReponse: false,
+    keyOfInstance: 'Test2',
+    successHandler: (value) => dispatch(pourTestAction(value))
+};
+
+useRh2WithParameters(configuration);
+```
+
+Dans l'initialisation du paramétrage, nous avons demandé à créer 2 instances Axios
+
+<b>keyOfInstance: 'Test2'</b> nous permet de dire d'exécuter la requête avec l'instance nommée <b>Test2</b>. Si aucune avez été mentionnée (Par défaut c'est la première renseignée dans l'initialisation) ou bien appelé l'autre, nous n'aurions pas eu le résultat escompté.
+
+Pour cet exemple, le paramètre <b>successHandler</b> a été utilisé pour dispatch une action redux. Dans cette action, on demande à obtenir l'ensemble du résultat de la requête <b>justeReponse: false</b>
+
+Ci-dessous, l’action qui a été réalisée :
+
+```typescript
+{
+  type: 'POUR_TEST_ACTION',
+  payload: {
+    data: {
+      userId: 1,
+      id: 1,
+      title: 'delectus aut autem',
+      completed: false
+    },
+    status: 200,
+    statusText: '',
+    headers: {
+      ...
+    },
+    config: {
+      url: '/todos/1',
+      method: 'get',
+      headers: {},
+      baseURL: 'https://jsonplaceholder.typicode.com',
+      ...
+    },
+    request: {}
+  }
+}
+```
+
+
+
+##### Exemple de gestion d'erreur
+
+Imaginons, pour une raison quelconque, vous n'avez pas voulu initialiser le paramètre <b>errorHandler</b> avec le wrapper <b>Rh2Initializer</b>. Vous pouvez utiliser valoriser de la façon suivante :
+
+```jsx
+ const traitementErreur = (data: ResponseFetchApi) => {
+     let message;
+
+     switch (data.status) {
+         case 405:
+             message = 'C’est une erreur 405 !';
+             dispatch(pourTestAction(message));
+             break;
+         case 404:
+             message = 'C’est une erreur 404 !';
+             dispatch(pourTestAction(message));
+             break;
+         default:
+             message = 'Facheux ce problème !';
+             dispatch(pourTestAction(message));
+             break;
+     }
+ };
+
+rh2ConfigService.setErrorHandler(traitementErreur);
+```
+
+Pour faire le test, j'ai pris l'exemple précédent et j'ai demandé d'exécuté la requête avec la première instance <b>Test1</b>
+
+Google ne s'attends pas à recevoir un requête de cette forme : <b>https://www.google.com/todos/1</b>. On obtient une erreur 404.
+
+L'action obtenu :
+
+```typescript
+{
+  type: 'POUR_TEST_ACTION',
+  payload: 'C’est une erreur 404 !'
+}
+```
+
+Vous pouvez faire ce que vous voulez. On peut également demander à dispatch une action  avec le contenu des données présente en paramètre de la méthode traitementErreur.
+
+
+
+#### Hook préchargé
+
+Ci-dessous, le code a été empilé. Dans les faits, vous pouvez avoir un fichier de configuration dans lequel vous ajouter les configurations.
+
+Ensuite, dans votre composant, vous avez juste à appeler le hook <b>useRh2WithName</b>
+
+```typescript
+const axiosConfig: AxiosRequestConfig = {
+	url: '/search?q=champ',
+	method: 'GET'
+};
+const configACharger: Rh2AxiosConfig = {
+	keyOfInstance: 'Test1',
+	axiosRequestConfig: axiosConfig,
+	label: GOOGLE
+};
+
+rh2AxiosConfigService.addConfigAxios(configACharger);
+
+const test = useRh2WithName(GOOGLE);
+console.log(test);
+```
+
+
+
+### Liste des services
+
+#### Rh2ConfigService
+
+Initialise l’application :
+
+- Paramètre les instances Axios (si rien n’est fourni, une instance par défaut sera générée)
+- Configuration du mode débug
+- Ajouter une gestion générale des erreurs de requête (les erreurs peuvent être gérées par le type d’erreur retourné, le code d’erreur de la requête) 
 
 | Méthode                                                      | type                         | Description                                                  |
 | ------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------ |
@@ -83,7 +282,23 @@ Si pour une quelconque raison, durant l'utilisation de votre application, vous d
 | getAxiosInstances()                                          | Rh2AxiosInstance             | Récupère les instances Axios                                 |
 | getAxiosInstance(key: string)                                | AxiosInstance                | Récupère l'instance Axios demandée en paramètre              |
 
+#### Rh2AxiosConfigService
 
+Initialise l’application :
+
+- Gestion des configurations préchargées
+
+| Méthode                                                      | type             | Description                                                  |
+| ------------------------------------------------------------ | ---------------- | ------------------------------------------------------------ |
+| getAllConfigAxios()                                          | Rh2AxiosConfig[] | Récupérer toutes les configurations                          |
+| getConfigAxios(label: string)                                | Rh2AxiosConfig   | Récupérer la configuration                                   |
+| hasConfigAxios(label: string)                                | boolean          | on vérifie si cette configuration a déjà été ajoutée         |
+| addConfigAxios(configAxios: Rh2AxiosConfig)                  | void             | Ajouter une nouvelle configuration                           |
+| addAuthToConfigAxios(label: string, auth: { username: string, password: string }) | void             | Ajouter des information d’authentification à une configuration existante |
+| addBodyToConfigAxios<T>(label: string, body: T)              | void             | Ajouter un body à une configuration existante                |
+| replaceConfig(label: string, configAxios: Rh2AxiosConfig)    | void             | Récupère l'instance Axios demandée en paramètre              |
+| removeConfigAxios(label: string)                             | void             | Supprimer une configuration existante                        |
+| removeAllConfigAxios()                                       | void             | Supprimer toutes les configuration existante                 |
 
 ### Liste des models Rh2
 
@@ -152,7 +367,7 @@ export interface Rh2AxiosConfig extends Rh2EffectAxiosConfigHandler {
 
 #### FetchApi
 
-Gestion des retour de requête.
+Gestion des retours de requête.
 
 Pour chaque requête, il y aura a minima le type <b>ResponseFetchApi</b>, en cas d'erreur  <b>ErreurFetchApi</b>
 
@@ -216,7 +431,7 @@ export interface AxiosRequestConfigExtended {
 
 | Nom          | Type                         | Description                                                  | Valeur par défaut | Valeur d’exemple |
 | ------------ | ---------------------------- | ------------------------------------------------------------ | ----------------- | ---------------- |
-| axiosConfig  | AxiosRequestConfigExtended[] | Les requêtes qui seront exécutées pendant l’utilisation de l’application peuvent être pré-configurées. L’utilisation d’une clé sera nécessaire pour retrouver la configuration ajoutée | []                | Exemple 1        |
+| axiosConfig  | AxiosRequestConfigExtended[] | Les requêtes qui seront exécutées pendant l’utilisation de l’application peuvent être préconfigurées. L’utilisation d’une clé sera nécessaire pour retrouver la configuration ajoutée | []                | Exemple 1        |
 | modeDebug    | boolean                      | Log des informations complémentaires à l’utilisateur. Ceci peut aider à comprendre de mauvais comportement | false             | `true, false`    |
 | errorHandler | function                     | Méthode générale qui va être utilisée en cas d’échec de la requête | n/a               | Exemple 2        |
 
@@ -226,10 +441,10 @@ export interface AxiosRequestConfigExtended {
 
 | Nom                | Type                                | Description                                                  | Valeur par défaut                                  | Valeur d’exemple                                     |
 | ------------------ | ----------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------- |
-| key                | string                              | Clé pour retrouver l'instance Axios. Elle sera utilisée pour configurer les requêtes, vous devez indiquer à quelle instance elle devra se référer. Si aucune est renseignée, on utilise la première ajoutée | n/a                                                | `"MY_DEFAULT_KEY"`                                   |
+| key                | string                              | Clé pour retrouver l'instance Axios. Elle sera utilisée pour configurer les requêtes, vous devez indiquer à quelle instance elle devra se référer. Si aucune n’est renseignée, on utilise la première ajoutée | n/a                                                | `"MY_DEFAULT_KEY"`                                   |
 | axiosConfig        | AxiosRequestConfig                  | Configuration [Axios](https://github.com/axios/axios). Si vous ne connaissez pas cette librairie, par exemple, vous pouvez valoriser la propriété baseURL pour indiquer le préfixe de chaque url qui utilisera cette instance | n/a                                                | `{ baseURL: 'http://test.fr' }`                      |
-| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être crée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémenté le votre, le votre ne va pas fonctionner</b> | true                                               | `true, false`                                        |
-| headerUrl          | {key: string;<br/>value: string;}[] | Liste des en-tête à utiliser par l'interceptor               | [{key: 'Content-Type', value: 'application/json'}] | `[{key: 'Content-Type', value: 'application/json'}]` |
+| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être créée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
+| headerUrl          | {key: string;<br/>value: string;}[] | Liste des en-têtes à utiliser par l'interceptor              | [{key: 'Content-Type', value: 'application/json'}] | `[{key: 'Content-Type', value: 'application/json'}]` |
 
 
 
@@ -287,4 +502,5 @@ const initSettings: Rh2InitializationParameter = {
 
 ## Roadmap
 
-Gérer l'annulation des requêtes http via la librairie si nécessaire
+- Modifier une instance Axios pour prendre en compte de nouveaux éléments (Ex : Mise à jour du paramètre «auth» de Axios)
+- Gérer l'annulation des requêtes HTTP par le biais de la librairie si nécessaire

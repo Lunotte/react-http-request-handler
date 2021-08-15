@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 05:44 pm
+ * Last Modified: 2021 08 15 - 09:56 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -20,25 +20,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
 import { Rh2EffectAxiosConfigHandler } from '../src/models/Rh2Effect';
-import { useRh2WithParameters } from '../src/services/Rh2EffectsService';
+import { useRh2WithName } from '../src/services/Rh2EffectsService';
+import { pourTestAction } from './redux/rh2-action';
 
 
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
 const AMAZON = 'AMAZON';
-
-
-const axiosConfig3: AxiosRequestConfig = {
-    url: `https://www.google.com/`,
-    method: 'GET' 
-};
-const configuration3: Rh2EffectAxiosConfigHandler = {
-    config: axiosConfig3,
-    keyOfInstance: 'Test2' 
-};
 
 const CancelToken = axios.CancelToken;
 let source;// = CancelToken.source();
@@ -48,32 +40,8 @@ const axiosConfigBis: AxiosRequestConfig = {
     method: 'post' 
 };
 let configurationBis: Rh2EffectAxiosConfigHandler = {
-    config: axiosConfigBis 
+    axiosRequestConfig: axiosConfigBis 
 };
-
-//const dispatch = useDispatch();
-
-const traitementErreur = (data: ResponseFetchApi) => {
-    let message;
-
-    switch (data.status) {
-    case 405:
-        message = 'C’est une erreur 405 !';
-        console.log(message);
-        //  dispatch(pourTestAction(message));
-        break;
-    case 404:
-        message = 'C’est une erreur 404 !';
-        console.log(message);
-        // dispatch(pourTestAction(message));
-        break;
-    default:
-        message = 'Facheux ce problème !';
-        console.log(message);
-        // dispatch(pourTestAction(message));
-        break;
-    }
-}
 
 // const initSettings: Rh2InitializationParameter = {
 //     axiosConfig: [
@@ -94,20 +62,44 @@ const traitementErreur = (data: ResponseFetchApi) => {
 
 const Moi = () => {
 
+    
+const dispatch = useDispatch();
+
+// const axiosConfig: AxiosRequestConfig = {
+//     url: `/todos/1`,
+//     method: 'GET'
+// };
+
+// const configuration: Rh2EffectAxiosConfigHandler = {
+//     axiosRequestConfig: axiosConfig,
+//     justeReponse: false,
+//     keyOfInstance: 'Test1',
+//     successHandler: (value) => dispatch(pourTestAction(value))
+// };
+
+    
+const traitementErreur = (data: ResponseFetchApi) => {
+    let message;
+
+    switch (data.status) {
+        case 405:
+            message = 'C’est une erreur 405 !';
+            dispatch(pourTestAction(message));
+            break;
+        case 404:
+            message = 'C’est une erreur 404 !';
+            dispatch(pourTestAction(message));
+            break;
+        default:
+            message = 'Facheux ce problème !';
+            dispatch(pourTestAction(message));
+            break;
+    }
+};
+    
     // const dispatch = useDispatch();
     // const navigation = useNavigation();
-    // rh2ConfigService.initializeParameters({
-    //   axiosConfig: [{
-    //     key: 'Test1', axiosConfig: { baseURL: 'https://www.sdfgoogle.com/' }, defaultInterceptor: false,
-    //     headerUrl: [{ key: 'CleDeTest', value: 'value to test' }]
-    //   },
-    //   {
-    //     key: 'Test2', axiosConfig: { baseURL: 'http://pompoarre.fr' },
-    //     headerUrl: [{ key: 'YoJack', value: 'Ça farte ?' }]
-    //   }],
-    //   errorHandler: (param) => dispatch(pourTestAction('Test Par la conf générale')),
-    //   modeDebug: true
-    // });
+    // rh2ConfigService.initializeParameters(initSettings);
 
     // Object.values(getAxiosInstances())[0].interceptors.request.use(
     //   async (config) => {
@@ -127,7 +119,7 @@ const Moi = () => {
 
 
     const axiosConfig: AxiosRequestConfig = {
-        url: '/search?q=champ&sxsrf=ALeKk01edO6fnR6BHj7seeqbsHbnoh5SPQ%3A1627152933260&source=hp&ei=JWL8YJ7FDZKWaPG7t8gF&iflsig=AINFCbYAAAAAYPxwNZtvdEb2dgqGiMoAxLgYpStrexPb&oq=champ&gs_lcp=Cgdnd3Mtd2l6EAMyCgguELEDEEMQkwIyBwguELEDEEMyCAgAELEDEIMBMggIABCxAxCDATIICAAQsQMQgwEyAgguMgIILjIFCC4QsQMyCAguELEDEIMBMgUILhCxAzoHCCMQ6gIQJzoECCMQJzoECAAQQzoFCAAQsQM6DgguELEDEIMBEMcBEKMCOgIIADoECC4QQzoLCC4QsQMQxwEQowI6BggAEAoQQzoLCAAQsQMQgwEQyQM6BQgAEJIDOgcILhBDEJMCOgoILhCxAxCDARBDUIwSWN4XYNYZaAFwAHgAgAGgAYgBkASSAQM0LjGYAQCgAQGqAQdnd3Mtd2l6sAEK&sclient=gws-wiz&ved=0ahUKEwje69GEsfzxAhUSCxoKHfHdDVkQ4dUDCAg&uact=5',
+        url: '/search?q=champ',
         method: 'GET'
     };
     const configACharger: Rh2AxiosConfig = {
@@ -137,11 +129,11 @@ const Moi = () => {
         addToDirectory: true
     };
 
-    const configACharger2: Rh2AxiosConfig = {
-        axiosRequestConfig: axiosConfig,
-        label: MICROSOFT,
-        addToDirectory: true
-    };
+    // const configACharger2: Rh2AxiosConfig = {
+    //     axiosRequestConfig: axiosConfig,
+    //     label: MICROSOFT,
+    //     addToDirectory: true
+    // };
 
 
     // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
@@ -157,7 +149,7 @@ const Moi = () => {
     // // const dispatch = useDispatch();
 
     rh2AxiosConfigService.addConfigAxios(configACharger);
-    rh2AxiosConfigService.addConfigAxios(configACharger2);
+    // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
     // rh2AxiosConfigService.addConfigAxios(configACharger2);
@@ -179,19 +171,14 @@ const Moi = () => {
     // console.log('ici');
     //useRequestFromParameter(pourTestAction, axiosConfig2, true, true);
 
-    const test3 = useRh2WithParameters(configuration3, {
-        params: {
-            une: 'valeur',
-            chatte: 'chienne'
-        }
-    });
-    console.log(test3);
+  //  useRh2WithParameters(configuration);
+   // console.log(test);
     
-    // const test = useRh2WithName(GOOGLE, true);
-    // console.log(test);
+    const test = useRh2WithName(GOOGLE);
+    console.log(test);
 
 
-    // // rh2ConfigService.setErrorHandler(traitementErreur);
+   // rh2ConfigService.setErrorHandler(traitementErreur);
 
     // const test2 = useRh2WithName(GOOGLE, true);
     // console.log(test2);
@@ -258,8 +245,8 @@ const Moi = () => {
         source = axios.CancelToken.source();
         configurationBis = {
             ...configurationBis,
-            config: {
-                ...configurationBis.config,
+            axiosRequestConfig: {
+                ...configurationBis.axiosRequestConfig,
                 params: state,
                 cancelToken: source.token 
             } 

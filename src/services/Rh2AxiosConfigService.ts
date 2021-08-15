@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:13 pm                                        *
+ * Last Modified: 2021 08 15 - 06:26 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -36,8 +36,8 @@ class Rh2AxiosConfigService {
      * @param label Query name
      * @returns The element searched if it exists
      */
-    getConfigAxios(id: string): Rh2AxiosConfig {
-        return this.configsAxios.find(config => config.label === id);
+    getConfigAxios(label: string): Rh2AxiosConfig {
+        return this.configsAxios.find(config => config.label === label);
     }
 
     /**
@@ -45,8 +45,8 @@ class Rh2AxiosConfigService {
      * @param id Query name
      * @returns True If present else False
      */
-    hasConfigAxios(id: string): boolean {
-        return this.configsAxios.some((config) => config.label === id);
+    hasConfigAxios(label: string): boolean {
+        return this.configsAxios.some((config) => config.label === label);
     }
 
     /**
@@ -80,7 +80,7 @@ class Rh2AxiosConfigService {
     }
 
     /**
-     * Add body to a axios config
+     * Add body to an axios config
      * @param id Query name
      * @param body Body to the http request
      */
