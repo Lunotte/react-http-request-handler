@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 15 - 09:56 pm
+ * Last Modified: 2021 08 16 - 07:52 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -123,7 +123,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
         method: 'GET'
     };
     const configACharger: Rh2AxiosConfig = {
-        keyOfInstance: 'Test1',
+        keyOfInstance: 'Test2',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
         addToDirectory: true
@@ -173,6 +173,11 @@ const traitementErreur = (data: ResponseFetchApi) => {
 
   //  useRh2WithParameters(configuration);
    // console.log(test);
+    
+    rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
+        username: 'toto',
+        password: 'I1€5t3nGerr€'
+    });
     
     const test = useRh2WithName(GOOGLE);
     console.log(test);

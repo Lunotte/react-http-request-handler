@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 15 - 09:27 pm
+ * Last Modified: 2021 08 16 - 07:50 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -38,7 +38,8 @@ const App = () => {
             },
             {
                 key: 'Test2',
-                axiosConfig: { baseURL: 'https://jsonplaceholder.typicode.com' },
+                axiosConfig: { baseURL: 'https://www.google.com/' },
+                defaultInterceptor: false,
                 headerUrl: []
             }
         ],

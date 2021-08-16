@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 06:02 pm                                        *
+ * Last Modified: 2021 08 16 - 07:57 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -489,7 +489,7 @@ describe('useRh2WithName', () => {
         }
         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-        const spyIsModeDebugThenDisplayError = jest.spyOn(utils, 'isModeDebugThenDisplayError');
+        const spyIsModeDebugThenDisplayWarn = jest.spyOn(utils, 'isModeDebugThenDisplayWarn');
         const spyFetchApi = jest.spyOn(FetchApiService, 'fetchApi');
 
         const reponse = {
@@ -515,10 +515,9 @@ describe('useRh2WithName', () => {
         expect(spyFetchApi.mock.calls[0][1]).toEqual({
             url: 'https://www.google.com/2/trote',
             method: 'GET',
-            data: undefined
+            data: undefined,
+            params: { une: 'valeur', chatte: 'chienne' }
           });
-        expect(spyIsModeDebugThenDisplayError).toHaveBeenCalled();
-        expect(spyIsModeDebugThenDisplayError).toHaveBeenCalledWith('Query and path parameters are defined. Path will be used');
         expect(setState).toHaveBeenCalledTimes(3);
         resetMocksAndServices();
     });

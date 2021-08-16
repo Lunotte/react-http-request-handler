@@ -1,6 +1,14 @@
 # React Http Request Handler (RH2)
 
-[![Coverage Status](https://coveralls.io/repos/bitbucket/Lunotte/reactnativehttprequesthandler/badge.svg?branch=master)](https://coveralls.io/bitbucket/Lunotte/reactnativehttprequesthandler?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Lunotte/react-http-request-handler/badge.svg?branch=master)](https://coveralls.io/github/Lunotte/react-http-request-handler?branch=master)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Lunotte/react-http-request-handler.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Lunotte/react-http-request-handler/context:javascript)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
+[![Build Status](https://travis-ci.com/Lunotte/react-http-request-handler.svg?branch=master)](https://travis-ci.com/Lunotte/react-http-request-handler)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
 ## Contexte
 
@@ -122,6 +130,7 @@ const App = () => {
             {
                 key: 'Test2',
                 axiosConfig: { baseURL: 'https://jsonplaceholder.typicode.com' },
+                defaultInterceptor: false,
                 headerUrl: []
             }
         ],
@@ -243,7 +252,7 @@ Ci-dessous, le code a été empilé. Dans les faits, vous pouvez avoir un fichie
 
 Ensuite, dans votre composant, vous avez juste à appeler le hook <b>useRh2WithName</b>
 
-```typescript
+```jsx
 const axiosConfig: AxiosRequestConfig = {
 	url: '/search?q=champ',
 	method: 'GET'
@@ -258,6 +267,78 @@ rh2AxiosConfigService.addConfigAxios(configACharger);
 
 const test = useRh2WithName(GOOGLE);
 console.log(test);
+```
+
+
+
+### Hook avec paramètre
+
+Le second paramètre des hooks <b>useRh2WithName</b> et <b>useRh2WithParameters</b> vous sera certainement utile pour compléter la configuration de votre requête. Les paramètres vont être utiles dans le cas où vous seriez en attente de les obtenir. 
+
+```jsx
+useRh2WithName(GOOGLE, {
+        pathParams: '/to/test',
+        params: {
+            hat: 'red',
+            hair: 'grey'
+        },
+        data: {
+            color: 'yellow',
+            shape: 'square'
+        }
+    });
+```
+
+Le résultat obtenu sera : 
+
+https://www.google.com/search/to/test?hat=red&hair=grey
+
+Avec en body les clés/valeurs renseignés dans la propriété data.
+
+Selon votre cas d'utilisation ou tout simplement de votre préférence, vous pouvez également utiliser le service <b>rh2AxiosConfigService</b> pour injecter le body.
+
+```jsx
+rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
+    color: 'yellow',
+    shape: 'square'
+});
+```
+
+
+
+### Instances Axios
+
+Vous pouvez utiliser les instances Axios qui ont été générées. Le service <b>rh2ConfigService</b> vous permet de les récupérer.
+
+| Attention : Pour l'initialisation de l'instance, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| ------------------------------------------------------------ |
+
+```jsx
+const axiosInstance: AxiosInstance = rh2ConfigService.getAxiosInstance('TEST2');
+axiosInstance.interceptors.request.use(
+    async (config) => {
+        const headerImpl = await getHeader();
+
+        if (headerImpl) {
+            if (config.method !== 'OPTIONS') {
+                config.headers = headerImpl;
+            }
+        }
+        return config;
+    },
+    ...
+);
+```
+
+Dans le scénario ci-dessus, On va utiliser l'instance que l'on avait demandé de nommer <b>TEST2</b>. Puis, on crée un intercepteur. Dans ce cas présent, on peut imaginer que l'on désir ajouter un token dans l'en-tête des requêtes.
+
+Si vous avez besoin de configurer une url avec l'authentification de type BASIC, vous pouvez l'ajouter en deux temps si nécessaire :
+
+```jsx
+rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
+	username: 'toto',
+	password: 'I1€5t3nGerr€'
+});
 ```
 
 
@@ -348,6 +429,8 @@ export interface Rh2EffectData {
 <b>params</b> Query params d'une requête.
 
 <b>pathParams</b> Path params d'une requête.
+
+Si <b>params</b> et <b>pathParams</b> sont défini, pathParams est construit en premier.
 
 
 

@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:13 pm                                        *
+ * Last Modified: 2021 08 16 - 06:46 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -48,6 +48,8 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
     try {
         const message = (axiosInstance == null) ? 'Aucune instance demandée, celle par défaut va être utilisée' : 'L\'instance demandée à être utilisée est ' + axiosInstance;
         isModeDebugThenDisplayInfo(message + '. Parmi celles qui sont disponibles', rh2ConfigService.getAxiosInstances());
+
+        isModeDebugThenDisplayInfo('La configuration utilisée', config);
 
         const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(rh2ConfigService.getAxiosInstances())[0];
 

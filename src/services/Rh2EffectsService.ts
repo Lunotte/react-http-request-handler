@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 06:01 pm                                        *
+ * Last Modified: 2021 08 16 - 07:52 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
-import { isModeDebugThenDisplayError, isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
+import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
@@ -149,23 +149,15 @@ function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): A
     let configToUse = { ...configuration.axiosRequestConfig,
         data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.axiosRequestConfig.data
     };
-    
-    if (configuration.optionalParameters?.params != null || configuration.optionalParameters?.pathParams != null) {
 
-        if (configuration.optionalParameters?.params != null && configuration.optionalParameters?.pathParams != null) {
-            isModeDebugThenDisplayError('Query and path parameters are defined. Path will be used');
-
-            configToUse = {
-                ...configToUse,
-                url: configuration.axiosRequestConfig.url.concat(configuration.optionalParameters.pathParams)
-            };
-
-        } else if (configuration.optionalParameters?.params != null) {
-            configToUse = { ...configToUse, params: configuration.optionalParameters.params };
-        } else {
-            configToUse = {...configToUse, url: configToUse.url.concat(configuration.optionalParameters.pathParams)};
-        }
+    if (configuration.optionalParameters?.pathParams != null) {
+        configToUse = { ...configToUse, url: configToUse.url.concat(configuration.optionalParameters.pathParams) };
     }
+
+    if (configuration.optionalParameters?.params != null) {
+        configToUse = { ...configToUse, params: configuration.optionalParameters.params };
+    }
+
     return configToUse;
     
 }
