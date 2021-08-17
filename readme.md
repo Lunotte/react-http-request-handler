@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Lunotte_react-http-request-handler&metric=alert_status)](https://sonarcloud.io/dashboard?id=Lunotte_react-http-request-handler)
 [![Coverage Status](https://coveralls.io/repos/github/Lunotte/react-http-request-handler/badge.svg?branch=master)](https://coveralls.io/github/Lunotte/react-http-request-handler?branch=master)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Lunotte/react-http-request-handler.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Lunotte/react-http-request-handler/context:javascript)
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
