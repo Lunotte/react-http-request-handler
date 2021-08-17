@@ -36,19 +36,19 @@
   },
   "devDependencies": {
     "@babel/core": "7.15.0",
-    "@babel/runtime": "7.14.8",
+    "@babel/runtime": "7.15.3",
     "@react-native-community/cli": "5.0.1",
     "@react-native-community/eslint-config": "3.0.0",
     "@react-navigation/devtools": "6.0.1",
     "@react-navigation/native": "6.0.2",
-    "@react-navigation/stack": "6.0.2",
-    "@types/jest": "26.0.24",
+    "@react-navigation/stack": "6.0.6",
+    "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
-    "@types/react": "17.0.16",
-    "@types/react-native": "0.64.12",
+    "@types/react": "17.0.18",
+    "@types/react-native": "0.64.13",
     "@types/react-test-renderer": "17.0.1",
-    "@typescript-eslint/eslint-plugin": "4.29.0",
-    "@typescript-eslint/parser": "4.29.0",
+    "@typescript-eslint/eslint-plugin": "4.29.2",
+    "@typescript-eslint/parser": "4.29.2",
     "babel-jest": "27.0.6",
     "coveralls": "3.1.1",
     "eslint": "7.32.0",
@@ -68,7 +68,7 @@
     "typescript": "4.3.5"
   },
   "optionalDependencies": {
-    "@babel/plugin-transform-react-display-name": "7.14.5"
+    "@babel/plugin-transform-react-display-name": "7.15.1"
   },
   "peerDependencies": {
     "@react-navigation/native": "^5.9.4 || ^6.0.0",
