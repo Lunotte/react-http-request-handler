@@ -1,7 +1,6 @@
 # React Http Request Handler (RH2)
 
 [![Coverage Status](https://coveralls.io/repos/github/Lunotte/react-http-request-handler/badge.svg?branch=master)](https://coveralls.io/github/Lunotte/react-http-request-handler?branch=master)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Lunotte/react-http-request-handler.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Lunotte/react-http-request-handler/context:javascript)
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
 [![Build Status](https://travis-ci.com/Lunotte/react-http-request-handler.svg?branch=master)](https://travis-ci.com/Lunotte/react-http-request-handler)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
@@ -73,7 +72,7 @@ rh2ConfigService.initializeParameters(initSettings);
 
 Soit, vous ne passez rien, dans ce cas une instance par défaut sera utilisée. 
 
-Si pour une quelconque raison, durant l'utilisation de votre application, vous décidez d'injecter une nouvelle configuration des instances, les anciennes qui possédaient des intercepteurs seront éjectées.
+Si pour une quelconque raison, durant l'utilisation de votre application, vous décidez d'injecter une nouvelle configuration des instances, les anciennes qui possédaient des interceptors seront éjectées.
 
 ### Utilisation des deux hooks
 
@@ -167,7 +166,7 @@ useRh2WithParameters(configuration);
 
 Dans l'initialisation du paramétrage, nous avons demandé à créer 2 instances Axios
 
-<b>keyOfInstance: 'Test2'</b> nous permet de dire d'exécuter la requête avec l'instance nommée <b>Test2</b>. Si aucune avez été mentionnée (Par défaut c'est la première renseignée dans l'initialisation) ou bien appelé l'autre, nous n'aurions pas eu le résultat escompté.
+<b>keyOfInstance: 'Test2'</b> nous permet de dire d'exécuter la requête avec l'instance nommée <b>Test2</b>. Si aucune avez été mentionnée (Par défaut c'est la première renseignée dans l'initialisation) ou bien appelé <b>Test1</b>, nous n'aurions pas eu le résultat escompté.
 
 Pour cet exemple, le paramètre <b>successHandler</b> a été utilisé pour dispatch une action redux. Dans cette action, on demande à obtenir l'ensemble du résultat de la requête <b>justeReponse: false</b>
 
@@ -204,7 +203,7 @@ Ci-dessous, l’action qui a été réalisée :
 
 ##### Exemple de gestion d'erreur
 
-Imaginons, pour une raison quelconque, vous n'avez pas voulu initialiser le paramètre <b>errorHandler</b> avec le wrapper <b>Rh2Initializer</b>. Vous pouvez utiliser valoriser de la façon suivante :
+Imaginons, pour une raison quelconque, vous n'avez pas voulu initialiser le paramètre <b>errorHandler</b> avec le wrapper <b>Rh2Initializer</b>. Vous pouvez valoriser de la façon suivante :
 
 ```jsx
  const traitementErreur = (data: ResponseFetchApi) => {
@@ -332,7 +331,7 @@ axiosInstance.interceptors.request.use(
 
 Dans le scénario ci-dessus, On va utiliser l'instance que l'on avait demandé de nommer <b>TEST2</b>. Puis, on crée un intercepteur. Dans ce cas présent, on peut imaginer que l'on désir ajouter un token dans l'en-tête des requêtes.
 
-Si vous avez besoin de configurer une url avec l'authentification de type BASIC, vous pouvez l'ajouter en deux temps si nécessaire :
+Si vous avez besoin de configurer une url avec l'authentification de type BASIC, vous pouvez suivre l’exemple suivant :
 
 ```jsx
 rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
@@ -373,11 +372,11 @@ Initialise l’application :
 | ------------------------------------------------------------ | ---------------- | ------------------------------------------------------------ |
 | getAllConfigAxios()                                          | Rh2AxiosConfig[] | Récupérer toutes les configurations                          |
 | getConfigAxios(label: string)                                | Rh2AxiosConfig   | Récupérer la configuration                                   |
-| hasConfigAxios(label: string)                                | boolean          | on vérifie si cette configuration a déjà été ajoutée         |
+| hasConfigAxios(label: string)                                | boolean          | On vérifie si cette configuration a déjà été ajoutée         |
 | addConfigAxios(configAxios: Rh2AxiosConfig)                  | void             | Ajouter une nouvelle configuration                           |
 | addAuthToConfigAxios(label: string, auth: { username: string, password: string }) | void             | Ajouter des information d’authentification à une configuration existante |
 | addBodyToConfigAxios<T>(label: string, body: T)              | void             | Ajouter un body à une configuration existante                |
-| replaceConfig(label: string, configAxios: Rh2AxiosConfig)    | void             | Récupère l'instance Axios demandée en paramètre              |
+| replaceConfig(label: string, configAxios: Rh2AxiosConfig)    | void             | Remplace une configuration			                 |
 | removeConfigAxios(label: string)                             | void             | Supprimer une configuration existante                        |
 | removeAllConfigAxios()                                       | void             | Supprimer toutes les configuration existante                 |
 
@@ -451,8 +450,6 @@ export interface Rh2AxiosConfig extends Rh2EffectAxiosConfigHandler {
 #### FetchApi
 
 Gestion des retours de requête.
-
-Pour chaque requête, il y aura a minima le type <b>ResponseFetchApi</b>, en cas d'erreur  <b>ErreurFetchApi</b>
 
 ##### ResponseFetchApi
 
