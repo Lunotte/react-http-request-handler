@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 16 - 07:52 pm                                        *
+ * Last Modified: 2021 08 23 - 03:16 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -20,7 +20,7 @@ import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
 import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
-import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
+import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Hook } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';
@@ -38,22 +38,23 @@ import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQue
  */
 export function useRh2WithParameters(
     configuration: Rh2EffectAxiosConfigHandler,
-    optionalParameters?: Rh2EffectData,
-    filter = true
-): {
-    loading: boolean;
-    data: any;
-} {
+    filter = true,
+    optionalParameters?: Rh2EffectData
+): Rh2Hook {
     const [
         state,
         setState
     ] = useState({
-        loading: true,
+        loading: false,
+        completed: false,
+        failed: false,
+        success: false,
         data: null
     });
 
     useEffect(() => {
         async function fetch() {
+            console.log('=== filter useRh2WithParameters ===', filter, configuration, optionalParameters);
             traitementToManageRequest(
                 {
                     ...configuration,
@@ -70,6 +71,9 @@ export function useRh2WithParameters(
         configuration.axiosRequestConfig?.url,
         configuration.axiosRequestConfig?.data,
         configuration.axiosRequestConfig?.params,
+        optionalParameters?.data,
+        optionalParameters?.params,
+        optionalParameters?.pathParams,
         filter
     ]);
 
@@ -87,17 +91,17 @@ export function useRh2WithParameters(
  */
 export function useRh2WithName(
     label: string,
-    optionalParameters?: Rh2EffectData,
-    filter = true
-): {
-    loading: boolean;
-    data: any;
-} {
+    filter = true,
+    optionalParameters?: Rh2EffectData
+): Rh2Hook {
     const [
         state,
         setState
     ] = useState({
         loading: false,
+        completed: false,
+        failed: false,
+        success: false,
         data: null
     });
 
@@ -125,6 +129,7 @@ export function useRh2WithName(
         fetch();
     }, [
         label,
+        optionalParameters,
         filter
     ]);
 
@@ -170,13 +175,20 @@ async function traitementToManageRequest(
 
         const configAxios = configuration.axiosRequestConfig;
         const configTmp = configToManageDirectory(configAxios);
+        console.log('=== filter traitementToManageRequest ===', filter);
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
+            isModeDebugThenDisplayInfo(`State filter is ${filter} and configuration is ${configuration}`);
+
             configuration.action({
                 loading: true,
+                completed: false,
+                failed: false,
+                success: false,
                 data: null 
             });
+            
             loadingStarted(configuration);
 
             const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
@@ -194,7 +206,7 @@ async function traitementToManageRequest(
                 treatmentIfErrorInUseRequest(configuration, reponse);
             }
 
-            loadingCompleted(configuration);
+            loadingcompletedd(configuration);
         }
     }
 }
@@ -229,7 +241,7 @@ function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void 
         rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
-function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
+function loadingcompletedd(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
     } else {
@@ -246,6 +258,9 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
     }
     configuration.action({
         loading: false,
+        completed: true,
+        failed: false,
+        success: true,
         data: reponse.responseSuccess 
     });
 }
@@ -261,6 +276,9 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
     }
     configuration.action({
         loading: false,
+        completed: true,
+        failed: true,
+        success: false,
         data: null 
     });
     rh2ManagerToQueryInProgressService.addErrorApi(configuration.label, reponse);

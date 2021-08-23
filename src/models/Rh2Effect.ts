@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 06:01 pm                                        *
+ * Last Modified: 2021 08 23 - 03:12 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -65,3 +65,11 @@ export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfig
 }
 
 type OptionalParamVoidMethod = (param?: any) => void;
+
+export interface Rh2Hook {
+    loading: boolean;
+    completed: boolean;
+    failed: boolean,
+    success: boolean,
+    data: any;
+}
