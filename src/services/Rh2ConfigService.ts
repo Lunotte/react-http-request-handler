@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:14 pm                                        *
+ * Last Modified: 2021 08 23 - 05:02 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -59,7 +59,10 @@ class Rh2ConfigService {
     }
 
     setErrorHandler(treatment: (param?: any) => void): void {
-        this.parameters = { ...this.parameters, errorHandler: treatment };
+        this.parameters = {
+            ...this.parameters,
+            errorHandler: treatment 
+        };
     }
 
     getParameters(): Rh2InitializationParameter {

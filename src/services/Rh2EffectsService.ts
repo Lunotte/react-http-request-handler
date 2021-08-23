@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 23 - 03:20 pm                                        *
+ * Last Modified: 2021 08 23 - 04:47 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -150,16 +150,23 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
  */
 function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): AxiosRequestConfig {
 
-    let configToUse = { ...configuration.axiosRequestConfig,
+    let configToUse = {
+        ...configuration.axiosRequestConfig,
         data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.axiosRequestConfig.data
     };
 
     if (configuration.optionalParameters?.pathParams != null) {
-        configToUse = { ...configToUse, url: configToUse.url.concat(configuration.optionalParameters.pathParams) };
+        configToUse = {
+            ...configToUse,
+            url: configToUse.url.concat(configuration.optionalParameters.pathParams) 
+        };
     }
 
     if (configuration.optionalParameters?.params != null) {
-        configToUse = { ...configToUse, params: configuration.optionalParameters.params };
+        configToUse = {
+            ...configToUse,
+            params: configuration.optionalParameters.params 
+        };
     }
 
     return configToUse;
@@ -177,7 +184,7 @@ async function traitementToManageRequest(
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
-            isModeDebugThenDisplayInfo(`State filter is ${filter} and configuration is ${configuration}`);
+            isModeDebugThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
 
             configuration.action({
                 loading: true,
@@ -223,7 +230,7 @@ function buildObjectToHash(configuration: Rh2EffectTreatmentToManageRequest): Ob
         url: configuration.axiosRequestConfig.url,
         method: configuration.axiosRequestConfig.method,
         params: configuration.axiosRequestConfig.params,
-        data: configuration.axiosRequestConfig.data,
+        data: configuration.axiosRequestConfig.data
     };
 }
 
@@ -264,7 +271,7 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
 }
 
 function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
-    isModeDebugThenDisplayWarn('An error is to be handled', configuration.label, reponse);
+    isModeDebugThenDisplayWarn('An error was encountered', configuration.label, reponse);
     if (configuration.errorHandler) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
