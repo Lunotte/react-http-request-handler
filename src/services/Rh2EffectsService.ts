@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 23 - 03:16 pm                                        *
+ * Last Modified: 2021 08 23 - 03:20 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -54,7 +54,6 @@ export function useRh2WithParameters(
 
     useEffect(() => {
         async function fetch() {
-            console.log('=== filter useRh2WithParameters ===', filter, configuration, optionalParameters);
             traitementToManageRequest(
                 {
                     ...configuration,
@@ -175,7 +174,6 @@ async function traitementToManageRequest(
 
         const configAxios = configuration.axiosRequestConfig;
         const configTmp = configToManageDirectory(configAxios);
-        console.log('=== filter traitementToManageRequest ===', filter);
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
