@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 23 - 04:47 pm                                        *
+ * Last Modified: 2021 08 24 - 12:23 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -115,7 +115,7 @@ export function useRh2WithName(
                     keyOfInstance: configSelected?.keyOfInstance,
                     label,
                     axiosRequestConfig: configSelected?.axiosRequestConfig,
-                    justeReponse: configSelected?.justeReponse,
+                    onlyResult: configSelected?.onlyResult,
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
@@ -198,7 +198,7 @@ async function traitementToManageRequest(
 
             const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
                 buildConfigToAxios(configuration),
-                configuration.justeReponse == null || configuration.justeReponse === true);
+                configuration.onlyResult == null || configuration.onlyResult === true);
             
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
             if (configuration.addToDirectory) { // On ajoute à l'annuaire

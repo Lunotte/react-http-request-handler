@@ -1,3 +1,18 @@
+/*
+ * File: Rh2ConfigService.spec.ts                                              *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 08 24 - 12:26 pm                                         *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 24 - 12:26 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { rh2ConfigService, Rh2InitializationParameter } from '../../src';
 import { AxiosRequestConfigExtended } from '../../src/models/Rh2Config';
 
@@ -9,7 +24,7 @@ describe('Configuration', () => {
         function emptyAllParameters() {
             const allParameters = rh2ConfigService.getParameters();
             expect(allParameters.axiosConfig).toEqual([]);
-            expect(allParameters.modeDebug).toBeFalsy();
+            expect(allParameters.debugMode).toBeFalsy();
             expect(allParameters.errorHandler).toBeNull();
         }
 
@@ -22,7 +37,7 @@ describe('Configuration', () => {
             emptyAllParameters();
         });
 
-        it('add a parameter without errorHandler and modedebug', () => {
+        it('add a parameter without errorHandler and debugMode', () => {
 
             const key = 'TEST_KEY';
             const baseURL = 'baseURLTest';
@@ -35,7 +50,7 @@ describe('Configuration', () => {
 
             const allParameters = rh2ConfigService.getParameters();
             expect(allParameters.axiosConfig).toEqual([axiosConfig]);
-            expect(allParameters.modeDebug).toBe(false);
+            expect(allParameters.debugMode).toBe(false);
             expect(allParameters.errorHandler).toBeNull();
 
             expect(Object.keys(rh2ConfigService.getAxiosInstances())).toHaveLength(1);
@@ -49,7 +64,7 @@ describe('Configuration', () => {
             const axiosConfig: AxiosRequestConfigExtended = { key, axiosConfig: { baseURL } };
 
             const parameters: Rh2InitializationParameter = {
-                modeDebug: true,
+                debugMode: true,
                 errorHandler: () => console.log('test'),
                 axiosConfig: [axiosConfig]
             };
@@ -57,7 +72,7 @@ describe('Configuration', () => {
 
             const allParameters = rh2ConfigService.getParameters();
             expect(allParameters.axiosConfig).toEqual([axiosConfig]);
-            expect(allParameters.modeDebug).toBe(true);
+            expect(allParameters.debugMode).toBe(true);
             expect(allParameters.errorHandler).not.toBeNull();
             expect(allParameters.errorHandler).not.toBeUndefined();
         });

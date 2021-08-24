@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 16 - 07:52 pm
+ * Last Modified: 2021 08 24 - 12:26 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -55,7 +55,7 @@ let configurationBis: Rh2EffectAxiosConfigHandler = {
 //             ]
 //         }
 //     ],
-//     modeDebug: true,
+//     debugMode: true,
 //     errorHandler: (data) => traitementErreur(data)
 // };
 
@@ -72,7 +72,7 @@ const dispatch = useDispatch();
 
 // const configuration: Rh2EffectAxiosConfigHandler = {
 //     axiosRequestConfig: axiosConfig,
-//     justeReponse: false,
+//     onlyResult: false,
 //     keyOfInstance: 'Test1',
 //     successHandler: (value) => dispatch(pourTestAction(value))
 // };
@@ -144,7 +144,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
     // };
 
     // const axiosConfigSansDispatch: AxiosRequestConfig = { url: 'https://www.amazon.com', method: 'GET' };
-    // const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, justeReponse: true };
+    // const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, onlyResult: true };
 
     // // const dispatch = useDispatch();
 
@@ -202,7 +202,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
     //             ]
     //         }
     //     ],
-    //     modeDebug: true,
+    //     debugMode: true,
     //     errorHandler: (data) => traitementErreur(data)
     // };
     //     rh2ConfigService.initializeParameters(initSettings);
