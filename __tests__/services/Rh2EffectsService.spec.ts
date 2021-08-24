@@ -133,8 +133,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configurationGoogle);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: false,
+            success: true,
             data: reponse
         });
     });
@@ -156,12 +166,21 @@ describe('useRh2WithParameters', () => {
             } as ResponseFetchApi);
         }
         await mockFetchApi();
-
         await useRh2WithParameters(configuration);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: false,
+            success: true,
             data: reponse
         });
 
@@ -184,8 +203,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configurationGoogle);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: true,
+            success: false,
             data: null
         });
     });
@@ -212,8 +241,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configuration);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: true,
+            success: false,
             data: null
         });
     });
@@ -242,8 +281,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configuration);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: true,
+            success: false,
             data: null
         });
     });
@@ -287,8 +336,18 @@ describe('useRh2WithName', () => {
             await useRh2WithName(GOOGLE);
 
             expect(setState).toHaveBeenCalledTimes(2);
-            expect(setState).toHaveBeenCalledWith({
+            expect(setState).toHaveBeenNthCalledWith(1, {
+                loading: true,
+                completed: false,
+                failed: false,
+                success: false,
+                data: null
+            });
+            expect(setState).toHaveBeenNthCalledWith(2, {
                 loading: false,
+                completed: true,
+                failed: false,
+                success: true,
                 data: reponse
             });
 
@@ -318,10 +377,21 @@ describe('useRh2WithName', () => {
             await useRh2WithName(GOOGLE);
 
             expect(setState).toHaveBeenCalledTimes(2);
-            expect(setState).toHaveBeenCalledWith({
+            expect(setState).toHaveBeenNthCalledWith(1, {
+                loading: true,
+                completed: false,
+                failed: false,
+                success: false,
+                data: null
+            });
+            expect(setState).toHaveBeenNthCalledWith(2, {
                 loading: false,
+                completed: true,
+                failed: false,
+                success: true,
                 data: reponse
             });
+            
         });
 
         it('Troisième appel ne doit pas s\'executer car deja dans l\'annuaire', async () => {
@@ -401,7 +471,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             params: {
                 une: 'valeur',
                 chatte: 'chienne'
@@ -435,7 +505,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             data: {
                 une: 'valeur',
                 chatte: 'chienne'
@@ -469,7 +539,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             pathParams: '/2/trote'
         });
 
@@ -503,7 +573,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             pathParams: '2/trote',
             params: {
                 une: 'valeur',
