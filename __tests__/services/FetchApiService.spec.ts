@@ -1,3 +1,18 @@
+/*
+ * File: FetchApiService.spec.ts                                               *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 08 25 - 12:38 pm                                         *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 25 - 12:38 pm                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------    *
+ */
+
+
+
 import axios from 'axios';
 import { AxiosRequestConfig, ResponseFetchApi, rh2ConfigService } from '../../src';
 import { fetchApi } from '../../src/services/FetchApiService';
@@ -12,8 +27,8 @@ let mockDefaultInstanceAxios = axios.create();
 
 jest.mock('../../src/tools/Utils', () => {
   return {
-    isModeDebugThenDisplayInfo: () => jest.fn(),
-    isModeDebugThenDisplayWarn: () => jest.fn()
+    isDebugModeThenDisplayInfo: () => jest.fn(),
+    isDebugModeThenDisplayWarn: () => jest.fn()
   }
 })
 jest.mock('../../src/services/Rh2ConfigService');
