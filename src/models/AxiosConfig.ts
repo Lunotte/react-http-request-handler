@@ -1,12 +1,12 @@
 /*
  * File: AxiosConfig.ts                                                        *
  * Project: react-http-request-handler                                         *
- * Project: react-http-request-handler                                         *
+ * Created Date: 2021 05 15                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 06:02 pm                                        *
- * Last Modified: 2021 08 14 - 06:02 pm                                        *
+ * Last Modified: 2021 08 25 - 12:30 pm                                        *
  * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
@@ -14,22 +14,6 @@
 
 
 import { Rh2EffectAxiosConfigHandler } from './Rh2Effect';
-/*
- * File: AxiosConfig.ts                                                        *
- * Project: react-http-request-handler                                         *
- * Created Date: 2021 05 15                                                    *
- * Author: Charly Beaugrand                                                    *
- * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:10 pm                                        *
- * Modified By: Charly Beaugrand                                               *
- * -----                                                                       *
- * Copyright (c) 2021 Lunotte                                                  *
- * ----------	---	---------------------------------------------------------  *
- */
-
-
-
-
 
 
 /**

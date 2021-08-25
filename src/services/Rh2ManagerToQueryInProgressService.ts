@@ -4,7 +4,7 @@
  * Created Date: 2021 08 03                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:18 pm                                        *
+ * Last Modified: 2021 08 25 - 12:33 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -16,9 +16,7 @@
 
 
 
-import {
-    ResponseFetchApi
-} from "../models";
+import { ResponseFetchApi } from "../models";
 
 interface Rh2ErreurApi {
     label: string;
