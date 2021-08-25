@@ -4,7 +4,7 @@
  * Created Date: We Jun yyyy                                                   *
  * Author: Charly Beaugrand                                                                *
  * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: 2021 08 25 - 11:12 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,15 +13,13 @@
 
 
 
-import {
-    rh2ConfigService
-} from "../services";
+import { rh2ConfigService } from "../services";
 
 const INFO = '[RH2 INFO] ';
 const WARN = '[RH2 WARN] ';
 
-export function isModeDebugThenDisplayError(message: string, ...data: unknown[]): void {
-    if (rh2ConfigService.isModeDebug()) {
+export function isDebugModeThenDisplayError(message: string, ...data: unknown[]): void {
+    if (rh2ConfigService.isDebugMode()) {
         if (data.length > 0) {
             console.error(WARN + message, data);
         } else {
@@ -30,8 +28,8 @@ export function isModeDebugThenDisplayError(message: string, ...data: unknown[])
     }
 }
 
-export function isModeDebugThenDisplayWarn(message: string, ...data: unknown[]): void {
-    if (rh2ConfigService.isModeDebug()) {
+export function isDebugModeThenDisplayWarn(message: string, ...data: unknown[]): void {
+    if (rh2ConfigService.isDebugMode()) {
         if (data.length > 0) {
             console.warn(WARN + message, data);
         } else {
@@ -40,8 +38,8 @@ export function isModeDebugThenDisplayWarn(message: string, ...data: unknown[]):
     }
 }
 
-export function isModeDebugThenDisplayInfo(message: string, ...data: unknown[]): void {
-    if (rh2ConfigService.isModeDebug()) {
+export function isDebugModeThenDisplayInfo(message: string, ...data: unknown[]): void {
+    if (rh2ConfigService.isDebugMode()) {
         if (data.length > 0) {
             console.info(INFO + message, data);
         } else {

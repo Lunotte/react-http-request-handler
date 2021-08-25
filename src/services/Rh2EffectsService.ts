@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 24 - 12:23 pm                                        *
+ * Last Modified: 2021 08 25 - 11:12 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
-import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
+import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Hook } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
@@ -108,7 +108,7 @@ export function useRh2WithName(
         async function fetch() {
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-            isModeDebugThenDisplayInfo('The following configuration was found', configSelected);
+            isDebugModeThenDisplayInfo('The following configuration was found', configSelected);
 
             traitementToManageRequest(
                 {
@@ -184,7 +184,7 @@ async function traitementToManageRequest(
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
-            isModeDebugThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
+            isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
 
             configuration.action({
                 loading: true,
@@ -259,7 +259,7 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
     if (configuration.successHandler) {
         configuration.successHandler(reponse.responseSuccess);
     } else {
-        isModeDebugThenDisplayWarn('The method successHandler has not provided. This is normal if you use the return of the hook');
+        isDebugModeThenDisplayWarn('The method successHandler has not provided. This is normal if you use the return of the hook');
     }
     configuration.action({
         loading: false,
@@ -271,13 +271,13 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
 }
 
 function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
-    isModeDebugThenDisplayWarn('An error was encountered', configuration.label, reponse);
+    isDebugModeThenDisplayWarn('An error was encountered', configuration.label, reponse);
     if (configuration.errorHandler) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
         rh2ConfigService.getParameters().errorHandler(reponse);
     } else {
-        isModeDebugThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
+        isDebugModeThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
     }
     configuration.action({
         loading: false,

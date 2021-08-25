@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 24 - 12:26 pm                                        *
+ * Last Modified: 2021 08 25 - 11:10 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -73,7 +73,7 @@ class Rh2ConfigService {
         return this.parameters.axiosConfig;
     }
 
-    isdebugMode(): boolean {
+    isDebugMode(): boolean {
         return this.parameters.debugMode;
     }
 
