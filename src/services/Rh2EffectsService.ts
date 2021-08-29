@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 11:12 am                                        *
+ * Last Modified: 2021 08 29 - 03:02 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -27,6 +27,14 @@ import { default as rh2ConfigService } from './Rh2ConfigService';
 import { default as rh2DirectoryService } from './Rh2DirectoryService';
 import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQueryInProgressService';
 
+const initState = {
+    loading: false,
+    completed: false,
+    failed: false,
+    success: false,
+    data: null
+} 
+
 
 /**
  * Get data from configuration
@@ -44,13 +52,7 @@ export function useRh2WithParameters(
     const [
         state,
         setState
-    ] = useState({
-        loading: false,
-        completed: false,
-        failed: false,
-        success: false,
-        data: null
-    });
+    ] = useState(initState);
 
     useEffect(() => {
         async function fetch() {
@@ -65,6 +67,9 @@ export function useRh2WithParameters(
             )
         }
         fetch();
+        return () => {
+            setState(initState)
+        }
     }, [
         configuration.axiosRequestConfig?.method,
         configuration.axiosRequestConfig?.url,
@@ -96,13 +101,7 @@ export function useRh2WithName(
     const [
         state,
         setState
-    ] = useState({
-        loading: false,
-        completed: false,
-        failed: false,
-        success: false,
-        data: null
-    });
+    ] = useState(initState);
 
     useEffect(() => {
         async function fetch() {
@@ -126,6 +125,9 @@ export function useRh2WithName(
             )
         }
         fetch();
+        return () => {
+            setState(initState)
+        }
     }, [
         label,
         optionalParameters,
