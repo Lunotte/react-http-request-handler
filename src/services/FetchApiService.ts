@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 12:34 pm                                        *
+ * Last Modified: 2021 09 11 - 11:40 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -46,15 +46,12 @@ const fetchErreur: ErreurFetchApi = {
 export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig, dataImmediat?: boolean): Promise<ResponseFetchApi> {
 
     try {
-        const message = (axiosInstance == null) ? 'Aucune instance demandée, celle par défaut va être utilisée' : 'L\'instance demandée à être utilisée est ' + axiosInstance;
-        isDebugModeThenDisplayInfo(message + '. Parmi celles qui sont disponibles', rh2ConfigService.getAxiosInstances());
-
-        isDebugModeThenDisplayInfo('La configuration utilisée', config);
+        const message = (axiosInstance == null) ? 'No instance requested, the default will be used' : 'The requested instance to be used is ' + axiosInstance;
+        isDebugModeThenDisplayInfo(message + '. Among those available', rh2ConfigService.getAxiosInstances());
+        isDebugModeThenDisplayInfo('The configuration used', config);
 
         const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(rh2ConfigService.getAxiosInstances())[0];
-
         const resultData = await rh2ConfigService.getAxiosInstance(axiosInstanceToUse).request(config);
-
         isDebugModeThenDisplayInfo('Data was fetched from lib', resultData);
 
         return {

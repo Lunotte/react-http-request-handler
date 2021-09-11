@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 11:13 am                                        *
+ * Last Modified: 2021 09 11 - 11:40 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -73,7 +73,7 @@ class Rh2DirectoryService {
         if (!this.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
             this.configQueryParameter.push(configTmp);       
         } else {
-            isDebugModeThenDisplayWarn('New config not added because it already exist', configTmp);
+            isDebugModeThenDisplayWarn('New config was not added because it already exists', configTmp);
         }
     }
 

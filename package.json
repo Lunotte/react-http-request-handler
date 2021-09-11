@@ -1,8 +1,8 @@
 {
   "name": "react-http-request-handler",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "private": false,
-  "description": "This React library using custom hooks aims to facilitate the user in handling http requests. All he has to do is configure the request that will be executed by Axios, as well as the time of the trigger. It is possible to add additional parameters for the needs of the client application. For example, requesting that a query be executed only once through our historization system; the configuration of the treatments to be carried out in the event of request errors. Redux users may be happy to dispatch the result of the request returned successfully or not, it may also be preceded by processing or not.",
+  "description": "This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the web client needs. For example : Configuring the request to be executed once through our historization module; Configuring methods to be called in case of error; Redux users will find means to dispatch the request’s result, whether it was successfully handled or not. The response can be processed before being dispatched.",
   "keywords": [
     "react",
     "react-native",
@@ -24,37 +24,34 @@
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "dependencies": {
-    "@react-navigation/native": "6.0.2",
     "axios": "0.21.1",
     "lodash": "4.17.21",
-    "object-hash": "^2.2.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-redux": "7.2.4",
-    "redux": "4.1.1",
-    "reselect": "4.0.0"
+    "object-hash": "2.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.0",
-    "@babel/runtime": "7.14.8",
+    "@babel/runtime": "7.15.3",
     "@react-native-community/cli": "5.0.1",
     "@react-native-community/eslint-config": "3.0.0",
     "@react-navigation/devtools": "6.0.1",
     "@react-navigation/native": "6.0.2",
-    "@react-navigation/stack": "6.0.2",
-    "@types/jest": "26.0.24",
+    "@react-navigation/stack": "6.0.7",
+    "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
-    "@types/react": "17.0.16",
-    "@types/react-native": "0.64.12",
+    "@types/react": "17.0.19",
+    "@types/react-native": "0.64.13",
     "@types/react-test-renderer": "17.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.29.2",
-    "@typescript-eslint/parser": "^4.29.2",
+    "@typescript-eslint/eslint-plugin": "4.29.2",
+    "@typescript-eslint/parser": "4.29.2",
     "babel-jest": "27.0.6",
     "coveralls": "3.1.1",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.24.0",
     "jest": "27.0.6",
     "metro-react-native-babel-preset": "0.66.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "7.2.4",
     "react-native": "0.64.2",
     "react-native-builder-bob": "0.18.1",
     "react-native-gesture-handler": "1.10.3",
@@ -65,10 +62,9 @@
     "react-native-unimodules": "0.14.6",
     "react-native-web": "0.17.1",
     "react-test-renderer": "17.0.2",
+    "redux": "4.1.1",
+    "reselect": "4.0.0",
     "typescript": "4.3.5"
-  },
-  "optionalDependencies": {
-    "@babel/plugin-transform-react-display-name": "7.14.5"
   },
   "peerDependencies": {
     "@react-navigation/native": "^5.9.4 || ^6.0.0",
