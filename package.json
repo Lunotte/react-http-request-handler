@@ -35,8 +35,8 @@
     "reselect": "4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.15.0",
-    "@babel/runtime": "7.15.3",
+    "@babel/core": "7.15.5",
+    "@babel/runtime": "7.15.4",
     "@react-native-community/cli": "5.0.1",
     "@react-native-community/eslint-config": "3.0.0",
     "@react-navigation/devtools": "6.0.1",
