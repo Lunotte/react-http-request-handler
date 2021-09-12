@@ -7,7 +7,6 @@
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
 ## Contexte
 
@@ -39,11 +38,11 @@ $ yarn add react-http-request-handler
 
 
 
-## Initialisation de la librairie
+### Initialisation de la librairie
 
 
 
-### L'application peut être initialisée de 2 manières :
+#### L'application peut être initialisée de 2 manières :
 
 Soit, vous utilisez un wrapper dans lequel vous passez en paramètre la configuration initiale : 
 
@@ -51,7 +50,7 @@ Soit, vous utilisez un wrapper dans lequel vous passez en paramètre la configur
 import { Rh2Initializer, Rh2InitializationParameter } from 'react-http-request-handler';
 
 const initSettings: Rh2InitializationParameter = {
-  modeDebug: true
+  debugMode: true
 };
  
 <Rh2Initializer rh2Settings={initSettings}>
@@ -65,7 +64,7 @@ Soit, vous la passez plus tard par le biais d’un service :
 import { Rh2InitializationParameter, rh2ConfigService } from 'react-http-request-handler';
 
 const initSettings: Rh2InitializationParameter = {
-  modeDebug: true
+  debugMode: true
 };
 rh2ConfigService.initializeParameters(initSettings);
 ```
@@ -133,7 +132,7 @@ const App = () => {
                 headerUrl: []
             }
         ],
-        modeDebug: true
+        debugMode: true
     };
 
     return (
@@ -156,7 +155,7 @@ const axiosConfig: AxiosRequestConfig = {
 
 const configuration: Rh2EffectAxiosConfigHandler = {
     axiosRequestConfig: axiosConfig,
-    justeReponse: false,
+    onlyResult: false,
     keyOfInstance: 'Test2',
     successHandler: (value) => dispatch(pourTestAction(value))
 };
@@ -168,7 +167,7 @@ Dans l'initialisation du paramétrage, nous avons demandé à créer 2 instances
 
 <b>keyOfInstance: 'Test2'</b> nous permet de dire d'exécuter la requête avec l'instance nommée <b>Test2</b>. Si aucune avez été mentionnée (Par défaut c'est la première renseignée dans l'initialisation) ou bien appelé <b>Test1</b>, nous n'aurions pas eu le résultat escompté.
 
-Pour cet exemple, le paramètre <b>successHandler</b> a été utilisé pour dispatch une action redux. Dans cette action, on demande à obtenir l'ensemble du résultat de la requête <b>justeReponse: false</b>
+Pour cet exemple, le paramètre <b>successHandler</b> a été utilisé pour dispatch une action redux. Dans cette action, on demande à obtenir l'ensemble du résultat de la requête <b>onlyResult: false</b>
 
 Ci-dessous, l’action qui a été réalisée :
 
@@ -358,7 +357,7 @@ Initialise l’application :
 | setErrorHandler(treatment: (param?: any) => void)            | void                         | Ajoute un traitement à faire en cas d'erreur. Si valorisé, ce traitement est utilisé pour toutes les requêtes en échec sauf si override dans le paramétrage de la requête envoyée. |
 | getParameters()                                              | Rh2InitializationParameter   | Les paramètres du service                                    |
 | getParametersAxiosConfigs()                                  | AxiosRequestConfigExtended[] | Le paramètrage envoyé par le consommateur                    |
-| isModeDebug()                                                | boolean                      | Si le modeDebug est activé                                   |
+| isdebugMode()                                                | boolean                      | Si le debugMode est activé                                   |
 | getAxiosInstances()                                          | Rh2AxiosInstance             | Récupère les instances Axios                                 |
 | getAxiosInstance(key: string)                                | AxiosInstance                | Récupère l'instance Axios demandée en paramètre              |
 
@@ -390,7 +389,7 @@ Initialise l’application :
 export interface Rh2EffectAxiosConfigHandler {
     readonly keyOfInstance?: string;
     readonly axiosRequestConfig: AxiosRequestConfig;
-    readonly justeReponse?: boolean;
+    readonly onlyResult?: boolean;
     readonly errorHandler?: OptionalParamVoidMethod
     readonly successHandler?: OptionalParamVoidMethod,
 }
@@ -405,7 +404,7 @@ export interface Rh2EffectAxiosConfigHandler {
 | Attention : La condition pour filtrer les requêtes s'appuie sur l'url, le type de méthode et la propriété params. |
 | ------------------------------------------------------------ |
 
-<b>justeReponse</b> Si au retour de la requête on veut le contenu de data ou bien l'ensemble du paramétrage. Par défaut vaut true .
+<b>onlyResult</b> Si au retour de la requête on veut le contenu de data ou bien l'ensemble du paramétrage. Par défaut vaut true .
 
 <b>successHandler</b> Ce champ est obligatoire pour obtenir un résultat si vous n'écoutez pas le retour du hook. Exemple: Utiliser Redux pour dispatch une action.
 
@@ -490,7 +489,7 @@ Les types suivants sont utilisés avec le service <b>Rh2ConfigService</b>
 export interface Rh2InitializationParameter {
     axiosConfig?: AxiosRequestConfigExtended[];
     errorHandler?: (param?: any) => void;
-    modeDebug?: boolean
+    debugMode?: boolean
 }
 ````
 
@@ -512,7 +511,7 @@ export interface AxiosRequestConfigExtended {
 | Nom          | Type                         | Description                                                  | Valeur par défaut | Valeur d’exemple |
 | ------------ | ---------------------------- | ------------------------------------------------------------ | ----------------- | ---------------- |
 | axiosConfig  | AxiosRequestConfigExtended[] | Les requêtes qui seront exécutées pendant l’utilisation de l’application peuvent être préconfigurées. L’utilisation d’une clé sera nécessaire pour retrouver la configuration ajoutée | []                | Exemple 1        |
-| modeDebug    | boolean                      | Log des informations complémentaires à l’utilisateur. Ceci peut aider à comprendre de mauvais comportement | false             | `true, false`    |
+| debugMode    | boolean                      | Log des informations complémentaires à l’utilisateur. Ceci peut aider à comprendre de mauvais comportement | false             | `true, false`    |
 | errorHandler | function                     | Méthode générale qui va être utilisée en cas d’échec de la requête | n/a               | Exemple 2        |
 
 
@@ -573,7 +572,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
 }
 
 const initSettings: Rh2InitializationParameter = {
-    modeDebug: true,
+    debugMode: true,
     errorHandler: (data) => traitementErreur(data)
 };
 ```

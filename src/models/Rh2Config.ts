@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:11 pm                                        *
+ * Last Modified: 2021 08 24 - 12:26 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -27,7 +27,7 @@ import { AxiosRequestConfig } from 'axios';
 export interface Rh2InitializationParameter {
     axiosConfig?: AxiosRequestConfigExtended[];
     errorHandler?: (param?: any) => void;
-    modeDebug?: boolean
+    debugMode?: boolean
 }
 
 export interface KeyValue {

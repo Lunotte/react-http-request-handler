@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 16 - 07:50 pm
+ * Last Modified: 2021 08 24 - 12:26 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -43,7 +43,7 @@ const App = () => {
                 headerUrl: []
             }
         ],
-        modeDebug: true
+        debugMode: true
     };
 
     return (

@@ -1,5 +1,20 @@
+/*
+ * File: Utils.spec.ts                                                         *
+ * Project: react-http-request-handler                                         *
+ * Created Date: 2021 08 24 - 12:26 pm                                         *
+ * Author: Charly Beaugrand                                                    *
+ * -----                                                                       *
+ * Last Modified: 2021 08 25 - 11:12 am                                        *
+ * Modified By: Charly Beaugrand                                               *
+ * -----                                                                       *
+ * Copyright (c) 2021 Lunotte                                                  *
+ * ----------	---	---------------------------------------------------------  *
+ */
+
+
+
 import { rh2ConfigService, Rh2InitializationParameter } from '../../src';
-import { isModeDebugThenDisplayError, isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../../src/tools/Utils';
+import { isDebugModeThenDisplayError, isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../../src/tools/Utils';
 
 describe('Utils file', () => {
 
@@ -7,18 +22,18 @@ describe('Utils file', () => {
 
         it('Info', async () => {
             console.info = jest.fn();
-            isModeDebugThenDisplayInfo('hello');
+            isDebugModeThenDisplayInfo('hello');
             expect(console.info).toHaveBeenCalledTimes(0);
         });
 
         it('Warn', async () => {
             console.warn = jest.fn();
-            isModeDebugThenDisplayWarn('hello');
+            isDebugModeThenDisplayWarn('hello');
             expect(console.warn).toHaveBeenCalledTimes(0);
         });
         it('Error', async () => {
             console.error = jest.fn();
-            isModeDebugThenDisplayError('hello');
+            isDebugModeThenDisplayError('hello');
             expect(console.error).toHaveBeenCalledTimes(0);
         });
     });
@@ -26,11 +41,11 @@ describe('Utils file', () => {
     describe('Avec debug', () => {
 
         beforeAll(() => {
-            const parameters: Rh2InitializationParameter = {modeDebug: true};
+            const parameters: Rh2InitializationParameter = {debugMode: true};
             rh2ConfigService.initializeParameters(parameters);
         });
     
-        describe('isModeDebugThenDisplayInfo', () => {
+        describe('isDebugModeThenDisplayInfo', () => {
 
             console.info = jest.fn();
 
@@ -38,19 +53,19 @@ describe('Utils file', () => {
 
                 const expectedResult = '[RH2 INFO] hello';
                 
-                isModeDebugThenDisplayInfo('hello');
+                isDebugModeThenDisplayInfo('hello');
                 expect(console.info).toHaveBeenCalled();
                 expect(console.info).toHaveBeenCalledWith(expectedResult);
             });
 
             it('Message et 1 param', async () => {
 
-                isModeDebugThenDisplayInfo('hello', ['Jack']);
+                isDebugModeThenDisplayInfo('hello', ['Jack']);
                 expect(console.info).toHaveBeenCalled();
             });
         });
 
-        describe('isModeDebugThenDisplayWarn', () => {
+        describe('isDebugModeThenDisplayWarn', () => {
 
             console.warn = jest.fn();
 
@@ -58,19 +73,19 @@ describe('Utils file', () => {
 
                 const expectedResult = '[RH2 WARN] hello';
                 
-                isModeDebugThenDisplayWarn('hello');
+                isDebugModeThenDisplayWarn('hello');
                 expect(console.warn).toHaveBeenCalled();
                 expect(console.warn).toHaveBeenCalledWith(expectedResult);
             });
 
             it('Message et 1 param', async () => {
 
-                isModeDebugThenDisplayWarn('hello', ['Jack']);
+                isDebugModeThenDisplayWarn('hello', ['Jack']);
                 expect(console.warn).toHaveBeenCalled();
             });
         });
 
-        describe('isModeDebugThenDisplayError', () => {
+        describe('isDebugModeThenDisplayError', () => {
 
             console.error = jest.fn();
 
@@ -78,14 +93,14 @@ describe('Utils file', () => {
 
                 const expectedResult = '[RH2 WARN] hello';
                 
-                isModeDebugThenDisplayError('hello');
+                isDebugModeThenDisplayError('hello');
                 expect(console.error).toHaveBeenCalled();
                 expect(console.error).toHaveBeenCalledWith(expectedResult);
             });
 
             it('Message et 1 param', async () => {
 
-                isModeDebugThenDisplayError('hello', ['Jack']);
+                isDebugModeThenDisplayError('hello', ['Jack']);
                 expect(console.error).toHaveBeenCalled();
             });
         });
@@ -94,7 +109,7 @@ describe('Utils file', () => {
 
 
 // describe('Utils file - Pas de debug', () => {
-//     const parameters: Rh2InitializationParameter = {modeDebug: false};
+//     const parameters: Rh2InitializationParameter = {debugMode: false};
 //     rh2ConfigService.initializeParameters(parameters);
 //     beforeEach(() => {
 //         jest.clearAllMocks();
@@ -102,17 +117,17 @@ describe('Utils file', () => {
     
 //     it('Pas de debug - Info', async () => {
 //         console.info = jest.fn();
-//         isModeDebugThenDisplayInfo('hello');
+//         isDebugModeThenDisplayInfo('hello');
 //         expect(console.info).toHaveBeenCalledTimes(0);
 //     });
 //     it('Pas de debug - Warn', async () => {
 //         console.warn = jest.fn();
-//         isModeDebugThenDisplayWarn('hello');
+//         isDebugModeThenDisplayWarn('hello');
 //         expect(console.warn).toHaveBeenCalledTimes(0);
 //     });
 //     it('Pas de debug - Error', async () => {
 //         console.error = jest.fn();
-//         isModeDebugThenDisplayError('hello');
+//         isDebugModeThenDisplayError('hello');
 //         expect(console.error).toHaveBeenCalledTimes(0);
 //     });
 // });

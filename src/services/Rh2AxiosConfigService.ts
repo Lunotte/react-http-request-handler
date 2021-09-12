@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 15 - 06:26 pm                                        *
+ * Last Modified: 2021 08 25 - 12:31 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -72,8 +72,10 @@ class Rh2AxiosConfigService {
             const configAxios = config.axiosRequestConfig;
             config = {
                 ...config,
-                axiosRequestConfig: { ...configAxios,
-                    auth }
+                axiosRequestConfig: {
+                    ...configAxios,
+                    auth 
+                }
             };
             this.addConfigAxios(config);
         }
@@ -91,8 +93,10 @@ class Rh2AxiosConfigService {
             const configAxios = config.axiosRequestConfig;
             config = {
                 ...config,
-                axiosRequestConfig: { ...configAxios,
-                    data: body }
+                axiosRequestConfig: {
+                    ...configAxios,
+                    data: body 
+                }
             };
             this.addConfigAxios(config);
         }

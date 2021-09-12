@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 17 - 07:37 pm                                        *
+ * Last Modified: 2021 09 11 - 11:40 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -16,7 +16,7 @@
 import { AxiosRequestConfig } from "axios";
 import { rh2ConfigService } from '.';
 import { ErreurFetchApi, ResponseFetchApi } from "../models";
-import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from "../tools/Utils";
+import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from "../tools/Utils";
 
 let fetchSuccess: ResponseFetchApi = {
     isSuccess: false,
@@ -47,15 +47,12 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
 
     try {
         const message = (axiosInstance == null) ? 'No instance requested, the default will be used' : 'The requested instance to be used is ' + axiosInstance;
-        isModeDebugThenDisplayInfo(message + '. Among those available', rh2ConfigService.getAxiosInstances());
-
-        isModeDebugThenDisplayInfo('The configuration used', config);
+        isDebugModeThenDisplayInfo(message + '. Among those available', rh2ConfigService.getAxiosInstances());
+        isDebugModeThenDisplayInfo('The configuration used', config);
 
         const axiosInstanceToUse = (axiosInstance != null) ? axiosInstance : Object.keys(rh2ConfigService.getAxiosInstances())[0];
-
         const resultData = await rh2ConfigService.getAxiosInstance(axiosInstanceToUse).request(config);
-
-        isModeDebugThenDisplayInfo('Data was fetched from lib', resultData);
+        isDebugModeThenDisplayInfo('Data was fetched from lib', resultData);
 
         return {
             ...fetchSuccess,
@@ -84,7 +81,7 @@ function responseFetchApi(error: any): ResponseFetchApi {
                 config: error.config
             }
         };
-        isModeDebugThenDisplayWarn('Error in response', fetchSuccess);
+        isDebugModeThenDisplayWarn('Error in response', fetchSuccess);
         return fetchSuccess;
     } else if (error.request) {
         // The request was made but no response was received
@@ -102,7 +99,7 @@ function responseFetchApi(error: any): ResponseFetchApi {
             }
         };
 
-        isModeDebugThenDisplayWarn('Error in request: The request was made but no response was received', fetchSuccess);
+        isDebugModeThenDisplayWarn('Error in request: The request was made but no response was received', fetchSuccess);
         return fetchSuccess;
     } else {
         // Something happened in setting up the request that triggered an Error
@@ -116,7 +113,7 @@ function responseFetchApi(error: any): ResponseFetchApi {
                 config: error.config
             }
         };
-        isModeDebugThenDisplayWarn('Unrecognized error : This case can happen if the user cancels the request.', fetchSuccess);
+        isDebugModeThenDisplayWarn('Unrecognized error : This case can happen if the user cancels the request.', fetchSuccess);
         return fetchSuccess;
     }
 }

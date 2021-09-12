@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 06:01 pm                                        *
+ * Last Modified: 2021 08 24 - 12:23 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -39,7 +39,7 @@ export interface Rh2EffectData {
 /**
  * @param keyOfInstance If is not provided, first Axios instance will be used
  * @param config Axios settings
- * @param justeReponse If true or not defined then return data else all information about http request
+ * @param onlyResult If true or not defined then return data else all information about http request
  * @param errorHandler Method to be executed to handle the errors in the event of an error in the request. If it is not provided, we see if that of the global *                        configuration is provided otherwise, nothing is done.
  * @param successHandler
  */
@@ -47,7 +47,7 @@ export interface Rh2EffectAxiosConfigHandler {
     readonly keyOfInstance?: string;
     readonly axiosRequestConfig: AxiosRequestConfig;
     readonly addToDirectory?: boolean;
-    readonly justeReponse?: boolean;
+    readonly onlyResult?: boolean;
     readonly errorHandler?: OptionalParamVoidMethod;
     readonly successHandler?: OptionalParamVoidMethod;
 }
@@ -65,3 +65,11 @@ export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfig
 }
 
 type OptionalParamVoidMethod = (param?: any) => void;
+
+export interface Rh2Hook {
+    loading: boolean;
+    completed: boolean;
+    failed: boolean,
+    success: boolean,
+    data: any;
+}

@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 16 - 07:57 pm                                        *
+ * Last Modified: 2021 08 24 - 12:25 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -23,7 +23,6 @@ import { Rh2EffectAxiosConfigHandler } from "../../src/models/Rh2Effect";
 import * as FetchApiService from '../../src/services/FetchApiService';
 import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
 import { useRh2WithName, useRh2WithParameters } from "../../src/services/Rh2EffectsService";
-import * as utils from "../../src/tools/Utils";
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -133,8 +132,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configurationGoogle);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: false,
+            success: true,
             data: reponse
         });
     });
@@ -156,12 +165,21 @@ describe('useRh2WithParameters', () => {
             } as ResponseFetchApi);
         }
         await mockFetchApi();
-
         await useRh2WithParameters(configuration);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: false,
+            success: true,
             data: reponse
         });
 
@@ -184,8 +202,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configurationGoogle);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: true,
+            success: false,
             data: null
         });
     });
@@ -212,8 +240,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configuration);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: true,
+            success: false,
             data: null
         });
     });
@@ -242,8 +280,18 @@ describe('useRh2WithParameters', () => {
         await useRh2WithParameters(configuration);
 
         expect(setState).toHaveBeenCalledTimes(2);
-        expect(setState).toHaveBeenCalledWith({
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
             loading: false,
+            completed: true,
+            failed: true,
+            success: false,
             data: null
         });
     });
@@ -287,8 +335,18 @@ describe('useRh2WithName', () => {
             await useRh2WithName(GOOGLE);
 
             expect(setState).toHaveBeenCalledTimes(2);
-            expect(setState).toHaveBeenCalledWith({
+            expect(setState).toHaveBeenNthCalledWith(1, {
+                loading: true,
+                completed: false,
+                failed: false,
+                success: false,
+                data: null
+            });
+            expect(setState).toHaveBeenNthCalledWith(2, {
                 loading: false,
+                completed: true,
+                failed: false,
+                success: true,
                 data: reponse
             });
 
@@ -318,10 +376,21 @@ describe('useRh2WithName', () => {
             await useRh2WithName(GOOGLE);
 
             expect(setState).toHaveBeenCalledTimes(2);
-            expect(setState).toHaveBeenCalledWith({
+            expect(setState).toHaveBeenNthCalledWith(1, {
+                loading: true,
+                completed: false,
+                failed: false,
+                success: false,
+                data: null
+            });
+            expect(setState).toHaveBeenNthCalledWith(2, {
                 loading: false,
+                completed: true,
+                failed: false,
+                success: true,
                 data: reponse
             });
+            
         });
 
         it('Troisième appel ne doit pas s\'executer car deja dans l\'annuaire', async () => {
@@ -401,7 +470,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             params: {
                 une: 'valeur',
                 chatte: 'chienne'
@@ -435,7 +504,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             data: {
                 une: 'valeur',
                 chatte: 'chienne'
@@ -469,7 +538,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             pathParams: '/2/trote'
         });
 
@@ -485,11 +554,10 @@ describe('useRh2WithName', () => {
             axiosRequestConfig: configurationGoogle.axiosRequestConfig,
             label: GOOGLE,
             successHandler: (data) => setState(data),
-            justeReponse: false
+            onlyResult: false
         }
         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-        const spyIsModeDebugThenDisplayWarn = jest.spyOn(utils, 'isModeDebugThenDisplayWarn');
         const spyFetchApi = jest.spyOn(FetchApiService, 'fetchApi');
 
         const reponse = {
@@ -503,7 +571,7 @@ describe('useRh2WithName', () => {
         }
         await mockFetchApi();
 
-        await useRh2WithName(GOOGLE, {
+        await useRh2WithName(GOOGLE, true, {
             pathParams: '2/trote',
             params: {
                 une: 'valeur',

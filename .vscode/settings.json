@@ -2,11 +2,18 @@
     "workbench.iconTheme": "vscode-icons",
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true,
+    "eslint.codeActionsOnSave.mode": "all",
+    "eslint.alwaysShowStatus": true,
     "eslint.format.enable": true,
     "eslint.packageManager": "npm",
+    "eslint.workingDirectories": ["src"],
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": true,
+        "source.fixAll.eslint": true
     },
+    "eslint.options": {
+        "extensions": [ ".js", ".ts", ".jsx", ".tsx" ]
+      },
     "editor.formatOnType": true,
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 200,

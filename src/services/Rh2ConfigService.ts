@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:14 pm                                        *
+ * Last Modified: 2021 08 25 - 11:10 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -35,7 +35,7 @@ class Rh2ConfigService {
         this.parameters = {
             axiosConfig: [],
             errorHandler: null,
-            modeDebug: false
+            debugMode: false
         }
 
         this.axiosInstances = initAxiosInstance(null);
@@ -52,14 +52,17 @@ class Rh2ConfigService {
                 ...this.parameters,
                 axiosConfig: parameters.axiosConfig,
                 errorHandler: parameters.errorHandler == null ? this.parameters.errorHandler : parameters.errorHandler,
-                modeDebug: parameters.modeDebug == null ? this.parameters.modeDebug : parameters.modeDebug
+                debugMode: parameters.debugMode == null ? this.parameters.debugMode : parameters.debugMode
             };
             this.axiosInstances = initAxiosInstance(this.getParametersAxiosConfigs())
         }
     }
 
     setErrorHandler(treatment: (param?: any) => void): void {
-        this.parameters = { ...this.parameters, errorHandler: treatment };
+        this.parameters = {
+            ...this.parameters,
+            errorHandler: treatment 
+        };
     }
 
     getParameters(): Rh2InitializationParameter {
@@ -70,8 +73,8 @@ class Rh2ConfigService {
         return this.parameters.axiosConfig;
     }
 
-    isModeDebug(): boolean {
-        return this.parameters.modeDebug;
+    isDebugMode(): boolean {
+        return this.parameters.debugMode;
     }
 
     /**

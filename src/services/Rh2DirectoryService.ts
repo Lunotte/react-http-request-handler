@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 17 - 07:36 pm                                        *
+ * Last Modified: 2021 09 11 - 11:40 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -16,7 +16,7 @@
 import { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
-import { isModeDebugThenDisplayWarn } from "../tools/Utils";
+import { isDebugModeThenDisplayWarn } from "../tools/Utils";
 
 
 /**
@@ -73,7 +73,7 @@ class Rh2DirectoryService {
         if (!this.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
             this.configQueryParameter.push(configTmp);       
         } else {
-            isModeDebugThenDisplayWarn('New config was not added because it already exists', configTmp);
+            isDebugModeThenDisplayWarn('New config was not added because it already exists', configTmp);
         }
     }
 

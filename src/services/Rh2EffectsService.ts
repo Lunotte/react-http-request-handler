@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 16 - 07:52 pm                                        *
+ * Last Modified: 2021 08 29 - 03:02 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -19,13 +19,21 @@ import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
-import { isModeDebugThenDisplayInfo, isModeDebugThenDisplayWarn } from '../tools/Utils';
-import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest } from './../models/Rh2Effect';
+import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
+import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Hook } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';
 import { default as rh2DirectoryService } from './Rh2DirectoryService';
 import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQueryInProgressService';
+
+const initState = {
+    loading: false,
+    completed: false,
+    failed: false,
+    success: false,
+    data: null
+} 
 
 
 /**
@@ -38,19 +46,13 @@ import { default as rh2ManagerToQueryInProgressService } from './Rh2ManagerToQue
  */
 export function useRh2WithParameters(
     configuration: Rh2EffectAxiosConfigHandler,
-    optionalParameters?: Rh2EffectData,
-    filter = true
-): {
-    loading: boolean;
-    data: any;
-} {
+    filter = true,
+    optionalParameters?: Rh2EffectData
+): Rh2Hook {
     const [
         state,
         setState
-    ] = useState({
-        loading: true,
-        data: null
-    });
+    ] = useState(initState);
 
     useEffect(() => {
         async function fetch() {
@@ -65,11 +67,17 @@ export function useRh2WithParameters(
             )
         }
         fetch();
+        return () => {
+            setState(initState)
+        }
     }, [
         configuration.axiosRequestConfig?.method,
         configuration.axiosRequestConfig?.url,
         configuration.axiosRequestConfig?.data,
         configuration.axiosRequestConfig?.params,
+        optionalParameters?.data,
+        optionalParameters?.params,
+        optionalParameters?.pathParams,
         filter
     ]);
 
@@ -87,32 +95,26 @@ export function useRh2WithParameters(
  */
 export function useRh2WithName(
     label: string,
-    optionalParameters?: Rh2EffectData,
-    filter = true
-): {
-    loading: boolean;
-    data: any;
-} {
+    filter = true,
+    optionalParameters?: Rh2EffectData
+): Rh2Hook {
     const [
         state,
         setState
-    ] = useState({
-        loading: false,
-        data: null
-    });
+    ] = useState(initState);
 
     useEffect(() => {
         async function fetch() {
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-            isModeDebugThenDisplayInfo('The following configuration was found', configSelected);
+            isDebugModeThenDisplayInfo('The following configuration was found', configSelected);
 
             traitementToManageRequest(
                 {
                     keyOfInstance: configSelected?.keyOfInstance,
                     label,
                     axiosRequestConfig: configSelected?.axiosRequestConfig,
-                    justeReponse: configSelected?.justeReponse,
+                    onlyResult: configSelected?.onlyResult,
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
@@ -123,8 +125,12 @@ export function useRh2WithName(
             )
         }
         fetch();
+        return () => {
+            setState(initState)
+        }
     }, [
         label,
+        optionalParameters,
         filter
     ]);
 
@@ -146,16 +152,23 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
  */
 function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): AxiosRequestConfig {
 
-    let configToUse = { ...configuration.axiosRequestConfig,
+    let configToUse = {
+        ...configuration.axiosRequestConfig,
         data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.axiosRequestConfig.data
     };
 
     if (configuration.optionalParameters?.pathParams != null) {
-        configToUse = { ...configToUse, url: configToUse.url.concat(configuration.optionalParameters.pathParams) };
+        configToUse = {
+            ...configToUse,
+            url: configToUse.url.concat(configuration.optionalParameters.pathParams) 
+        };
     }
 
     if (configuration.optionalParameters?.params != null) {
-        configToUse = { ...configToUse, params: configuration.optionalParameters.params };
+        configToUse = {
+            ...configToUse,
+            params: configuration.optionalParameters.params 
+        };
     }
 
     return configToUse;
@@ -173,15 +186,21 @@ async function traitementToManageRequest(
 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
+            isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
+
             configuration.action({
                 loading: true,
+                completed: false,
+                failed: false,
+                success: false,
                 data: null 
             });
+            
             loadingStarted(configuration);
 
             const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
                 buildConfigToAxios(configuration),
-                configuration.justeReponse == null || configuration.justeReponse === true);
+                configuration.onlyResult == null || configuration.onlyResult === true);
             
             // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
             if (configuration.addToDirectory) { // On ajoute à l'annuaire
@@ -194,7 +213,7 @@ async function traitementToManageRequest(
                 treatmentIfErrorInUseRequest(configuration, reponse);
             }
 
-            loadingCompleted(configuration);
+            loadingcompletedd(configuration);
         }
     }
 }
@@ -213,7 +232,7 @@ function buildObjectToHash(configuration: Rh2EffectTreatmentToManageRequest): Ob
         url: configuration.axiosRequestConfig.url,
         method: configuration.axiosRequestConfig.method,
         params: configuration.axiosRequestConfig.params,
-        data: configuration.axiosRequestConfig.data,
+        data: configuration.axiosRequestConfig.data
     };
 }
 
@@ -229,7 +248,7 @@ function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void 
         rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
-function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
+function loadingcompletedd(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
     } else {
@@ -242,25 +261,31 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
     if (configuration.successHandler) {
         configuration.successHandler(reponse.responseSuccess);
     } else {
-        isModeDebugThenDisplayWarn('The method successHandler has not provided. This is normal if you use the return of the hook');
+        isDebugModeThenDisplayWarn('The method successHandler has not provided. This is normal if you use the return of the hook');
     }
     configuration.action({
         loading: false,
+        completed: true,
+        failed: false,
+        success: true,
         data: reponse.responseSuccess 
     });
 }
 
 function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
-    isModeDebugThenDisplayWarn('An error is to be handled', configuration.label, reponse);
+    isDebugModeThenDisplayWarn('An error was encountered', configuration.label, reponse);
     if (configuration.errorHandler) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
         rh2ConfigService.getParameters().errorHandler(reponse);
     } else {
-        isModeDebugThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
+        isDebugModeThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
     }
     configuration.action({
         loading: false,
+        completed: true,
+        failed: true,
+        success: false,
         data: null 
     });
     rh2ManagerToQueryInProgressService.addErrorApi(configuration.label, reponse);
