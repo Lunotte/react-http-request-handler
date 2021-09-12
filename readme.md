@@ -434,7 +434,7 @@ export interface Rh2EffectData {
 
 <b>pathParams</b> Request path parameters.
 
-NB : If <b>params</b> et <b>pathParams</b> are provided, pathParams is built first.
+NB : If <b>params</b> and <b>pathParams</b> are provided, pathParams is built first.
 
 
 #### AxiosConfig
