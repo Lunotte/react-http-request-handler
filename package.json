@@ -24,13 +24,13 @@
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "dependencies": {
-    "axios": "0.21.1",
+    "axios": "0.21.4",
     "lodash": "4.17.21",
     "object-hash": "2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "7.15.0",
-    "@babel/runtime": "7.15.3",
+    "@babel/core": "7.15.5",
+    "@babel/runtime": "7.15.4",
     "@react-native-community/cli": "5.0.1",
     "@react-native-community/eslint-config": "3.0.0",
     "@react-navigation/devtools": "6.0.1",
@@ -38,7 +38,7 @@
     "@react-navigation/stack": "6.0.7",
     "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
-    "@types/react": "17.0.19",
+    "@types/react": "17.0.20",
     "@types/react-native": "0.64.13",
     "@types/react-test-renderer": "17.0.1",
     "@typescript-eslint/eslint-plugin": "4.29.2",
@@ -75,7 +75,6 @@
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
     "reselect": "^4.0.0"
-    
   },
   "jest": {
     "preset": "react-native"

@@ -7,7 +7,6 @@
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
 ## Contexte
 
@@ -39,11 +38,11 @@ $ yarn add react-http-request-handler
 
 
 
-## Initialisation de la librairie
+### Initialisation de la librairie
 
 
 
-### L'application peut être initialisée de 2 manières :
+#### L'application peut être initialisée de 2 manières :
 
 Soit, vous utilisez un wrapper dans lequel vous passez en paramètre la configuration initiale : 
 
