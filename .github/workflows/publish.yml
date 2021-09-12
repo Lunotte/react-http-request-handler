@@ -8,7 +8,7 @@ on:
 jobs:
   job_publish:
     name: Publish if merged
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
        - run: echo merged and ready to publish
