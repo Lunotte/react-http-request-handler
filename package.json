@@ -1,6 +1,6 @@
 {
   "name": "react-http-request-handler",
-  "version": "1.0.10",
+  "version": "1.0.0",
   "private": false,
   "description": "This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the web client needs. For example : Configuring the request to be executed once through our historization module; Configuring methods to be called in case of error; Redux users will find means to dispatch the request’s result, whether it was successfully handled or not. The response can be processed before being dispatched.",
   "keywords": [
