@@ -34,7 +34,7 @@ Utilisant yarn :
 $ yarn add react-http-request-handler
 ```
 
-## Toutes les configurations
+## Toutes les configurations 
 
 
 
