@@ -1,6 +1,7 @@
 # React Http Request Handler (RH2)
 
-[![Coverage Status](https://coveralls.io/repos/github/Lunotte/react-http-request-handler/badge.svg?branch=master)](https://coveralls.io/github/Lunotte/react-http-request-handler?branch=master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Lunotte_react-http-request-handler&metric=alert_status)](https://sonarcloud.io/dashboard?id=Lunotte_react-http-request-handler)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Lunotte_react-http-request-handler&metric=coverage)](https://sonarcloud.io/dashboard?id=Lunotte_react-http-request-handler)
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
 [![Build Status](https://travis-ci.com/Lunotte/react-http-request-handler.svg?branch=master)](https://travis-ci.com/Lunotte/react-http-request-handler)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
