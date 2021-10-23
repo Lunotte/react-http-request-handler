@@ -55,7 +55,7 @@
     "react-native": "0.66.1",
     "react-native-builder-bob": "0.18.2",
     "react-native-gesture-handler": "1.10.3",
-    "react-native-reanimated": "2.2.0",
+    "react-native-reanimated": "2.2.3",
     "react-native-safe-area": "0.5.1",
     "react-native-safe-area-context": "3.3.0",
     "react-native-screens": "3.5.0",
