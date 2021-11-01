@@ -5,5 +5,14 @@
   "schedule": [
     "every 3 months on the first day of the month",
     "before 2am"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true,
+      "rangeStrategy": "bump",
+      "packagePatterns": ["*"],
+      "depTypeList": ["dependencies", "devDependencies"]
+    }
   ]
 }
