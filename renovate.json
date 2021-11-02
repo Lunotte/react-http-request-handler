@@ -3,8 +3,8 @@
     "config:base"
   ],
   "schedule": [
-    "every 3 months on the first day of the month",
-    "before 2am"
+    "before 2am",
+    "every 3 months on the first day of the month"
   ],
   "packageRules": [
     {
