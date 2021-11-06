@@ -3,14 +3,22 @@
     "config:base"
   ],
   "schedule": [
-    "before 2am every 3 months on the first day of the month"
+    "before 2am"
   ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
       "automerge": true,
-      "packagePatterns": ["*"],
-      "depTypeList": ["dependencies", "devDependencies"]
+      "groupName": "dependencies (non-major)",
+      "groupSlug": "dependencies-non-major"
+    },
+    {
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "dependencies (major)",
+      "groupSlug": "dependencies-major",
+      "labels": ["UPDATE-MAJOR"]
     }
   ]
 }
