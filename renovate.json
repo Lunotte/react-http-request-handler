@@ -16,6 +16,7 @@
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["major"],
+      "excludePackageNames": ["gradle"]
       "groupName": "dependencies (major)",
       "groupSlug": "dependencies-major",
       "labels": ["UPDATE-MAJOR"]
