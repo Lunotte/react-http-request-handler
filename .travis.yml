@@ -1,3 +1,6 @@
+branches:
+  only:
+  - master
 language: node_js
 node_js:
 - stable
@@ -12,5 +15,3 @@ cache:
 script:
 - npm test -- --coverage
 - sonar-scanner
-after_success:
-- npm run coveralls

@@ -2,17 +2,24 @@
   "extends": [
     "config:base"
   ],
+  "schedule": [
+    "before 2am"
+  ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "automerge": true,
+      "groupName": "dependencies (non-major)",
+      "groupSlug": "dependencies-non-major"
     },
     {
-      "matchDepTypes": ["devDependencies"],
-      "automerge": true
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "matchUpdateTypes": ["major"],
+      "excludePackageNames": ["gradle"],
+      "groupName": "dependencies (major)",
+      "groupSlug": "dependencies-major",
+      "labels": ["UPDATE-MAJOR"]
     }
-  ],
-  "schedule": [
-    "before 3am on the first day of the month"
   ]
 }

@@ -35,10 +35,10 @@
         "modDateFormat": "YYYY MM DD - hh:mm a",
         "include": [],
         "includeGlob": [],
-        "exclude": ["markdown", "json", "jsonc", "shellscript"],
-        "excludeGlob": [],
+        "exclude": ["markdown", "json", "jsonc", "shellscript", "gradle", "properties"],
+        "excludeGlob": ["/android/**"],
         "autoHeader": "autoSave",
-        "enforceHeader": true,
+       /* "enforceHeader": true,*/
         "replace": [
             "Filename:",
             "Project"
