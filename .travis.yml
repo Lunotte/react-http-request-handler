@@ -7,8 +7,8 @@ node_js:
 addons:
   sonarcloud:
     organization: lunotte
-    token:
-      secure: 104cccd30914117579b8b26ca9499e786cd9f3ed
+#    token:
+#      secure: 104cccd30914117579b8b26ca9499e786cd9f3ed
 cache:
   directories:
   - node_modules
