@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
       - run: echo merged and ready to publish
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
         with:
