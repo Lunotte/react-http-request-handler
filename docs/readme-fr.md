@@ -9,7 +9,38 @@
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
-[TOC]
+## Table of Contents
+- [Contexte](#contexte)
+- [Fonctionnalités](#fonctionnalit-s)
+- [Installation](#installation)
+- [Toutes les configurations](#toutes-les-configurations)
+  * [Initialisation de la librairie](#initialisation-de-la-librairie)
+    + [L'application peut être initialisée de 2 manières :](#l-application-peut--tre-initialis-e-de-2-mani-res--)
+  * [Utilisation des deux hooks](#utilisation-des-deux-hooks)
+    + [Hooks sans préchargement](#hooks-sans-pr-chargement)
+      - [Autre exemple :](#autre-exemple--)
+      - [Exemple de gestion d'erreur](#exemple-de-gestion-d-erreur)
+    + [Hook préchargé](#hook-pr-charg-)
+  * [Hook avec paramètre](#hook-avec-param-tre)
+  * [Instances Axios](#instances-axios)
+  * [Liste des services](#liste-des-services)
+    + [Rh2DirectoryService](#rh2directoryservice)
+    + [Rh2ConfigService](#rh2configservice)
+    + [Rh2AxiosConfigService](#rh2axiosconfigservice)
+  * [Liste des models Rh2](#liste-des-models-rh2)
+    + [Paramètre pour pour les requêtes non pré-chargée](#param-tre-pour-pour-les-requ-tes-non-pr--charg-e)
+      - [Rh2EffectAxiosConfigHandler](#rh2effectaxiosconfighandler)
+      - [Rh2EffectData](#rh2effectdata)
+    + [AxiosConfig](#axiosconfig)
+    + [FetchApi](#fetchapi)
+      - [ResponseFetchApi](#responsefetchapi)
+      - [ErreurFetchApi](#erreurfetchapi)
+    + [Configuration générale](#configuration-g-n-rale)
+      - [Rh2InitializationParameter](#rh2initializationparameter)
+      - [AxiosRequestConfigExtended](#axiosrequestconfigextended)
+    + [Rh2InitializationParameter](#rh2initializationparameter-1)
+    + [AxiosRequestConfigExtended](#axiosrequestconfigextended-1)
+- [Roadmap](#roadmap)
 
 ## Contexte
 
@@ -602,3 +633,7 @@ const initSettings: Rh2InitializationParameter = {
 
 - Modifier une instance Axios pour prendre en compte de nouveaux éléments (Ex : Mise à jour du paramètre «auth» de Axios)
 - Gérer l'annulation des requêtes HTTP par le biais de la librairie si nécessaire
+
+	
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
