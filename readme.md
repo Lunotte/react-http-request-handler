@@ -11,6 +11,8 @@
 
 [French documentation](https://github.com/Lunotte/react-http-request-handler/blob/Documentation/docs/readme-fr.md)
 
+[TOC]
+
 ## Contexte
 
 This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the web client needs.
@@ -350,6 +352,22 @@ rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
 
 ### Services
 
+#### Rh2DirectoryService
+
+Initialize the app :
+
+- Management of requests stored in memory to prevent them from being executed again
+
+| Méthode                                                      | type                   | Description                             |
+| ------------------------------------------------------------ | ---------------------- | --------------------------------------- |
+| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Check the presence of the configuration |
+| hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Check the presence of the configuration |
+| addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Add a configuration to the directory    |
+| getConfigQueryParameters()                                   | ConfigQueryParameter[] | Retrieve the list of configurations     |
+| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Retrieve a specific configuration       |
+| removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Delete a specific configuration         |
+| removeAllQueryDirectory()                                    | void                   | Delete all configurations in memory     |
+
 #### Rh2ConfigService
 
 Initialize the app :
@@ -406,7 +424,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Axios configuration. 
 
-<b>addToDirectory</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>QueryStorageService</b>.
+<b>addToDirectory</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>Rh2DirectoryService</b>.
 
 | Caution : The request filter depends on URL, method type and params property. |
 | ------------------------------------------------------------ |

@@ -9,6 +9,8 @@
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
+[TOC]
+
 ## Contexte
 
 Cette librairie React utilisant les hooks customisés a pour but de faciliter l'utilisateur dans sa manipulation des requêtes HTTP. Il doit simplement configurer la requête qui sera exécutée par Axios, ainsi que le moment du déclenchement.Il est possible d’ajouter des paramètres supplémentaires pour des besoins de l’application cliente. Par exemple, demander qu’une requête soit exécutée seulement une fois via notre système d’historisation; la configuration des traitements à effectuer en cas d’erreurs de requête. Les utilisateurs de redux pourront trouver leur bonheur pour dispatch le résultat de la requête revenue avec succès ou non, celle-ci pourra également être précédée d’un traitement ou non.
@@ -344,6 +346,22 @@ rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
 
 ### Liste des services
 
+#### Rh2DirectoryService
+
+Initialise l’application :
+
+- Gestion des requêtes mise en mémoire pour éviter quelles soient de nouveau exécutées
+
+| Méthode                                                      | type                   | Description                                   |
+| ------------------------------------------------------------ | ---------------------- | --------------------------------------------- |
+| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Vérifier la présence de la configuration      |
+| hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Vérifier la présence de la configuration      |
+| addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Ajouter une configuration à l'annuaire        |
+| getConfigQueryParameters()                                   | ConfigQueryParameter[] | Récupérer la liste des configurations         |
+| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
+| removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Supprimer une configuration précise           |
+| removeAllQueryDirectory()                                    | void                   | Supprimer toutes les configuration en mémoire |
+
 #### Rh2ConfigService
 
 Initialise l’application :
@@ -400,7 +418,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Configuration Axios. 
 
-<b>addToDirectory</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>QueryStorageService</b> pour être réinitialisée. 
+<b>addToDirectory</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
 
 | Attention : La condition pour filtrer les requêtes s'appuie sur l'url, le type de méthode et la propriété params. |
 | ------------------------------------------------------------ |
