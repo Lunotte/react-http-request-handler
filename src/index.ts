@@ -21,6 +21,5 @@ export type {
     ErreurFetchApi, KeyValue, ResponseFetchApi, Rh2AxiosConfig, Rh2EffectAxiosConfigHandler, Rh2InitializationParameter
 } from './models';
 export { default as InitializerRnhrh } from './Rh2Initializer';
-export { rh2AxiosConfigService, rh2ConfigService } from './services';
-export { useRh2WithName, useRh2WithParameters } from './services/Rh2EffectsService';
+export { rh2AxiosConfigService, rh2ConfigService, rh2DirectoryService, useRh2WithName, useRh2WithParameters } from './services';
 

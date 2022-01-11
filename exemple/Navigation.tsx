@@ -21,7 +21,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
+import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2DirectoryService } from '../src';
 import { Rh2EffectAxiosConfigHandler } from '../src/models/Rh2Effect';
 import { useRh2WithName } from '../src/services/Rh2EffectsService';
 import { pourTestAction } from './redux/rh2-action';
@@ -181,6 +181,12 @@ const traitementErreur = (data: ResponseFetchApi) => {
     
     const test = useRh2WithName(GOOGLE);
     console.log(test);
+
+    console.log(rh2DirectoryService.getConfigQueryParameters());
+
+    rh2DirectoryService.removeAllQueryDirectory();
+    console.log(rh2DirectoryService.getConfigQueryParameters());
+    
 
 
    // rh2ConfigService.setErrorHandler(traitementErreur);

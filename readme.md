@@ -11,6 +11,39 @@
 
 [French documentation](https://github.com/Lunotte/react-http-request-handler/blob/Documentation/docs/readme-fr.md)
 
+## Table of Contents
+- [Contexte](#contexte)
+- [Functionalities](#functionalities)
+- [Installation](#installation)
+- [Configurations](#configurations)
+  * [Library usage](#library-usage)
+    + [You can initialize your application by :](#you-can-initialize-your-application-by--)
+  * [Using two hooks](#using-two-hooks)
+    + [Hooks without preloading](#hooks-without-preloading)
+      - [Other example :](#other-example--)
+      - [Handling error example](#handling-error-example)
+    + [Preloaded Hook](#preloaded-hook)
+  * [Hook with parameters](#hook-with-parameters)
+  * [Axios instance](#axios-instance)
+  * [Services](#services)
+    + [Rh2DirectoryService](#rh2directoryservice)
+    + [Rh2ConfigService](#rh2configservice)
+    + [Rh2AxiosConfigService](#rh2axiosconfigservice)
+  * [Rh2 model list](#rh2-model-list)
+    + [Parameters for non-preloaded requests](#parameters-for-non-preloaded-requests)
+      - [Rh2EffectAxiosConfigHandler](#rh2effectaxiosconfighandler)
+      - [Rh2EffectData](#rh2effectdata)
+    + [AxiosConfig](#axiosconfig)
+    + [FetchApi](#fetchapi)
+      - [ResponseFetchApi](#responsefetchapi)
+      - [ErreurFetchApi](#erreurfetchapi)
+    + [General configuration](#general-configuration)
+      - [Rh2InitializationParameter](#rh2initializationparameter)
+      - [AxiosRequestConfigExtended](#axiosrequestconfigextended)
+    + [Rh2InitializationParameter](#rh2initializationparameter-1)
+    + [AxiosRequestConfigExtended](#axiosrequestconfigextended-1)
+- [Roadmap](#roadmap)
+
 ## Contexte
 
 This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the web client needs.
@@ -350,6 +383,22 @@ rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
 
 ### Services
 
+#### Rh2DirectoryService
+
+Initialize the app :
+
+- Management of requests stored in memory to prevent them from being executed again
+
+| Méthode                                                      | type                   | Description                             |
+| ------------------------------------------------------------ | ---------------------- | --------------------------------------- |
+| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Check the presence of the configuration |
+| hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Check the presence of the configuration |
+| addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Add a configuration to the directory    |
+| getConfigQueryParameters()                                   | ConfigQueryParameter[] | Retrieve the list of configurations     |
+| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Retrieve a specific configuration       |
+| removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Delete a specific configuration         |
+| removeAllQueryDirectory()                                    | void                   | Delete all configurations in memory     |
+
 #### Rh2ConfigService
 
 Initialize the app :
@@ -406,7 +455,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Axios configuration. 
 
-<b>addToDirectory</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>QueryStorageService</b>.
+<b>addToDirectory</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>Rh2DirectoryService</b>.
 
 | Caution : The request filter depends on URL, method type and params property. |
 | ------------------------------------------------------------ |
@@ -589,3 +638,7 @@ const initSettings: Rh2InitializationParameter = {
 
 - Modifying an Axios instance to handle new éléments (ex : update « auth » parameter from Axios)
 - Handling HTTP request cancellation with the library
+	
+	
+	
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>

@@ -184,6 +184,7 @@ async function traitementToManageRequest(
         const configAxios = configuration.axiosRequestConfig;
         const configTmp = configToManageDirectory(configAxios);
 
+        // Requête declenchée si filtre à true et que la requête n'est pas déjà envoyée 
         if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
 
             isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
