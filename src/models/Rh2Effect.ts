@@ -38,7 +38,8 @@ export interface Rh2EffectData {
 
 /**
  * @param keyOfInstance If is not provided, first Axios instance will be used
- * @param config Axios settings
+ * @param axiosRequestConfig Axios settings
+ * @param addToDirectory Add the query to the directory to prevent a query from running multiple times
  * @param onlyResult If true or not defined then return data else all information about http request
  * @param errorHandler Method to be executed to handle the errors in the event of an error in the request. If it is not provided, we see if that of the global *                        configuration is provided otherwise, nothing is done.
  * @param successHandler
