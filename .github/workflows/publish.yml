@@ -22,7 +22,8 @@ jobs:
       - run: npm install
       - name: Publish
         run: | 
-              echo "$GITHUB_CONTEXT"
+              echo ${{ secrets.NPM_TOKEN }}
+              echo $GITHUB_CONTEXT
               echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
               npm publish --access public --ignore-scripts
         env:
