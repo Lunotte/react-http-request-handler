@@ -23,7 +23,7 @@ jobs:
       - name: Publish
         run: | 
               echo ${{ secrets.NPM_TOKEN }}
-              echo $GITHUB_CONTEXT
+              echo ${{ GITHUB_CONTEXT }}
               echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
               npm publish --access public --ignore-scripts
         env:
