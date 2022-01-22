@@ -4,7 +4,7 @@
  * Created Date: 2021 07 14                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:12 pm                                        *
+ * Last Modified: 2022 01 09 - 06:15 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -12,9 +12,9 @@
  */
 
 
-
-
-
+export interface DirectoryConfigQueryParameter extends ConfigQueryParameter {
+    readonly lock: boolean; // Ne pas utiliser cette query
+}
 
 export interface ConfigQueryParameter {
     readonly url: string;

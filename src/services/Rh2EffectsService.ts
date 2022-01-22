@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 29 - 03:02 pm                                        *
+ * Last Modified: 2022 01 22 - 03:50 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -181,42 +181,74 @@ async function traitementToManageRequest(
 ) {
     if (configuration.axiosRequestConfig != null) {
 
-        const configAxios = configuration.axiosRequestConfig;
-        const configTmp = configToManageDirectory(configAxios);
+        const configAxios: AxiosRequestConfig<any> = configuration.axiosRequestConfig;
+        const configTmp: ConfigQueryParameter = configToManageDirectory(configAxios);
 
-        // Requête declenchée si filtre à true et que la requête n'est pas déjà envoyée 
-        if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+        //
+        //
+        //  [RAF] - Dans le filter, si la requete est deja en cours et que l'on ajoute un boolean pour dire
+        //  je veux annuler les requetes en cours pour en lancer une autre, (certainement true par défaut)
+        //  alors on annule la requete precedente pour utiliser la nouvelle.
+        //  Avant de faire ça, merger la PR issue123
+        //  
+        // La condition pourrait etre (en dessous de la condition ligne 200)
+        //      if(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterNotLocked())
+        //   On voudra tester qu'il existe une requete en cours et que l'on veut la stopper, ensuite l'algo peut continuer normalement
+        // Si requête dejà en cours, supprimer la config en cours et la remplacer /_\ ligne 214 par la version avec un canceltoken different
 
-            isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
 
-            configuration.action({
-                loading: true,
-                completed: false,
-                failed: false,
-                success: false,
-                data: null 
-            });
-            
-            loadingStarted(configuration);
+        if (filter) {
 
-            const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
-                buildConfigToAxios(configuration),
-                configuration.onlyResult == null || configuration.onlyResult === true);
-            
-            // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
-            if (configuration.addToDirectory) { // On ajoute à l'annuaire
-                rh2DirectoryService.addConfigQueryParameter(configTmp);
+            // Si la requête est en cours et quelle est pas lock
+            if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(configTmp, false)) {
+                // on l’a stoppe pour en déclencher une nouvelle
+                rh2DirectoryService.removeQueryDirectoryNotLocked(configTmp);
+                executeQuery(configuration, filter, configTmp);
             }
-
-            if (reponse.isSuccess) {
-                treatmentIfSuccessInUseRequest(configuration, reponse);
-            } else {
-                treatmentIfErrorInUseRequest(configuration, reponse);
+            // Si elle n’est pas en cours, on fait le traitement classique
+            else if (!rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+                executeQuery(configuration, filter, configTmp);
             }
-
-            loadingcompletedd(configuration);
+            // sinon on ne fait rien
+            else {
+                isDebugModeThenDisplayWarn('The query is configured to be executed only once', configTmp);
+            }
         }
     }
+}
+
+async function executeQuery(
+    configuration: Rh2EffectTreatmentToManageRequest,
+    filter: boolean,
+    configTmp: ConfigQueryParameter
+): Promise<void> {
+
+    isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
+
+    configuration.action({
+        loading: true,
+        completed: false,
+        failed: false,
+        success: false,
+        data: null 
+    });
+    
+    loadingStarted(configuration);
+
+    rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.addToDirectory);
+
+    const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
+        buildConfigToAxios(configuration),
+        configuration.onlyResult == null || configuration.onlyResult === true);
+    
+    if (reponse.isSuccess) {
+        treatmentIfSuccessInUseRequest(configuration, reponse);
+    } else {
+        treatmentIfErrorInUseRequest(configuration, reponse);
+    }
+
+    loadingcompleted(configuration);
+    
 }
 
 interface ObjectToHash {
@@ -249,7 +281,7 @@ function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void 
         rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
-function loadingcompletedd(configuration: Rh2EffectTreatmentToManageRequest): void {
+function loadingcompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
     } else {
@@ -259,6 +291,12 @@ function loadingcompletedd(configuration: Rh2EffectTreatmentToManageRequest): vo
 }
 
 function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
+    
+    // Si on n'a pas demandé d'ajouter cette config en tant que config lock, on en a plus besoin
+    if (!configuration.addToDirectory) {
+        rh2DirectoryService.removeQueryDirectoryNotLocked(configuration.axiosRequestConfig);
+    }
+
     if (configuration.successHandler) {
         configuration.successHandler(reponse.responseSuccess);
     } else {
