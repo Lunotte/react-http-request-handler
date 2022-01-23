@@ -4,7 +4,7 @@
  * Created Date: 2021 08 14                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 01 22 - 04:42 pm                                        *
+ * Last Modified: 2022 01 23 - 07:49 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -45,9 +45,32 @@ describe('Remove Configuration', () => {
         const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET'};
         const axiosConfig: AxiosRequestConfig = { url: config.url, method: config.method };
 
-        rh2DirectoryService.addConfigQueryParameter(config, true);
+        rh2DirectoryService.addConfigQueryParameter(config, false);
+        expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method)).toBe(true);
         
+        rh2DirectoryService.removeQueryDirectoryNotLocked(axiosConfig);
+        expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method)).toBe(false);
+    });
+
+    it('Supprime un élément sans paramètre et avec lock', () => {
+
+        const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET'};
+        const axiosConfig: AxiosRequestConfig = { url: config.url, method: config.method };
+
+        rh2DirectoryService.addConfigQueryParameter(config, true);
         expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method)).toBe(true);
+        
+        rh2DirectoryService.removeQueryDirectoryLocked(axiosConfig);
+        expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method)).toBe(false);
+    });
+
+    it('Supprime un élément sans paramètre impossible car lock et recherché sans lock', () => {
+
+        const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET'};
+        const axiosConfig: AxiosRequestConfig = { url: config.url, method: config.method };
+
+        rh2DirectoryService.addConfigQueryParameter(config, true);
+        expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method)).toBe(false);
         
         rh2DirectoryService.removeQueryDirectoryLocked(axiosConfig);
         expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method)).toBe(false);
@@ -72,7 +95,7 @@ describe('Add Configuration', () => {
 
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {}};
             rh2DirectoryService.addConfigQueryParameter(config, true);
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method)).toBeTruthy();
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method)).toBeTruthy();
         });
 
         it('url - method - param array vide dans service, null param recherché', () => {
@@ -80,7 +103,7 @@ describe('Add Configuration', () => {
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: null};
             rh2DirectoryService.addConfigQueryParameter(config, true);
             
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method, null)).toBe(true);
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method, null)).toBe(true);
         });
     });
 
@@ -91,7 +114,7 @@ describe('Add Configuration', () => {
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {unParam: 'unParam'}};
             rh2DirectoryService.addConfigQueryParameter(config, true);
             
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method, config.params)).toBe(true);
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method, config.params)).toBe(true);
         });
 
         it('url - method - param array avec pour valeur 5', () => {
@@ -99,21 +122,21 @@ describe('Add Configuration', () => {
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {val: 5}};
             rh2DirectoryService.addConfigQueryParameter(config, true);
             
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method, config.params)).toBe(true);
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method, config.params)).toBe(true);
         });
 
         it('url - method - param array avec pour valeur unParam, 2, deuxParam', () => {
 
             const configT: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: null};
             rh2DirectoryService.addConfigQueryParameter(configT, true);
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, configT.url, configT.method, configT.params)).toBe(true);
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, configT.url, configT.method, configT.params)).toBe(true);
 
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: {premier : 'unParam', second: 2, troisieme: 'deuxParam'}};
             rh2DirectoryService.addConfigQueryParameter(config, true);
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method, config.params)).toBe(true);
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method, config.params)).toBe(true);
 
             rh2DirectoryService.addConfigQueryParameter(config, true);
-            expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method, config.params)).toBe(true);
+            expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method, config.params)).toBe(true);
         });
     });
 });
