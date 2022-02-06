@@ -22,7 +22,7 @@
       "labels": ["UPDATE-MAJOR"]
     },
     {
-      "excludePackageNames": ["FLIPPER_VERSION", "react-native-reanimated"]
+      "excludePackageNames": ["FLIPPER_VERSION"]
     }
   ]
 }
