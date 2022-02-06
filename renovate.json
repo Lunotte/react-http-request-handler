@@ -7,11 +7,9 @@
   ],
   "packageRules": [
     {
-      "excludePackageNames": ["FLIPPER_VERSION"]
-    },
-    {
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "excludePackageNames": ["react-native-reanimated"],
       "automerge": true,
       "groupName": "dependencies (non-major)",
       "groupSlug": "dependencies-non-major"
@@ -19,7 +17,7 @@
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["major"],
-      "excludePackageNames": ["gradle"],
+      "excludePackageNames": ["gradle", "react-native-reanimated"],
       "groupName": "dependencies (major)",
       "groupSlug": "dependencies-major",
       "labels": ["UPDATE-MAJOR"]
