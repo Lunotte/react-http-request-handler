@@ -9,7 +9,6 @@
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
-      "excludePackageNames": ["react-native-reanimated"],
       "automerge": true,
       "groupName": "dependencies (non-major)",
       "groupSlug": "dependencies-non-major"
