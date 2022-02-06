@@ -21,6 +21,9 @@
       "groupName": "dependencies (major)",
       "groupSlug": "dependencies-major",
       "labels": ["UPDATE-MAJOR"]
+    },
+    {
+      "excludePackageNames": ["FLIPPER_VERSION"]
     }
   ]
 }
