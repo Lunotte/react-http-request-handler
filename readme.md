@@ -3,7 +3,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Lunotte_react-http-request-handler&metric=alert_status)](https://sonarcloud.io/dashboard?id=Lunotte_react-http-request-handler)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Lunotte_react-http-request-handler&metric=coverage)](https://sonarcloud.io/dashboard?id=Lunotte_react-http-request-handler)
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
-[![Build Status](https://travis-ci.com/Lunotte/react-http-request-handler.svg?branch=master)](https://travis-ci.com/Lunotte/react-http-request-handler)
+[![Build Status](https://app.travis-ci.com/Lunotte/react-http-request-handler.svg?branch=master)](https://app.travis-ci.com/Lunotte/react-http-request-handler)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
