@@ -345,7 +345,7 @@ rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
 
 Vous pouvez utiliser les instances Axios qui ont été générées. Le service <b>rh2ConfigService</b> vous permet de les récupérer.
 
-| Attention : Pour l'initialisation de l'instance, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| Attention : Pour l'initialisation de l'instance personnalisée, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
 | ------------------------------------------------------------ |
 
 ```jsx
@@ -553,7 +553,7 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[];
+    headerUrl?: KeyValue<string>[];
 }
 ````
 
@@ -575,7 +575,7 @@ export interface AxiosRequestConfigExtended {
 | ------------------ | ----------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------- |
 | key                | string                              | Clé pour retrouver l'instance Axios. Elle sera utilisée pour configurer les requêtes, vous devez indiquer à quelle instance elle devra se référer. Si aucune n’est renseignée, on utilise la première ajoutée | n/a                                                | `"MY_DEFAULT_KEY"`                                   |
 | axiosConfig        | AxiosRequestConfig                  | Configuration [Axios](https://github.com/axios/axios). Si vous ne connaissez pas cette librairie, par exemple, vous pouvez valoriser la propriété baseURL pour indiquer le préfixe de chaque url qui utilisera cette instance | n/a                                                | `{ baseURL: 'http://test.fr' }`                      |
-| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être créée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
+| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être crée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
 | headerUrl          | {key: string;<br/>value: string;}[] | Liste des en-têtes à utiliser par l'interceptor              | [{key: 'Content-Type', value: 'application/json'}] | `[{key: 'Content-Type', value: 'application/json'}]` |
 
 

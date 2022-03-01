@@ -8,28 +8,28 @@ describe('Configuration en cours', () => {
 
         it('label configuration', () => {
             rh2ManagerToQueryInProgressService.addQueryInProgress(LABEL);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress().length).toBe(1);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress()).toEqual([LABEL]);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress().length).toBe(1);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress()).toEqual([LABEL]);
         });
 
         it('label configuration, ne doit pas être ajouté 2 fois', () => {
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress().length).toBe(1);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress().length).toBe(1);
             rh2ManagerToQueryInProgressService.addQueryInProgress(LABEL);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress().length).toBe(1);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress()).toEqual([LABEL]);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress().length).toBe(1);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress()).toEqual([LABEL]);
         });
     });
 
     describe('Supprimer', () => {
         it('label configuration', () => {
             rh2ManagerToQueryInProgressService.removeQueryInProgress(LABEL);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress().length).toBe(0);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress()).toEqual([]);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress().length).toBe(0);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress()).toEqual([]);
         });
 
         it('label configuration n\'existe plus', () => {
             rh2ManagerToQueryInProgressService.removeQueryInProgress(LABEL);
-            expect(rh2ManagerToQueryInProgressService.getQueryInProgress().length).toBe(0);
+            expect(rh2ManagerToQueryInProgressService.getQueriesInProgress().length).toBe(0);
         });
     });
 });

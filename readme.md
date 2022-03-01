@@ -347,7 +347,7 @@ rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
 
 You can use Axios generated instances, by getting it from service rh2ConfigService.
 
-| Caution : : To initialize your instance, you have to fill in the property <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| Caution : : For custom instance initialization, you have to fill in the property <i>"defaultInterceptor"</i> à <i>"false"</i> |
 | ------------------------------------------------------------ |
 
 ```jsx
@@ -555,7 +555,7 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[];
+    headerUrl?: KeyValue<string>[];
 }
 ````
 

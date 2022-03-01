@@ -4,7 +4,7 @@
  * Created Date: 2021 08 03                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 12:33 pm                                        *
+ * Last Modified: 2022 02 07 - 05:41 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -28,6 +28,10 @@ class Rh2ManagerToQueryInProgressService {
     private queryInProgress: string[] = [];
     private erreurApi: Rh2ErreurApi[] = [];
 
+    isQueryInProgress(label: string): boolean {
+        return this.queryInProgress.find(query => query !== label) != null;
+    }
+
     addQueryInProgress(label: string): void {
         if (!this.queryInProgress.includes(label)) {
             this.queryInProgress.push(label);
@@ -41,7 +45,7 @@ class Rh2ManagerToQueryInProgressService {
         }
     }
 
-    getQueryInProgress(): string[] {
+    getQueriesInProgress(): string[] {
         return this.queryInProgress;
     }
 

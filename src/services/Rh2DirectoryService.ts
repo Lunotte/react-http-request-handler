@@ -4,19 +4,17 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 01 18 - 10:24 pm                                        *
+ * Last Modified: 2022 02 17 - 08:38 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
-
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import _ from "lodash";
 import { ConfigQueryParameter, DirectoryConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
 import { isDebugModeThenDisplayWarn } from "../tools/Utils";
+import { KeyValue } from './../models/Rh2Config';
 
 
 /**
@@ -28,6 +26,60 @@ class Rh2DirectoryService {
 
     private directoryConfigQueryParameter: DirectoryConfigQueryParameter[] = [];
 
+    private keysCancelToken: KeyValue<CancelTokenSource>[] = [];
+
+    private cancelToken = axios.CancelToken;
+
+    isKeyCancelToken(searchedKey: string): boolean {
+        return this.keysCancelToken.some(keyCancelToken => keyCancelToken.key === searchedKey);
+    }
+
+    getKeyCancelToken(searchedKey: string): CancelTokenSource {
+        if (this.isKeyCancelToken(searchedKey)) {
+            const source: KeyValue<CancelTokenSource> = this.keysCancelToken.find(keyCancelToken => keyCancelToken.key === searchedKey);
+            return (source != null) ? source.value : null;
+        }
+        return null
+    }
+
+    setKeyCancelToken(keyCancelToken: string): CancelTokenSource {
+        this.keysCancelToken.push({
+            key: keyCancelToken,
+            value: this.generateCancelToken() 
+        });
+        return this.getKeyCancelToken(keyCancelToken);
+    }
+
+    /**
+     * Remove cancel token
+     * 
+     * @param searchedKey Search key
+     */
+    removeKeyCancelToken(searchedKey: string): void {
+        if (this.isKeyCancelToken(searchedKey)) {
+            this.keysCancelToken = this.keysCancelToken.filter(keyCancelToken => keyCancelToken.key !== searchedKey);
+        }
+    }
+
+    private generateCancelToken(): CancelTokenSource {
+        return this.cancelToken.source();
+    }
+
+    /**
+     * Get or create CancelToken
+     * When the searched key is empty, it means that there is no need to memorize the generated token.
+     * When the key is entered, we will look for the associated token if it exists, otherwise we generate it.
+     * @param searchedKey Search key
+     * @returns CancelTokenSource
+     */
+    getOrGenerateCancelToken(searchedKey: string): CancelTokenSource {
+        if (searchedKey == null) {
+            return this.generateCancelToken();
+        } else {
+            return (this.isKeyCancelToken(searchedKey) ? this.getKeyCancelToken(searchedKey) : this.setKeyCancelToken(searchedKey));
+        }
+    }
+    
     /**
      * Get all stored items
      * @returns Result table
@@ -89,11 +141,12 @@ class Rh2DirectoryService {
      * @param configTmp new setting
      * @param lock we want use this query one time
      */
-    addConfigQueryParameter(configTmp: ConfigQueryParameter, lock: boolean): void {
+    addConfigQueryParameter(configTmp: ConfigQueryParameter, lock: boolean, sourceCancelToken: CancelTokenSource = null): void {
         if (!this.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
             this.directoryConfigQueryParameter.push({
                 ...configTmp,
-                lock 
+                lock,
+                sourceCancelToken
             });       
         } else {
             isDebugModeThenDisplayWarn('New config was not added because it already exists', configTmp);

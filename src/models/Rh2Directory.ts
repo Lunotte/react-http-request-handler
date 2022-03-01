@@ -4,16 +4,19 @@
  * Created Date: 2021 07 14                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 01 09 - 06:15 pm                                        *
+ * Last Modified: 2022 02 07 - 07:10 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
+import { CancelTokenSource } from "axios";
+
 
 export interface DirectoryConfigQueryParameter extends ConfigQueryParameter {
-    readonly lock: boolean; // Ne pas utiliser cette query
+    readonly lock: boolean; // Signifie que l’on interdit de la manipuler sauf si c’est explicitement demandé
+    readonly sourceCancelToken: CancelTokenSource;
 }
 
 export interface ConfigQueryParameter {

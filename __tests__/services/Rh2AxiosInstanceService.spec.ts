@@ -4,7 +4,7 @@
  * Created Date: Su Aug yyyy                                                   *
  * Author: <<author>                                                           *
  * -----                                                                       *
- * Last Modified: Sun Aug 08 2021                                              *
+ * Last Modified: 2022 02 12 - 04:37 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -254,7 +254,7 @@ describe('Generate a header to interceptor', () => {
         const test: any = 'sdfsdf';
 
         const resultat = await generateHeaders(axiosConfig, [
-            test as KeyValue 
+            test as KeyValue<string> 
         ]);
         
         expect(resultat.headers[0]).toBeFalsy();
@@ -267,7 +267,7 @@ describe('Generate a header to interceptor', () => {
         };
         expect(axiosConfig.headers).toBeFalsy();
 
-        const test: KeyValue = {
+        const test: KeyValue<string> = {
             key: 'Content-Type',
             value: 'application/json' 
         };
@@ -294,7 +294,7 @@ describe('Generate a header to interceptor', () => {
 
     it('Header param 1', async () => {
         
-        const unHeader: KeyValue[] = [
+        const unHeader: KeyValue<string>[] = [
             {
                 key: 'key-test',
                 value: 'Test a value'
@@ -312,7 +312,7 @@ describe('Generate a header to interceptor', () => {
 
     it('Header param 2', async () => {
         
-        const unHeader: KeyValue[] = [
+        const unHeader: KeyValue<string>[] = [
             {
                 key: 'key-test',
                 value: 'Test a value'

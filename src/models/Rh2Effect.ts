@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 24 - 12:23 pm                                        *
+ * Last Modified: 2022 02 13 - 04:50 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -43,6 +43,8 @@ export interface Rh2EffectData {
  * @param onlyResult If true or not defined then return data else all information about http request
  * @param errorHandler Method to be executed to handle the errors in the event of an error in the request. If it is not provided, we see if that of the global *                        configuration is provided otherwise, nothing is done.
  * @param successHandler
+ * @param messageCancelToken Associated message if the request is canceled
+ * @param keyCancelToken Key to identify requests that must be joined together if a cancellation is requested
  */
 export interface Rh2EffectAxiosConfigHandler {
     readonly keyOfInstance?: string;
@@ -51,6 +53,8 @@ export interface Rh2EffectAxiosConfigHandler {
     readonly onlyResult?: boolean;
     readonly errorHandler?: OptionalParamVoidMethod;
     readonly successHandler?: OptionalParamVoidMethod;
+    readonly messageCancelToken?: string;
+    readonly keyCancelToken?: string;
 }
 
 /**

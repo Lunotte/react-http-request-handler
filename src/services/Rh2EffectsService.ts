@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 01 22 - 03:50 pm                                        *
+ * Last Modified: 2022 02 17 - 09:43 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -13,12 +13,12 @@
 
 
 
-import { AxiosRequestConfig, Method } from 'axios';
+import { AxiosRequestConfig, CancelTokenSource, Method } from 'axios';
 import hash from 'object-hash';
 import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
-import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
+import { ConfigQueryParameter, DirectoryConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
 import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Hook } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
@@ -119,6 +119,8 @@ export function useRh2WithName(
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
                     addToDirectory: configSelected?.addToDirectory,
+                    messageCancelToken: configSelected.messageCancelToken,
+                    keyCancelToken: configSelected.keyCancelToken,
                     optionalParameters
                 },
                 filter
@@ -199,15 +201,21 @@ async function traitementToManageRequest(
 
         if (filter) {
 
-            // Si la requête est en cours et quelle est pas lock
+            // Si la requête est en cours et quelle n’est pas lock
             if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(configTmp, false)) {
-                // on l’a stoppe pour en déclencher une nouvelle
+                // On l’a stoppe pour en déclencher une nouvelle
+                const myConfigToCancelRequest: DirectoryConfigQueryParameter = rh2DirectoryService.getConfigQueryParameter(configTmp.url, configTmp.method, configTmp.params);
+                // On declenche le cancel
+                cancelToken(myConfigToCancelRequest, configuration);
+
+                // on supprime de l’annuaire
                 rh2DirectoryService.removeQueryDirectoryNotLocked(configTmp);
-                executeQuery(configuration, filter, configTmp);
+                
+                executeQuery(configuration, filter, configTmp, rh2DirectoryService.getOrGenerateCancelToken(configuration.keyCancelToken));
             }
             // Si elle n’est pas en cours, on fait le traitement classique
             else if (!rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
-                executeQuery(configuration, filter, configTmp);
+                executeQuery(configuration, filter, configTmp, null);
             }
             // sinon on ne fait rien
             else {
@@ -217,10 +225,24 @@ async function traitementToManageRequest(
     }
 }
 
+function cancelToken(
+    myConfigToCancelRequest: DirectoryConfigQueryParameter,
+    configuration: Rh2EffectTreatmentToManageRequest
+): void {
+
+    if (configuration.messageCancelToken == null) {
+        myConfigToCancelRequest.sourceCancelToken.cancel();
+    } else {
+        myConfigToCancelRequest.sourceCancelToken.cancel(configuration.messageCancelToken);
+    }
+    rh2DirectoryService.removeKeyCancelToken(configuration.keyCancelToken);
+}
+
 async function executeQuery(
     configuration: Rh2EffectTreatmentToManageRequest,
     filter: boolean,
-    configTmp: ConfigQueryParameter
+    configTmp: ConfigQueryParameter,
+    sourceCancelToken: CancelTokenSource
 ): Promise<void> {
 
     isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
@@ -235,7 +257,7 @@ async function executeQuery(
     
     loadingStarted(configuration);
 
-    rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.addToDirectory);
+    rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.addToDirectory, sourceCancelToken);
 
     const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
         buildConfigToAxios(configuration),

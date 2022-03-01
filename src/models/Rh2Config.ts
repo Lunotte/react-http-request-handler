@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 24 - 12:26 pm                                        *
+ * Last Modified: 2022 02 12 - 04:35 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -30,9 +30,9 @@ export interface Rh2InitializationParameter {
     debugMode?: boolean
 }
 
-export interface KeyValue {
+export interface KeyValue<T> {
     key: string;
-    value: string;
+    value: T;
 }
 
 /**
@@ -46,5 +46,5 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[]; // Par défaut : [{key: 'Content-Type', value: 'application/json'}]
+    headerUrl?: KeyValue<string>[]; // Par défaut : [{key: 'Content-Type', value: 'application/json'}]
 }
