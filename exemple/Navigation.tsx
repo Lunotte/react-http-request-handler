@@ -126,7 +126,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
         keyOfInstance: 'Test2',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
-        addToDirectory: true
+        addToDirectory: false
     };
 
     // const configACharger2: Rh2AxiosConfig = {
@@ -148,7 +148,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
 
     // // const dispatch = useDispatch();
 
-    rh2AxiosConfigService.addConfigAxios(configACharger);
+    //rh2AxiosConfigService.addConfigAxios(configACharger);
     // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
@@ -174,13 +174,13 @@ const traitementErreur = (data: ResponseFetchApi) => {
   //  useRh2WithParameters(configuration);
    // console.log(test);
     
-    rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
-        username: 'toto',
-        password: 'I1€5t3nGerr€'
-    });
+    // rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
+    //     username: 'toto',
+    //     password: 'I1€5t3nGezz€'
+    // });
     
     const test = useRh2WithName(GOOGLE);
-    console.log(test);
+    console.log('test GOOGLE 2', test);
 
 
    // rh2ConfigService.setErrorHandler(traitementErreur);
@@ -239,6 +239,14 @@ const traitementErreur = (data: ResponseFetchApi) => {
         setstate
     ] = useState<number>(0);
 
+    const [
+        parti,
+        setparti
+    ] = useState<boolean>(false);
+
+    const test2 = useRh2WithName(GOOGLE, parti);
+    console.log('test GOOGLE', test2);
+
     const onMe = () => {
         
         if (source != null) {
@@ -246,7 +254,11 @@ const traitementErreur = (data: ResponseFetchApi) => {
         }
         setstate(state + 1);
 
-        console.log('Onme');
+        rh2AxiosConfigService.addOrUpdateAuthToConfigAxios(GOOGLE, {
+            username: 'toto2',
+            password: 'I1€5t3nGezYYY€'
+        });
+
         source = axios.CancelToken.source();
         configurationBis = {
             ...configurationBis,
@@ -257,7 +269,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
             } 
         };
         console.log('configuration dans navigation ', configurationBis);
-
+        setparti(true);
     //navigation.navigate({name: 'Details', params: [{jack: '5'}]});
     // navigation.navigate('Details', {
     //   itemId: 86,

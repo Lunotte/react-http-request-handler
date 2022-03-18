@@ -61,6 +61,17 @@ class Rh2AxiosConfigService {
     }
 
     /**
+     * Add or update auth to a axios config
+     * @param label Query name
+     * @param auth Ident to HTTP Basic auth
+     */
+    addOrUpdateAuthToConfigAxios(label: string, auth: { username: string, password: string }): void {
+        this.addAuthToConfigAxios(label, auth);
+    }
+
+    /**
+     * @deprecated You need to use addOrUdateAuthToConfigAxios method  
+     * 
      * Add auth to a axios config
      * @param label Query name
      * @param auth Ident to HTTP Basic auth
