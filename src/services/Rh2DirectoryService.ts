@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 02 17 - 08:38 pm                                        *
+ * Last Modified: 2022 03 19 - 08:33 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -34,7 +34,7 @@ class Rh2DirectoryService {
         return this.keysCancelToken.some(keyCancelToken => keyCancelToken.key === searchedKey);
     }
 
-    getKeyCancelToken(searchedKey: string): CancelTokenSource {
+    private getKeyCancelToken(searchedKey: string): CancelTokenSource {
         if (this.isKeyCancelToken(searchedKey)) {
             const source: KeyValue<CancelTokenSource> = this.keysCancelToken.find(keyCancelToken => keyCancelToken.key === searchedKey);
             return (source != null) ? source.value : null;
@@ -42,7 +42,7 @@ class Rh2DirectoryService {
         return null
     }
 
-    setKeyCancelToken(keyCancelToken: string): CancelTokenSource {
+    private setKeyCancelToken(keyCancelToken: string): CancelTokenSource {
         this.keysCancelToken.push({
             key: keyCancelToken,
             value: this.generateCancelToken() 
@@ -175,8 +175,13 @@ class Rh2DirectoryService {
      * @param axiosRequestConfig Item to delete
      */
     removeQueryDirectoryNotLocked(axiosRequestConfig: AxiosRequestConfig): void {
+        console.log('suppression de dir', axiosRequestConfig);
+        console.log('SON etat AVANT',  this.directoryConfigQueryParameter);
+        
         this.directoryConfigQueryParameter = this.directoryConfigQueryParameter.filter(config =>
             !comparatorUrlMethodParamsWithoutLock(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
+        
+        console.log('SON etat APRES',  this.directoryConfigQueryParameter);
     }
 
 }

@@ -4,17 +4,12 @@
  * Created Date: 2021 08 03                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 02 07 - 05:41 pm                                        *
+ * Last Modified: 2022 03 17 - 08:39 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
-
-
-
 
 import { ResponseFetchApi } from "../models";
 
@@ -27,10 +22,6 @@ class Rh2ManagerToQueryInProgressService {
 
     private queryInProgress: string[] = [];
     private erreurApi: Rh2ErreurApi[] = [];
-
-    isQueryInProgress(label: string): boolean {
-        return this.queryInProgress.find(query => query !== label) != null;
-    }
 
     addQueryInProgress(label: string): void {
         if (!this.queryInProgress.includes(label)) {

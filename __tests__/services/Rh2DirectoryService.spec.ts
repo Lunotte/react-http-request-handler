@@ -1,21 +1,3 @@
-/*
- * File: Rh2DirectoryService.spec.ts                                           *
- * Project: react-http-request-handler                                         *
- * Created Date: 2021 08 14                                                    *
- * Author: Charly Beaugrand                                                    *
- * -----                                                                       *
- * Last Modified: 2022 01 23 - 07:49 pm                                        *
- * Modified By: Charly Beaugrand                                               *
- * -----                                                                       *
- * Copyright (c) 2021 Lunotte                                                  *
- * ----------	---	---------------------------------------------------------  *
- */
-
-
-
-
-
-
 import { AxiosRequestConfig } from 'axios';
 import { ConfigQueryParameter } from '../../src/models/Rh2Directory';
 import { default as rh2DirectoryService } from '../../src/services/Rh2DirectoryService';
@@ -242,5 +224,66 @@ describe('Find Configuration', () => {
             expect(resultat.url).toBe('uneUrl');
             expect(Object.keys(resultat.params).length).toBe(3);
         });
+
+
+
+        describe('Has lock', () => {
+            const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: null };
+            
+            it('ne doit pas avoir de config avec lock', () => {
+                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(config, true)).toBe(false);
+            });
+
+            it('ne doit pas avoir de config avec lock', () => {
+                rh2DirectoryService.addConfigQueryParameter(config, true);
+                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(config, true)).toBe(true);
+            });
+
+            it('ne doit pas avoir de config avec lock', () => {
+                rh2DirectoryService.addConfigQueryParameter({...config, url: 'unesecondeurl'}, false);
+                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(config, true)).toBe(false);
+            });
+        })
+    });
+
+    describe('Gérer clé canceltoken ', () => {
+
+        let axios;
+        beforeEach(() => {
+            jest.resetModules();
+            axios = require('axios').default;
+          });
+
+        it('doit générer un token si parametre null fourni', () => {
+
+            const cancelTokenSource: any = { cancel: jest.fn(), token: { reason: { message: 'user canceled' } } };
+            jest.spyOn(rh2DirectoryService["cancelToken"], 'source').mockReturnValue(cancelTokenSource);
+            
+            expect(rh2DirectoryService.getOrGenerateCancelToken(null)).not.toEqual(null);
+        });
+
+        it('doit générer un token si parametre n\'existe pas', () => {
+
+            const cancelTokenSource: any = { cancel: jest.fn(), token: { reason: { message: 'user canceled' } } };
+            jest.spyOn(rh2DirectoryService["cancelToken"], 'source').mockReturnValue(cancelTokenSource);
+            
+            expect(rh2DirectoryService.getOrGenerateCancelToken("keyDoesNotExist")).not.toEqual(null);
+            expect(rh2DirectoryService.getOrGenerateCancelToken("keyDoesNotExist")).not.toEqual(null);
+        });
+
+        it('ne doit aps supprimer de clé car n\'existe pas', () => {
+
+            rh2DirectoryService.getOrGenerateCancelToken("keyExist");
+            rh2DirectoryService.removeKeyCancelToken("keyDoesNotExist")
+            expect(rh2DirectoryService.isKeyCancelToken("keyExist")).toBe(true);
+        });
+
+        it('doit supprimer une clé', () => {
+
+            rh2DirectoryService.getOrGenerateCancelToken("keyExist");
+            rh2DirectoryService.removeKeyCancelToken("keyExist")
+            expect(rh2DirectoryService.isKeyCancelToken("keyExist")).toBe(false);
+        });
+
     });
 });

@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 02 17 - 09:43 pm                                        *
+ * Last Modified: 2022 03 19 - 09:01 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -197,19 +197,32 @@ async function traitementToManageRequest(
         //      if(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterNotLocked())
         //   On voudra tester qu'il existe une requete en cours et que l'on veut la stopper, ensuite l'algo peut continuer normalement
         // Si requête dejà en cours, supprimer la config en cours et la remplacer /_\ ligne 214 par la version avec un canceltoken different
+        
+        
+        
+        
+        
+        // TODO Ajouter la possiblité des unlock une config dans le service directory 
 
 
         if (filter) {
-
+            console.log(configTmp);
+            console.log(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(configTmp, false));
+            
             // Si la requête est en cours et quelle n’est pas lock
             if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(configTmp, false)) {
+                console.log('c\'est passé hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock');
+                
                 // On l’a stoppe pour en déclencher une nouvelle
                 const myConfigToCancelRequest: DirectoryConfigQueryParameter = rh2DirectoryService.getConfigQueryParameter(configTmp.url, configTmp.method, configTmp.params);
+                console.log('Estoy aqui !!', myConfigToCancelRequest, configuration);
+               
                 // On declenche le cancel
                 cancelToken(myConfigToCancelRequest, configuration);
-
+                console.log('Estoy alli !!');
                 // on supprime de l’annuaire
                 rh2DirectoryService.removeQueryDirectoryNotLocked(configTmp);
+                console.log('je suis iciiiii !!!');
                 
                 executeQuery(configuration, filter, configTmp, rh2DirectoryService.getOrGenerateCancelToken(configuration.keyCancelToken));
             }
