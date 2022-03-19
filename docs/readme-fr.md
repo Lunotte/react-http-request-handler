@@ -634,7 +634,6 @@ const initSettings: Rh2InitializationParameter = {
 
 ## Roadmap
 
-- Modifier une instance Axios pour prendre en compte de nouveaux éléments (Ex : Mise à jour du paramètre «auth» de Axios)
 - Gérer l'annulation des requêtes HTTP par le biais de la librairie si nécessaire
 
 	

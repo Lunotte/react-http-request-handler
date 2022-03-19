@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Rh2InitializationParameter } from '../src';
+import { AxiosRequestConfig, Rh2AxiosConfig, rh2AxiosConfigService, Rh2InitializationParameter } from '../src';
 import Rh2Initializer from '../src/Rh2Initializer';
 import Navigation from './Navigation';
 import Store from './redux/rh2-store';
@@ -38,13 +38,34 @@ const App = () => {
             },
             {
                 key: 'Test2',
-                axiosConfig: { baseURL: 'https://www.google.com/' },
+                axiosConfig: {
+                    baseURL: 'https://www.google.com/', auth: {
+                        username: 'toto',
+                        password: 'I1€5t3nGezz€'
+                    }
+                },
                 defaultInterceptor: false,
                 headerUrl: []
             }
         ],
         debugMode: true
     };
+
+    const axiosConfig: AxiosRequestConfig = {
+        url: '/search?q=champ',
+        method: 'GET'
+    };
+    const configACharger: Rh2AxiosConfig = {
+        keyOfInstance: 'Test2',
+        axiosRequestConfig: axiosConfig,
+        label: 'GOOGLE',
+        addToDirectory: false
+    };
+    rh2AxiosConfigService.addConfigAxios(configACharger);
+    //  rh2AxiosConfigService.addAuthToConfigAxios('GOOGLE', {
+    //     username: 'toto',
+    //     password: 'I1€5t3nGezz€'
+    // });
 
     return (
     <Provider store={Store}>
