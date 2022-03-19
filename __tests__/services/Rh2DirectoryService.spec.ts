@@ -272,17 +272,19 @@ describe('Find Configuration', () => {
         });
 
         it('ne doit aps supprimer de clé car n\'existe pas', () => {
-
             rh2DirectoryService.getOrGenerateCancelToken("keyExist");
             rh2DirectoryService.removeKeyCancelToken("keyDoesNotExist")
             expect(rh2DirectoryService.isKeyCancelToken("keyExist")).toBe(true);
         });
 
         it('doit supprimer une clé', () => {
-
             rh2DirectoryService.getOrGenerateCancelToken("keyExist");
             rh2DirectoryService.removeKeyCancelToken("keyExist")
             expect(rh2DirectoryService.isKeyCancelToken("keyExist")).toBe(false);
+        });
+        
+        it('doit retourner null car la clé n\'existe pas', () => {
+            expect(rh2DirectoryService.getKeyCancelToken("keyExist")).toBe(null);
         });
 
     });

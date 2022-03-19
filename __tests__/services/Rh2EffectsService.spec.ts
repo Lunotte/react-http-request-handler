@@ -17,12 +17,12 @@ import { AxiosRequestConfig } from "axios";
 import React from 'react';
 import * as redux from 'react-redux';
 import {
-    ResponseFetchApi, rh2AxiosConfigService
+    ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter
 } from "../../src";
 import { Rh2EffectAxiosConfigHandler } from "../../src/models/Rh2Effect";
 import * as FetchApiService from '../../src/services/FetchApiService';
 import rh2DirectoryService from "../../src/services/Rh2DirectoryService";
-import { useRh2WithParameters } from "../../src/services/Rh2EffectsService";
+import { useRh2WithName, useRh2WithParameters } from "../../src/services/Rh2EffectsService";
 
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
@@ -88,6 +88,9 @@ beforeAll(() => {
 
 describe('useRh2WithParameters', () => {
 
+    const cancelTokenSource: any = { cancel: jest.fn(), token: { reason: { message: 'user canceled' } } };
+    jest.spyOn(rh2DirectoryService["cancelToken"], 'source').mockReturnValue(cancelTokenSource);
+
     afterEach(() => {
         resetMocksAndServices();
     });
@@ -96,95 +99,95 @@ describe('useRh2WithParameters', () => {
         initMocksServices();
     });
 
-    // it('Cas nominal avec succcess', async () => {
+    it('Cas nominal avec succcess', async () => {
 
-    //     const reponse = {
-    //         data: 'something' 
-    //     };
-    //     const mockFetchApi = async () => {
-    //         return fetchApiSpy.mockReturnValue({
-    //             isSuccess: true,
-    //             responseSuccess: reponse
-    //         } as ResponseFetchApi);
-    //     }
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
 
-    //     await mockFetchApi();
+        await mockFetchApi();
 
-    //     // await useRh2WithParameters(configurationGoogle, false);
-    //     // expect(setState).toHaveBeenCalledTimes(0);
-    //     await useRh2WithParameters(configurationGoogle);
-    //     expect(setState).toHaveBeenCalledTimes(2);
-    // });
+        // await useRh2WithParameters(configurationGoogle, false);
+        // expect(setState).toHaveBeenCalledTimes(0);
+        await useRh2WithParameters(configurationGoogle);
+        expect(setState).toHaveBeenCalledTimes(2);
+    });
 
-    // it('Cas nominal avec succcess', async () => {
+    it('Cas nominal avec succcess', async () => {
 
-    //     const reponse = {
-    //         data: 'something' 
-    //     };
-    //     const mockFetchApi = async () => {
-    //         return fetchApiSpy.mockReturnValue({
-    //             isSuccess: true,
-    //             responseSuccess: reponse
-    //         } as ResponseFetchApi);
-    //     }
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
 
-    //     await mockFetchApi();
+        await mockFetchApi();
 
-    //     await useRh2WithParameters(configurationGoogle);
+        await useRh2WithParameters(configurationGoogle);
 
-    //     expect(setState).toHaveBeenCalledTimes(2);
-    //     expect(setState).toHaveBeenNthCalledWith(1, {
-    //         loading: true,
-    //         completed: false,
-    //         failed: false,
-    //         success: false,
-    //         data: null
-    //     });
-    //     expect(setState).toHaveBeenNthCalledWith(2, {
-    //         loading: false,
-    //         completed: true,
-    //         failed: false,
-    //         success: true,
-    //         data: reponse
-    //     });
-    // });
+        expect(setState).toHaveBeenCalledTimes(2);
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
+            loading: false,
+            completed: true,
+            failed: false,
+            success: true,
+            data: reponse
+        });
+    });
 
-    // it('Cas nominal avec succcess et successHandler', async () => {
+    it('Cas nominal avec succcess et successHandler', async () => {
 
-    //     const configuration: Rh2EffectAxiosConfigHandler = {
-    //         ...configurationGoogle,
-    //         successHandler: () => console.log('Success !!!')
-    //     };
+        const configuration: Rh2EffectAxiosConfigHandler = {
+            ...configurationGoogle,
+            successHandler: () => console.log('Success !!!')
+        };
 
-    //     const reponse = {
-    //         data: 'something' 
-    //     };
-    //     const mockFetchApi = async () => {
-    //         return fetchApiSpy.mockReturnValue({
-    //             isSuccess: true,
-    //             responseSuccess: reponse
-    //         } as ResponseFetchApi);
-    //     }
-    //     await mockFetchApi();
-    //     await useRh2WithParameters(configuration);
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
+        await useRh2WithParameters(configuration);
 
-    //     expect(setState).toHaveBeenCalledTimes(2);
-    //     expect(setState).toHaveBeenNthCalledWith(1, {
-    //         loading: true,
-    //         completed: false,
-    //         failed: false,
-    //         success: false,
-    //         data: null
-    //     });
-    //     expect(setState).toHaveBeenNthCalledWith(2, {
-    //         loading: false,
-    //         completed: true,
-    //         failed: false,
-    //         success: true,
-    //         data: reponse
-    //     });
+        expect(setState).toHaveBeenCalledTimes(2);
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
+            loading: false,
+            completed: true,
+            failed: false,
+            success: true,
+            data: reponse
+        });
 
-    // });
+    });
 
     it('Cas nominal avec erreur', async () => {
 
@@ -257,338 +260,333 @@ describe('useRh2WithParameters', () => {
         });
     });
 
-    // it('Cas nominal avec erreur et errorHandler global', async () => {
+    it('Cas nominal avec erreur et errorHandler global', async () => {
 
-    //     const initSettings: Rh2InitializationParameter = {
-    //         errorHandler: () => console.log('Hello Guys, c\'est la loose ....') 
-    //     };
-    //     rh2ConfigService.initializeParameters(initSettings);
+        const initSettings: Rh2InitializationParameter = {
+            errorHandler: () => console.log('Hello Guys, c\'est la loose ....') 
+        };
+        rh2ConfigService.initializeParameters(initSettings);
 
-    //     const configuration: Rh2EffectAxiosConfigHandler = configurationGoogle;
+        const configuration: Rh2EffectAxiosConfigHandler = configurationGoogle;
 
-    //     const reponse = {
-    //         data: 'something' 
-    //     };
-    //     const mockFetchApi = async () => {
-    //         return fetchApiSpy.mockReturnValue({
-    //             isSuccess: false,
-    //             isError: true,
-    //             responseSuccess: reponse
-    //         } as ResponseFetchApi);
-    //     }
-    //     await mockFetchApi();
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: false,
+                isError: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
 
-    //     await useRh2WithParameters(configuration);
+        await useRh2WithParameters(configuration);
 
-    //     expect(setState).toHaveBeenCalledTimes(2);
-    //     expect(setState).toHaveBeenNthCalledWith(1, {
-    //         loading: true,
-    //         completed: false,
-    //         failed: false,
-    //         success: false,
-    //         data: null
-    //     });
-    //     expect(setState).toHaveBeenNthCalledWith(2, {
-    //         loading: false,
-    //         completed: true,
-    //         failed: true,
-    //         success: false,
-    //         data: null
-    //     });
-    // });
+        expect(setState).toHaveBeenCalledTimes(2);
+        expect(setState).toHaveBeenNthCalledWith(1, {
+            loading: true,
+            completed: false,
+            failed: false,
+            success: false,
+            data: null
+        });
+        expect(setState).toHaveBeenNthCalledWith(2, {
+            loading: false,
+            completed: true,
+            failed: true,
+            success: false,
+            data: null
+        });
+    });
 
 });
 
+describe('useRh2WithName', () => {
 
+    afterEach(() => {
+        resetMocks();
+    });
 
+    // beforeEach(() => {
+    //     initMocksServices();
+    // });
 
+    describe('useRh2WithName', () => {
+        it('Cas nominal avec succcess', async () => {
 
-// describe('useRh2WithName', () => {
+            const configACharger: Rh2AxiosConfig = {
+                axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+                label: GOOGLE,
+                messageCancelToken: 'Query canceled'
+            }
+            rh2AxiosConfigService.addConfigAxios(configACharger);
 
-//     afterEach(() => {
-//         resetMocks();
-//     });
+            const reponse = {
+                data: 'something' 
+            };
+            const mockFetchApi = async () => {
+                return fetchApiSpy.mockReturnValue({
+                    isSuccess: true,
+                    responseSuccess: reponse
+                } as ResponseFetchApi);
+            }
+            await mockFetchApi();
 
-//     // beforeEach(() => {
-//     //     initMocksServices();
-//     // });
+            await useRh2WithName(GOOGLE);
 
-//     describe('useRh2WithName', () => {
-//         it('Cas nominal avec succcess', async () => {
+            expect(setState).toHaveBeenCalledTimes(2);
+            expect(setState).toHaveBeenNthCalledWith(1, {
+                loading: true,
+                completed: false,
+                failed: false,
+                success: false,
+                data: null
+            });
+            expect(setState).toHaveBeenNthCalledWith(2, {
+                loading: false,
+                completed: true,
+                failed: false,
+                success: true,
+                data: reponse
+            });
 
-//             const configACharger: Rh2AxiosConfig = {
-//                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//                 label: GOOGLE
-//             }
-//             rh2AxiosConfigService.addConfigAxios(configACharger);
+            resetMocksAndServices();
+        });
 
-//             const reponse = {
-//                 data: 'something' 
-//             };
-//             const mockFetchApi = async () => {
-//                 return fetchApiSpy.mockReturnValue({
-//                     isSuccess: true,
-//                     responseSuccess: reponse
-//                 } as ResponseFetchApi);
-//             }
-//             await mockFetchApi();
+        it('Deuxième appel doit s\'executer car pas encore dans l\'annuaire', async () => {
 
-//             await useRh2WithName(GOOGLE);
+            const configACharger: Rh2AxiosConfig = {
+                axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+                label: GOOGLE,
+                addToDirectory: true
+            }
+            rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-//             expect(setState).toHaveBeenCalledTimes(2);
-//             expect(setState).toHaveBeenNthCalledWith(1, {
-//                 loading: true,
-//                 completed: false,
-//                 failed: false,
-//                 success: false,
-//                 data: null
-//             });
-//             expect(setState).toHaveBeenNthCalledWith(2, {
-//                 loading: false,
-//                 completed: true,
-//                 failed: false,
-//                 success: true,
-//                 data: reponse
-//             });
+            const reponse = {
+                data: 'something' 
+            };
+            const mockFetchApi = async () => {
+                return fetchApiSpy.mockReturnValue({
+                    isSuccess: true,
+                    responseSuccess: reponse
+                } as ResponseFetchApi);
+            }
+            await mockFetchApi();
 
-//             resetMocksAndServices();
-//         });
+            await useRh2WithName(GOOGLE);
 
-//         it('Deuxième appel doit s\'executer car pas encore dans l\'annuaire', async () => {
-
-//             const configACharger: Rh2AxiosConfig = {
-//                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//                 label: GOOGLE,
-//                 addToDirectory: true
-//             }
-//             rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
-
-//             const reponse = {
-//                 data: 'something' 
-//             };
-//             const mockFetchApi = async () => {
-//                 return fetchApiSpy.mockReturnValue({
-//                     isSuccess: true,
-//                     responseSuccess: reponse
-//                 } as ResponseFetchApi);
-//             }
-//             await mockFetchApi();
-
-//             await useRh2WithName(GOOGLE);
-
-//             expect(setState).toHaveBeenCalledTimes(2);
-//             expect(setState).toHaveBeenNthCalledWith(1, {
-//                 loading: true,
-//                 completed: false,
-//                 failed: false,
-//                 success: false,
-//                 data: null
-//             });
-//             expect(setState).toHaveBeenNthCalledWith(2, {
-//                 loading: false,
-//                 completed: true,
-//                 failed: false,
-//                 success: true,
-//                 data: reponse
-//             });
+            expect(setState).toHaveBeenCalledTimes(2);
+            expect(setState).toHaveBeenNthCalledWith(1, {
+                loading: true,
+                completed: false,
+                failed: false,
+                success: false,
+                data: null
+            });
+            expect(setState).toHaveBeenNthCalledWith(2, {
+                loading: false,
+                completed: true,
+                failed: false,
+                success: true,
+                data: reponse
+            });
             
-//         });
+        });
 
-//         it('Troisième appel ne doit pas s\'executer car deja dans l\'annuaire', async () => {
+        it('Troisième appel ne doit pas s\'executer car deja dans l\'annuaire', async () => {
 
-//             const configACharger: Rh2AxiosConfig = {
-//                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//                 label: GOOGLE,
-//                 addToDirectory: true
-//             }
-//             rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
+            const configACharger: Rh2AxiosConfig = {
+                axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+                label: GOOGLE,
+                addToDirectory: true
+            }
+            rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-//             const reponse = {
-//                 data: 'something' 
-//             };
-//             const mockFetchApi = async () => {
-//                 return fetchApiSpy.mockReturnValue({
-//                     isSuccess: true,
-//                     responseSuccess: reponse
-//                 } as ResponseFetchApi);
-//             }
-//             await mockFetchApi();
+            const reponse = {
+                data: 'something' 
+            };
+            const mockFetchApi = async () => {
+                return fetchApiSpy.mockReturnValue({
+                    isSuccess: true,
+                    responseSuccess: reponse
+                } as ResponseFetchApi);
+            }
+            await mockFetchApi();
 
-//             await useRh2WithName(GOOGLE);
-//             expect(setState).toHaveBeenCalledTimes(0);
-//         });
-//     });
-
-
-// });
+            await useRh2WithName(GOOGLE);
+            expect(setState).toHaveBeenCalledTimes(0);
+        });
+    });
+});
 
 
-// describe('useRh2WithName', () => {
-//     it('ne doit pas s\'executer car pas ajouter à la liste des config', async () => {
+describe('useRh2WithName', () => {
+    it('ne doit pas s\'executer car pas ajouter à la liste des config', async () => {
 
-//         const configACharger: Rh2AxiosConfig = {
-//             axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//             label: GOOGLE
-//         }
-//         rh2AxiosConfigService.addConfigAxios(configACharger);
+        const configACharger: Rh2AxiosConfig = {
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+            label: GOOGLE
+        }
+        rh2AxiosConfigService.addConfigAxios(configACharger);
 
-//         const reponse = {
-//             data: 'something' 
-//         };
-//         const mockFetchApi = async () => {
-//             return fetchApiSpy.mockReturnValue({
-//                 isSuccess: true,
-//                 responseSuccess: reponse
-//             } as ResponseFetchApi);
-//         }
-//         await mockFetchApi();
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
 
-//         await useRh2WithName(MICROSOFT);
+        await useRh2WithName(MICROSOFT);
 
-//         expect(setState).toHaveBeenCalledTimes(0);
-//         resetMocksAndServices();
-//     });
-// });
+        expect(setState).toHaveBeenCalledTimes(0);
+        resetMocksAndServices();
+    });
+});
 
-// describe('useRh2WithName', () => {
-//     it('avec query params', async () => {
+describe('useRh2WithName', () => {
+    it('avec query params', async () => {
 
-//         const configACharger: Rh2AxiosConfig = {
-//             axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//             label: GOOGLE,
-//             successHandler: (data) => setState(data) 
-//         }
-//         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
+        const configACharger: Rh2AxiosConfig = {
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+            label: GOOGLE,
+            successHandler: (data) => setState(data) 
+        }
+        rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-//         const reponse = {
-//             data: 'something' 
-//         };
-//         const mockFetchApi = async () => {
-//             return fetchApiSpy.mockReturnValue({
-//                 isSuccess: true,
-//                 responseSuccess: reponse
-//             } as ResponseFetchApi);
-//         }
-//         await mockFetchApi();
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
 
-//         await useRh2WithName(GOOGLE, true, {
-//             params: {
-//                 une: 'valeur',
-//                 chatte: 'chienne'
-//             }
-//         });
+        await useRh2WithName(GOOGLE, true, {
+            params: {
+                une: 'valeur',
+                chatte: 'chienne'
+            }
+        });
 
-//         expect(setState).toHaveBeenCalledTimes(3);
-//         resetMocksAndServices();
-//     });
-// });
-
-
-// describe('useRh2WithName', () => {
-//     it('avec body params', async () => {
-
-//         const configACharger: Rh2AxiosConfig = {
-//             axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//             label: GOOGLE,
-//             successHandler: (data) => setState(data) 
-//         }
-//         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
-
-//         const reponse = {
-//             data: 'something' 
-//         };
-//         const mockFetchApi = async () => {
-//             return fetchApiSpy.mockReturnValue({
-//                 isSuccess: true,
-//                 responseSuccess: reponse
-//             } as ResponseFetchApi);
-//         }
-//         await mockFetchApi();
-
-//         await useRh2WithName(GOOGLE, true, {
-//             data: {
-//                 une: 'valeur',
-//                 chatte: 'chienne'
-//             }
-//         });
-
-//         expect(setState).toHaveBeenCalledTimes(3);
-//         resetMocksAndServices();
-//     });
-// });
+        expect(setState).toHaveBeenCalledTimes(3);
+        resetMocksAndServices();
+    });
+});
 
 
-// describe('useRh2WithName', () => {
-//     it('avec path params', async () => {
+describe('useRh2WithName', () => {
+    it('avec body params', async () => {
 
-//         const configACharger: Rh2AxiosConfig = {
-//             axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//             label: GOOGLE,
-//             successHandler: (data) => setState(data) 
-//         }
-//         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
+        const configACharger: Rh2AxiosConfig = {
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+            label: GOOGLE,
+            successHandler: (data) => setState(data) 
+        }
+        rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-//         const reponse = {
-//             data: 'something' 
-//         };
-//         const mockFetchApi = async () => {
-//             return fetchApiSpy.mockReturnValue({
-//                 isSuccess: true,
-//                 responseSuccess: reponse
-//             } as ResponseFetchApi);
-//         }
-//         await mockFetchApi();
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
 
-//         await useRh2WithName(GOOGLE, true, {
-//             pathParams: '/2/trote'
-//         });
+        await useRh2WithName(GOOGLE, true, {
+            data: {
+                une: 'valeur',
+                chatte: 'chienne'
+            }
+        });
 
-//         expect(setState).toHaveBeenCalledTimes(3);
-//         resetMocksAndServices();
-//     });
-// });
+        expect(setState).toHaveBeenCalledTimes(3);
+        resetMocksAndServices();
+    });
+});
 
-// describe('useRh2WithName', () => {
-//     it('with path and query params', async () => {
 
-//         const configACharger: Rh2AxiosConfig = {
-//             axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-//             label: GOOGLE,
-//             successHandler: (data) => setState(data),
-//             onlyResult: false
-//         }
-//         rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
+describe('useRh2WithName', () => {
+    it('avec path params', async () => {
 
-//         const spyFetchApi = jest.spyOn(FetchApiService, 'fetchApi');
+        const configACharger: Rh2AxiosConfig = {
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+            label: GOOGLE,
+            successHandler: (data) => setState(data) 
+        }
+        rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
-//         const reponse = {
-//             data: 'something' 
-//         };
-//         const mockFetchApi = async () => {
-//             return fetchApiSpy.mockReturnValue({
-//                 isSuccess: true,
-//                 responseSuccess: reponse
-//             } as ResponseFetchApi);
-//         }
-//         await mockFetchApi();
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
 
-//         await useRh2WithName(GOOGLE, true, {
-//             pathParams: '2/trote',
-//             params: {
-//                 une: 'valeur',
-//                 chatte: 'chienne'
-//             }
-//         });
+        await useRh2WithName(GOOGLE, true, {
+            pathParams: '/2/trote'
+        });
 
-//         expect(spyFetchApi).toHaveBeenCalled();
-//         expect(spyFetchApi.mock.calls[0][1]).toEqual({
-//             url: 'https://www.google.com/2/trote',
-//             method: 'GET',
-//             data: undefined,
-//             params: { une: 'valeur', chatte: 'chienne' }
-//           });
-//         expect(setState).toHaveBeenCalledTimes(3);
-//         resetMocksAndServices();
-//     });
-// });
+        expect(setState).toHaveBeenCalledTimes(3);
+        resetMocksAndServices();
+    });
+});
+
+describe('useRh2WithName', () => {
+    it('with path and query params', async () => {
+
+        const configACharger: Rh2AxiosConfig = {
+            axiosRequestConfig: configurationGoogle.axiosRequestConfig,
+            label: GOOGLE,
+            successHandler: (data) => setState(data),
+            onlyResult: false
+        }
+        rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
+
+        const spyFetchApi = jest.spyOn(FetchApiService, 'fetchApi');
+
+        const reponse = {
+            data: 'something' 
+        };
+        const mockFetchApi = async () => {
+            return fetchApiSpy.mockReturnValue({
+                isSuccess: true,
+                responseSuccess: reponse
+            } as ResponseFetchApi);
+        }
+        await mockFetchApi();
+
+        await useRh2WithName(GOOGLE, true, {
+            pathParams: '2/trote',
+            params: {
+                une: 'valeur',
+                chatte: 'chienne'
+            }
+        });
+
+        expect(spyFetchApi).toHaveBeenCalled();
+        expect(spyFetchApi.mock.calls[0][1]).toEqual({
+            url: 'https://www.google.com/2/trote',
+            method: 'GET',
+            data: undefined,
+            params: { une: 'valeur', chatte: 'chienne' }
+          });
+        expect(setState).toHaveBeenCalledTimes(3);
+        resetMocksAndServices();
+    });
+});
 

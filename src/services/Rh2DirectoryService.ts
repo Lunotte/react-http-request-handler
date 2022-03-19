@@ -34,10 +34,10 @@ class Rh2DirectoryService {
         return this.keysCancelToken.some(keyCancelToken => keyCancelToken.key === searchedKey);
     }
 
-    private getKeyCancelToken(searchedKey: string): CancelTokenSource {
+    getKeyCancelToken(searchedKey: string): CancelTokenSource {
         if (this.isKeyCancelToken(searchedKey)) {
             const source: KeyValue<CancelTokenSource> = this.keysCancelToken.find(keyCancelToken => keyCancelToken.key === searchedKey);
-            return (source != null) ? source.value : null;
+            return source.value;
         }
         return null
     }
@@ -96,7 +96,7 @@ class Rh2DirectoryService {
      * @returns The element searched if it exists
      */
     getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): DirectoryConfigQueryParameter {
-        return this.directoryConfigQueryParameter.find(config => comparatorUrlMethodParamsWithLock(config, url, method, params));
+        return this.directoryConfigQueryParameter.find(config => comparatorUrlMethodParams(config, url, method, params));
     }
 
     /**
@@ -175,13 +175,8 @@ class Rh2DirectoryService {
      * @param axiosRequestConfig Item to delete
      */
     removeQueryDirectoryNotLocked(axiosRequestConfig: AxiosRequestConfig): void {
-        console.log('suppression de dir', axiosRequestConfig);
-        console.log('SON etat AVANT',  this.directoryConfigQueryParameter);
-        
         this.directoryConfigQueryParameter = this.directoryConfigQueryParameter.filter(config =>
             !comparatorUrlMethodParamsWithoutLock(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
-        
-        console.log('SON etat APRES',  this.directoryConfigQueryParameter);
     }
 
 }
