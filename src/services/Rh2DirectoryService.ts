@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 19 - 08:33 pm                                        *
+ * Last Modified: 2022 03 20 - 06:39 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -165,9 +165,13 @@ class Rh2DirectoryService {
     /**
      * Empty all items without items not locked
      */
-    removeAllQueryDirectoryLocked(): void {
+    removeAllQueriesDirectoryLocked(): void {
         const removeConfigLocked = this.directoryConfigQueryParameter.filter(config => !config.lock);
         this.directoryConfigQueryParameter = removeConfigLocked
+    }
+
+    removeAllQueriesDirectory(): void {
+        this.directoryConfigQueryParameter = [];
     }
 
     /**

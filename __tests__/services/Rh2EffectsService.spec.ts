@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 19 - 08:39 pm                                        *
+ * Last Modified: 2022 03 20 - 06:50 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -68,7 +68,7 @@ const configurationGoogle: Rh2EffectAxiosConfigHandler = {
 
 function resetMocksAndServices() {
     rh2AxiosConfigService.removeAllConfigAxios();
-    rh2DirectoryService.removeAllQueryDirectoryLocked();
+    rh2DirectoryService.removeAllQueriesDirectoryLocked();
     resetMocks();
 }
 

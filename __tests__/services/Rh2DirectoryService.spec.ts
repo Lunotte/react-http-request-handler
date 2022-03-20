@@ -4,13 +4,23 @@ import { default as rh2DirectoryService } from '../../src/services/Rh2DirectoryS
 
 describe('Remove Configuration', () => {
 
-    it('Supprime les éléments configurés', () => {
+    it('Supprime les éléments configurés sans lock', () => {
+
+        const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET'};
+        rh2DirectoryService.addConfigQueryParameter(config, false);
+        
+        expect(rh2DirectoryService.hasConfigQueryParameter(false, config.url, config.method, config.params)).toBe(true);
+        rh2DirectoryService.removeAllQueriesDirectory();
+        expect(rh2DirectoryService.getConfigQueryParameters()).toHaveLength(0);
+    });
+
+    it('Supprime les éléments configurés avec lock', () => {
 
         const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET'};
         rh2DirectoryService.addConfigQueryParameter(config, true);
         
         expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method, config.params)).toBe(true);
-        rh2DirectoryService.removeAllQueryDirectoryLocked();
+        rh2DirectoryService.removeAllQueriesDirectoryLocked();
         expect(rh2DirectoryService.getConfigQueryParameters()).toHaveLength(0);
     });
 
@@ -58,12 +68,12 @@ describe('Remove Configuration', () => {
         expect(rh2DirectoryService.hasConfigQueryParameter(true, config.url, config.method)).toBe(false);
     });
 
-    afterAll(() => rh2DirectoryService.removeAllQueryDirectoryLocked());
+    afterAll(() => rh2DirectoryService.removeAllQueriesDirectoryLocked());
 });
 
 describe('Add Configuration', () => {
 
-    beforeEach(() => rh2DirectoryService.removeAllQueryDirectoryLocked());
+    beforeEach(() => rh2DirectoryService.removeAllQueriesDirectoryLocked());
 
     it('url - method', () => {
         const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET' };
@@ -127,7 +137,7 @@ describe('Add Configuration', () => {
 describe('Find Configuration', () => {
 
     beforeEach(() => {
-        rh2DirectoryService.removeAllQueryDirectoryLocked();
+        rh2DirectoryService.removeAllQueriesDirectoryLocked();
     });
 
     it('Get elements vide', () => {

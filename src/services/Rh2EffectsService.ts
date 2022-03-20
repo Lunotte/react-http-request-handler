@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 19 - 09:01 pm                                        *
+ * Last Modified: 2022 03 20 - 07:29 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -181,14 +181,20 @@ async function traitementToManageRequest(
     configuration: Rh2EffectTreatmentToManageRequest,
     filter: boolean
 ) {
+
+    console.log('On appel traitementToManageRequest');
+    
     if (configuration.axiosRequestConfig != null) {
 
         const configAxios: AxiosRequestConfig<any> = configuration.axiosRequestConfig;
         const configTmp: ConfigQueryParameter = configToManageDirectory(configAxios);
 
         if (filter) {
+
             // Si la requête est en cours et quelle n’est pas lock
             if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(configTmp, false)) {
+                console.log('la requête est en cours ...');
+                
                 // On l’a stoppe pour en déclencher une nouvelle
                 const myConfigToCancelRequest: DirectoryConfigQueryParameter = rh2DirectoryService.getConfigQueryParameter(configTmp.url, configTmp.method, configTmp.params);
                
@@ -214,6 +220,7 @@ function cancelToken(
     myConfigToCancelRequest: DirectoryConfigQueryParameter,
     configuration: Rh2EffectTreatmentToManageRequest
 ): void {
+    isDebugModeThenDisplayWarn('Cancel token called', configuration, myConfigToCancelRequest);
     if (configuration.messageCancelToken == null) {
         myConfigToCancelRequest.sourceCancelToken.cancel();
     } else {
