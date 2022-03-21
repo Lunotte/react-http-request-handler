@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 20 - 06:50 pm                                        *
+ * Last Modified: 2022 03 21 - 09:10 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -63,7 +63,7 @@ const axiosConfigGoogle: AxiosRequestConfig = {
 };
 const configurationGoogle: Rh2EffectAxiosConfigHandler = {
     axiosRequestConfig: axiosConfigGoogle,
-    addToDirectory: false
+    lock: false
 };
 
 function resetMocksAndServices() {
@@ -359,7 +359,7 @@ describe('useRh2WithName', () => {
             const configACharger: Rh2AxiosConfig = {
                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE,
-                addToDirectory: true
+                lock: true
             }
             rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
@@ -399,7 +399,7 @@ describe('useRh2WithName', () => {
             const configACharger: Rh2AxiosConfig = {
                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE,
-                addToDirectory: true
+                lock: true
             }
             rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
@@ -583,7 +583,12 @@ describe('useRh2WithName', () => {
             url: 'https://www.google.com/2/trote',
             method: 'GET',
             data: undefined,
-            params: { une: 'valeur', chatte: 'chienne' }
+            params: { une: 'valeur', chatte: 'chienne' },
+            cancelToken: {
+                reason: {
+                    message: "user canceled"
+                }
+            }
           });
         expect(setState).toHaveBeenCalledTimes(3);
         resetMocksAndServices();

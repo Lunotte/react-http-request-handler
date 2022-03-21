@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 20 - 07:29 pm                                        *
+ * Last Modified: 2022 03 21 - 09:07 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -118,7 +118,7 @@ export function useRh2WithName(
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
-                    addToDirectory: configSelected?.addToDirectory,
+                    lock: configSelected?.lock,
                     messageCancelToken: configSelected.messageCancelToken,
                     keyCancelToken: configSelected.keyCancelToken,
                     optionalParameters
@@ -193,7 +193,7 @@ async function traitementToManageRequest(
         if (filter) {
 
             let cancelTokenSource = null;
-            if (!configuration.addToDirectory) {
+            if (!configuration.lock) {
                 cancelTokenSource = rh2DirectoryService.getOrGenerateCancelToken(configuration.keyCancelToken);
             }
 
@@ -254,7 +254,7 @@ async function executeQuery(
     
     loadingStarted(configuration);
 
-    rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.addToDirectory, sourceCancelToken);
+    rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.lock, sourceCancelToken);
 
     const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
         buildConfigToAxios(configuration, sourceCancelToken),
@@ -312,7 +312,7 @@ function loadingcompleted(configuration: Rh2EffectTreatmentToManageRequest): voi
 function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
     
     // Si on n'a pas demandé d'ajouter cette config en tant que config lock, on en a plus besoin
-    if (!configuration.addToDirectory) {
+    if (!configuration.lock) {
         rh2DirectoryService.removeQueryDirectoryNotLocked(configuration.axiosRequestConfig);
     }
 

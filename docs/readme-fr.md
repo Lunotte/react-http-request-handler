@@ -452,7 +452,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Configuration Axios. 
 
-<b>addToDirectory</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
+<b>lock</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
 
 | Attention : La condition pour filtrer les requêtes s'appuie sur l'url, le type de méthode et la propriété params. |
 | ------------------------------------------------------------ |
@@ -630,6 +630,7 @@ const initSettings: Rh2InitializationParameter = {
 };
 ```
 
+Si vous avez des recommandations, on peut analyser le besoin !
 
 
 ## Roadmap

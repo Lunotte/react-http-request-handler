@@ -6,10 +6,10 @@ const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
 
 const axiosConfig: AxiosRequestConfig = { url: 'https://www.google.com', method: 'GET' };
-const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, addToDirectory: true };
+const configACharger: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig, label: GOOGLE, lock: true };
 
 const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
-const configACharger2: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false};
+const configACharger2: Rh2AxiosConfig = { axiosRequestConfig: axiosConfig2, label: MICROSOFT, lock: false};
 
 describe('Remove Configuration', () => {
     it('Supprime les éléments configurés', () => {

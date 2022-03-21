@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 20 - 07:38 pm
+ * Last Modified: 2022 03 21 - 09:10 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -126,20 +126,20 @@ const traitementErreur = (data: ResponseFetchApi) => {
         keyOfInstance: 'Test2',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
-        addToDirectory: false
+        lock: false
     };
 
     // const configACharger2: Rh2AxiosConfig = {
     //     axiosRequestConfig: axiosConfig,
     //     label: MICROSOFT,
-    //     addToDirectory: true
+    //     lock: true
     // };
 
 
     // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
     // const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
     // const configACharger2: Rh2AxiosConfig = {
-    //   axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false,
+    //   axiosRequestConfig: axiosConfig2, label: MICROSOFT, lock: false,
     //   successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
     // };
 
