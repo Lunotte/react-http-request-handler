@@ -241,17 +241,17 @@ describe('Find Configuration', () => {
             const config: ConfigQueryParameter = { url: 'uneUrl', method: 'GET', params: null };
             
             it('ne doit pas avoir de config avec lock', () => {
-                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(config, true)).toBe(false);
+                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(config, true)).toBe(false);
             });
 
             it('ne doit pas avoir de config avec lock', () => {
                 rh2DirectoryService.addConfigQueryParameter(config, true);
-                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(config, true)).toBe(true);
+                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(config, true)).toBe(true);
             });
 
             it('ne doit pas avoir de config avec lock', () => {
                 rh2DirectoryService.addConfigQueryParameter({...config, url: 'unesecondeurl'}, false);
-                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(config, true)).toBe(false);
+                expect(rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(config, true)).toBe(false);
             });
         })
     });

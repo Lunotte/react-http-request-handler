@@ -245,7 +245,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
         setstate
     ] = useState<number>(0);
 
-    const test = useRh2WithName(GOOGLE, state > 0);
+    const test = useRh2WithName(GOOGLE, state % 2 === 0);
     console.log(test);
 
     const onMe = () => {

@@ -152,10 +152,11 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
  * @param configuration 
  * @returns config to use by Axios
  */
-function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): AxiosRequestConfig {
+function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest, sourceCancelToken: CancelTokenSource): AxiosRequestConfig {
 
     let configToUse = {
         ...configuration.axiosRequestConfig,
+        cancelToken: (sourceCancelToken == null) ? null : sourceCancelToken.token,
         data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.axiosRequestConfig.data
     };
 
@@ -191,10 +192,13 @@ async function traitementToManageRequest(
 
         if (filter) {
 
-            // Si la requête est en cours et quelle n’est pas lock
-            if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(configTmp, false)) {
-                console.log('la requête est en cours ...');
-                
+            let cancelTokenSource = null;
+            if (!configuration.addToDirectory) {
+                cancelTokenSource = rh2DirectoryService.getOrGenerateCancelToken(configuration.keyCancelToken);
+            }
+
+            // Si la requête est en cours et quelle n’est pas lock alors on va pouvoir l’annuler
+            if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(configTmp, false)) {
                 // On l’a stoppe pour en déclencher une nouvelle
                 const myConfigToCancelRequest: DirectoryConfigQueryParameter = rh2DirectoryService.getConfigQueryParameter(configTmp.url, configTmp.method, configTmp.params);
                
@@ -202,11 +206,13 @@ async function traitementToManageRequest(
                 cancelToken(myConfigToCancelRequest, configuration);
                 // on supprime de l’annuaire
                 rh2DirectoryService.removeQueryDirectoryNotLocked(configTmp);
-                executeQuery(configuration, filter, configTmp, rh2DirectoryService.getOrGenerateCancelToken(configuration.keyCancelToken));
+                executeQuery(configuration, filter, configTmp, cancelTokenSource);
             }
             // Si elle n’est pas en cours, on fait le traitement classique
+            // (Si lock est true ou false, on veut faire au moins une fois la requête)
+            // Cette condition ne sera jamais est vraie si le lock a été positionnée pendant une requête précèdente
             else if (!rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
-                executeQuery(configuration, filter, configTmp, rh2DirectoryService.getOrGenerateCancelToken(null));
+                executeQuery(configuration, filter, configTmp, cancelTokenSource);
             }
             // sinon on ne fait rien
             else {
@@ -251,7 +257,7 @@ async function executeQuery(
     rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.addToDirectory, sourceCancelToken);
 
     const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
-        buildConfigToAxios(configuration),
+        buildConfigToAxios(configuration, sourceCancelToken),
         configuration.onlyResult == null || configuration.onlyResult === true);
     
     if (reponse.isSuccess) {

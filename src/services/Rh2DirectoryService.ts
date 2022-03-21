@@ -111,9 +111,9 @@ class Rh2DirectoryService {
         if (lock == null) {
             return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParams(config, url, method, params));
         } else if (lock === true) {
-            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParamsWithLock(config, url, method, params));
+            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParamsWithLockEnabled(config, url, method, params));
         } else {
-            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParamsWithoutLock(config, url, method, params));
+            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParamsWithLockDisabled(config, url, method, params));
         }
     }
 
@@ -132,7 +132,7 @@ class Rh2DirectoryService {
      * @param lock Lock searched
      * @returns True If present else False
      */
-    hasConfigQueryParameterByConfigQueryParameterWithOrWithoutLock(parameter: ConfigQueryParameter, lock: boolean): boolean {
+    hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(parameter: ConfigQueryParameter, lock: boolean): boolean {
         return this.hasConfigQueryParameter(lock, parameter.url, parameter.method, parameter.params);
     }
 
@@ -159,7 +159,7 @@ class Rh2DirectoryService {
      */
     removeQueryDirectoryLocked(axiosRequestConfig: AxiosRequestConfig): void {
         this.directoryConfigQueryParameter = this.directoryConfigQueryParameter.filter(config =>
-            !comparatorUrlMethodParamsWithLock(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
+            !comparatorUrlMethodParamsWithLockEnabled(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
     }
 
     /**
@@ -180,7 +180,7 @@ class Rh2DirectoryService {
      */
     removeQueryDirectoryNotLocked(axiosRequestConfig: AxiosRequestConfig): void {
         this.directoryConfigQueryParameter = this.directoryConfigQueryParameter.filter(config =>
-            !comparatorUrlMethodParamsWithoutLock(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
+            !comparatorUrlMethodParamsWithLockDisabled(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
     }
 
 }
@@ -204,10 +204,10 @@ const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean => {
     }
 }
 
-const comparatorUrlMethodParamsWithoutLock = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
+const comparatorUrlMethodParamsWithLockDisabled = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
     !config.lock && comparatorUrlMethodParams(config, url, method, params);
 
-const comparatorUrlMethodParamsWithLock = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
+const comparatorUrlMethodParamsWithLockEnabled = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
     config.lock && comparatorUrlMethodParams(config, url, method, params);
 
 /**
