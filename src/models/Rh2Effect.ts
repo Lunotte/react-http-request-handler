@@ -4,19 +4,12 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 21 - 09:10 pm                                        *
+ * Last Modified: 2022 03 21 - 11:30 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
-
-
-
-
- 
 
 import { AxiosRequestConfig } from 'axios';
 
@@ -64,13 +57,19 @@ export interface Rh2EffectManageConfigAndReturnData {
     readonly action: any;
 }
 
+/**
+ * optionalParameters Important parameter to custom query. Three parameters are available
+ * - data is used to send body to the request
+ * - params its content is combined with that of the "params" parameter of axios
+ * - pathParams its content is concat with url
+ */
 export interface Rh2EffectTreatmentToManageRequest extends Rh2EffectManageConfigAndReturnData, Rh2EffectLabelFilter, Rh2EffectAxiosConfigHandler {
     optionalParameters?: Rh2EffectData
 }
 
 type OptionalParamVoidMethod = (param?: any) => void;
 
-export interface Rh2Hook {
+export interface Rh2Response {
     loading: boolean;
     completed: boolean;
     failed: boolean,

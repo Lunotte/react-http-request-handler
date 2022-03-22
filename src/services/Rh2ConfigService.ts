@@ -4,23 +4,17 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 11:10 am                                        *
+ * Last Modified: 2022 03 22 - 12:39 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
-
-
-
 import { AxiosInstance } from 'axios';
 import { Rh2InitializationParameter } from "../models/Rh2Config";
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 import { ejectInterceptor, initAxiosInstance, Rh2AxiosInstance } from './Rh2AxiosInstanceService';
-
 
 /**
  * Application configuration

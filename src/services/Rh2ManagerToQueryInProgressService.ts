@@ -12,9 +12,11 @@
  */
 
 import { ResponseFetchApi } from "../models";
+import { Rh2EffectTreatmentToManageRequest } from "../models/Rh2Effect";
 
 interface Rh2ErreurApi {
     label: string;
+    configuration: Rh2EffectTreatmentToManageRequest;
     error: ResponseFetchApi;
 }
 
@@ -40,17 +42,19 @@ class Rh2ManagerToQueryInProgressService {
         return this.queryInProgress;
     }
 
-    addErrorApi(label: string, newError: ResponseFetchApi): void {
+    addErrorApi(label: string, configuration: Rh2EffectTreatmentToManageRequest, newError: ResponseFetchApi): void {
         if (this.erreurApi.some(error => error.label === label)) {
             const erreurApi = this.erreurApi.filter(erreur => erreur.label !== label);
             this.erreurApi = erreurApi;
             this.erreurApi.push({
-                label: label,
+                label,
+                configuration,
                 error: newError 
             });
         } else {
             this.erreurApi.push({
-                label: label,
+                label,
+                configuration,
                 error: newError 
             });
         }

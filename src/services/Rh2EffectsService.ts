@@ -11,16 +11,14 @@
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
 import { AxiosRequestConfig, CancelTokenSource, Method } from 'axios';
 import hash from 'object-hash';
 import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
-import { ConfigQueryParameter, DirectoryConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
+import { ConfigQueryParameter, DirectoryConfigQueryParameter, Rh2Method } from '../models/Rh2Directory';
 import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
-import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Hook } from './../models/Rh2Effect';
+import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Response } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';
@@ -48,7 +46,7 @@ export function useRh2WithParameters(
     configuration: Rh2EffectAxiosConfigHandler,
     filter = true,
     optionalParameters?: Rh2EffectData
-): Rh2Hook {
+): Rh2Response {
     const [
         state,
         setState
@@ -97,7 +95,7 @@ export function useRh2WithName(
     label: string,
     filter = true,
     optionalParameters?: Rh2EffectData
-): Rh2Hook {
+): Rh2Response {
     const [
         state,
         setState
@@ -141,7 +139,7 @@ export function useRh2WithName(
 
 function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryParameter {
     return {
-        method: configAxios?.method as MethodRnhrh,
+        method: configAxios?.method as Rh2Method,
         url: configAxios?.url,
         params: configAxios?.params 
     } as ConfigQueryParameter;
@@ -150,6 +148,7 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
 /**
  * Build a configuration to Axios with user's optional parameters
  * @param configuration 
+ * @param sourceCancelToken 
  * @returns config to use by Axios
  */
 function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest, sourceCancelToken: CancelTokenSource): AxiosRequestConfig {
@@ -182,9 +181,6 @@ async function traitementToManageRequest(
     configuration: Rh2EffectTreatmentToManageRequest,
     filter: boolean
 ) {
-
-    console.log('On appel traitementToManageRequest');
-    
     if (configuration.axiosRequestConfig != null) {
 
         const configAxios: AxiosRequestConfig<any> = configuration.axiosRequestConfig;
@@ -266,8 +262,7 @@ async function executeQuery(
         treatmentIfErrorInUseRequest(configuration, reponse);
     }
 
-    loadingcompleted(configuration);
-    
+    loadingCompleted(configuration);
 }
 
 interface ObjectToHash {
@@ -300,7 +295,7 @@ function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void 
         rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
-function loadingcompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
+function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
     } else {
@@ -332,6 +327,7 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
 
 function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
     isDebugModeThenDisplayWarn('An error was encountered', configuration.label, reponse);
+    
     if (configuration.errorHandler) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
@@ -339,6 +335,7 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
     } else {
         isDebugModeThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
     }
+
     configuration.action({
         loading: false,
         completed: true,
@@ -346,6 +343,6 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
         success: false,
         data: null 
     });
-    rh2ManagerToQueryInProgressService.addErrorApi(configuration.label, reponse);
+    const label = (configuration.label == null) ? hashConfiguration(configuration) : configuration.label;
+    rh2ManagerToQueryInProgressService.addErrorApi(label, configuration, reponse);
 }
-

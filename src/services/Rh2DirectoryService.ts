@@ -12,7 +12,7 @@
  */
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import _ from "lodash";
-import { ConfigQueryParameter, DirectoryConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
+import { ConfigQueryParameter, DirectoryConfigQueryParameter, Rh2Method, Rh2Param } from "../models/Rh2Directory";
 import { isDebugModeThenDisplayWarn } from "../tools/Utils";
 import { KeyValue } from './../models/Rh2Config';
 
@@ -95,7 +95,7 @@ class Rh2DirectoryService {
      * @param params Settings searched
      * @returns The element searched if it exists
      */
-    getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): DirectoryConfigQueryParameter {
+    getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param): DirectoryConfigQueryParameter {
         return this.directoryConfigQueryParameter.find(config => comparatorUrlMethodParams(config, url, method, params));
     }
 
@@ -107,7 +107,7 @@ class Rh2DirectoryService {
      * @param params Settings searched
      * @returns True if present else False
      */
-    hasConfigQueryParameter(lock: boolean, url: string, method: MethodRnhrh, params?: ParamRnhnh): boolean {
+    hasConfigQueryParameter(lock: boolean, url: string, method: Rh2Method, params?: Rh2Param): boolean {
         if (lock == null) {
             return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParams(config, url, method, params));
         } else if (lock === true) {
@@ -191,7 +191,7 @@ class Rh2DirectoryService {
  * @param params2 
  * @returns True If the parameters are identical, null or empty otherwise False
  */
-const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean => {
+const compareParams = (params1: Rh2Param, params2: Rh2Param): boolean => {
     if (params1 == null && params2 == null) {
         return true;
     } else if ((params1 == null && params2 != null && Object.keys(params2).length === 0) ||

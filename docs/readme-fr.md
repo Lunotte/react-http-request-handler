@@ -388,11 +388,11 @@ Initialise l’application :
 
 | Méthode                                                      | type                   | Description                                   |
 | ------------------------------------------------------------ | ---------------------- | --------------------------------------------- |
-| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Vérifier la présence de la configuration      |
+| hasConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | boolean                | Vérifier la présence de la configuration      |
 | hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Vérifier la présence de la configuration      |
 | addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Ajouter une configuration à l'annuaire        |
 | getConfigQueryParameters()                                   | ConfigQueryParameter[] | Récupérer la liste des configurations         |
-| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
+| getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
 | removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Supprimer une configuration précise           |
 | removeAllQueryDirectory()                                    | void                   | Supprimer toutes les configuration en mémoire |
 

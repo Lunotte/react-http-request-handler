@@ -4,14 +4,12 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 09 11 - 11:40 am                                        *
+ * Last Modified: 2022 03 22 - 12:04 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
 
 import { AxiosRequestConfig } from "axios";
 import { rh2ConfigService } from '.';
@@ -66,6 +64,11 @@ export async function fetchApi(axiosInstance: string, config: AxiosRequestConfig
 
 }
 
+/**
+ * Formatting the response
+ * @param error Error received
+ * @returns ResponseFetchApi
+ */
 function responseFetchApi(error: any): ResponseFetchApi {
     if (error.response) {
         fetchSuccess = {

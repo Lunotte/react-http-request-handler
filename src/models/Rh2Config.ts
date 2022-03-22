@@ -4,25 +4,19 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 02 12 - 04:35 pm                                        *
+ * Last Modified: 2022 03 21 - 11:15 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
-
-
-
-
-
 import { AxiosRequestConfig } from 'axios';
 
 /**
  * axiosConfig: If not provided then a default instance of axios is generated
- * errorHandler: Manipuler un callback specifique
+ * errorHandler: Manage a specific callback
+ * debugMode True will display information
  */
 export interface Rh2InitializationParameter {
     axiosConfig?: AxiosRequestConfigExtended[];
@@ -37,11 +31,11 @@ export interface KeyValue<T> {
 
 /**
  * @param key Key to find instance
- * @param axiosConfig Paramètrage Axios
- * @param headerUrl An interceptor is generate to each instance of axios, per default, Content-Type: application/json is added if this parameter is null
+ * @param axiosConfig Axios parameters
  * @param defaultInterceptor Default is true, in the interceptor only headerUrl is used. If you want to custom interceptor of the instance, choose false. 
- * If default Interceptor is true and you implement an interceptor, yours will not work
- */
+ * !!! If default Interceptor is true and you implement an interceptor, yours will not work !!!
+ * @param headerUrl An interceptor is generate to each instance of axios, per default, Content-Type: application/json is added if this parameter is null 
+*/
 export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;

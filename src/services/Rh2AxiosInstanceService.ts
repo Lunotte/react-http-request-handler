@@ -4,20 +4,19 @@
  * Created Date: 2021 07 24                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 02 12 - 04:37 pm                                        *
+ * Last Modified: 2022 03 22 - 12:36 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { KeyValue } from '../models/Rh2Config';
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 
 export type Rh2AxiosInstance = { [key: string]: {axiosInstance : AxiosInstance, interceptor: number} };
+export type Rh2Header = {[key: string]: string};
 
 const HEADER_URL: KeyValue<string>[] = [
     {
@@ -26,7 +25,11 @@ const HEADER_URL: KeyValue<string>[] = [
     }
 ]
 
-function initInstance() {
+/**
+ * Generate default instance of Axios with name « default »
+ * @returns 
+ */
+function initInstance(): Rh2AxiosInstance {
     return {
         ['default']: {
             axiosInstance: axios.create(),
@@ -35,6 +38,11 @@ function initInstance() {
     };
 }
 
+/**
+ * Generate instances with given parameters
+ * @param axiosRequestConfigExtended config to genarate instances
+ * @returns List of Axios instance
+ */
 export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfigExtended[]): Rh2AxiosInstance {
     let listAxiosInstance: Rh2AxiosInstance;
 
@@ -68,6 +76,12 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
     return listAxiosInstance;
 }
 
+/**
+ * Generate interceptors
+ * @param axiosInstance New instance
+ * @param headersToAdd Header to link with the interceptor
+ * @returns 
+ */
 function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyValue<string>[]): number {
     
     return axiosInstance.interceptors.request.use(
@@ -79,13 +93,23 @@ function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyVal
         });
 }
 
+/**
+ * Eject interceptor of the instance
+ * @param axiosInstances targeted instance
+ */
 export function ejectInterceptor(axiosInstances: Rh2AxiosInstance): void {
     Object.values(axiosInstances).forEach(instance => {
         instance.axiosInstance.interceptors.request.eject(instance.interceptor);
     })
 }
 
-export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: KeyValue<string>[]) {
+/**
+ * Generate new header
+ * @param config Axios config
+ * @param headersToAdd Headers to add
+ * @returns 
+ */
+export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: KeyValue<string>[]): Promise<AxiosRequestConfig<any>> {
     const headers = await addHeaderToUrl(headersToAdd);
 
     if (headers) {
@@ -99,7 +123,12 @@ export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: 
     return config;
 }
 
-async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<{[k: string]: string}> {
+/**
+ * Map default header else use the config provided
+ * @param headersToAdd List of headers
+ * @returns Headers
+ */
+async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<Rh2Header> {
     const headersDefault: KeyValue<string>[] = HEADER_URL;
 
     if (headersToAdd == null || headersToAdd.length === 0) {
@@ -109,9 +138,13 @@ async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<{[k: st
     }
 }
 
-function mapAllHeaders(headers: KeyValue<string>[]): {[k: string]: string} {
-    const headerAfterBuilding = {
-    };
+/**
+ * Map headers
+ * @param headers List of headers
+ * @returns headers
+ */
+function mapAllHeaders(headers: KeyValue<string>[]): Rh2Header {
+    const headerAfterBuilding = {};
     headers.forEach((kv: KeyValue<string>) => headerAfterBuilding[kv.key] = kv.value);
     return headerAfterBuilding;
 }

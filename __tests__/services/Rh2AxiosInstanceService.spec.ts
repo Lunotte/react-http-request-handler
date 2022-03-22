@@ -159,65 +159,7 @@ describe('Init Axios instance', () => {
         ejectInterceptor(resultat);
     });
 
-    // it('List Axios request with key and request', () => {
-        
-    //     const key = 'TEST_VALUE';
-    //     const axiosRequestConfig: AxiosRequestConfig = {
-    //         baseURL: 'http://test.fr' 
-    //     };
-    //     const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
-    //         key,
-    //         axiosConfig: axiosRequestConfig,
-    //         defaultInterceptor: false 
-    //     };
-       
-    //     initAxiosInstance([
-    //         axiosRequestConfigExtended 
-    //     ]);
-    //     expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
-    //         key 
-    //     ]);
-
-    //     console.log(rh2ConfigService.getAxiosInstances());
-    // });
-
-    // it('List Axios request with key and request - 2 elements', () => {
-        
-    //     const key = 'TEST_VALUE';
-    //     const axiosRequestConfig: AxiosRequestConfig = {
-    //         baseURL: 'http://test.fr' 
-    //     };
-    //     const axiosRequestConfigExtended: AxiosRequestConfigExtended = {
-    //         key,
-    //         axiosConfig: axiosRequestConfig 
-    //     };
-        
-    //     const key2 = 'TEST_VALUE_2';
-    //     const axiosRequestConfig2: AxiosRequestConfig = {
-    //         baseURL: 'http://test2.fr' 
-    //     };
-    //     const axiosRequestConfigExtended2: AxiosRequestConfigExtended = {
-    //         key: key2,
-    //         axiosConfig: axiosRequestConfig2 
-    //     };
-       
-    //     initAxiosInstance([
-    //         axiosRequestConfigExtended,
-    //         axiosRequestConfigExtended2 
-    //     ]);
-    //     expect(Object.keys(rh2ConfigService.getAxiosInstances())).toEqual([
-    //         key,
-    //         key2 
-    //     ]);
-    //     const axiosInstance1 = Object.values(rh2ConfigService.getAxiosInstances())[0];
-    //     const axiosInstance2 = Object.values(rh2ConfigService.getAxiosInstances())[1];
-    //     expect(axiosInstance1.axiosInstance.defaults.baseURL).toEqual(axiosRequestConfig.baseURL);
-    //     expect(axiosInstance2.axiosInstance.defaults.baseURL).toEqual(axiosRequestConfig2.baseURL);
-               
-    //     console.log(rh2ConfigService.getAxiosInstances());
-    // });
 });
-
 
 describe('Generate a header to interceptor', () => {
     const HEARDER_PAR_DEFAUT = {
