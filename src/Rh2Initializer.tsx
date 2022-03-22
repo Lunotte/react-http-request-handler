@@ -9,9 +9,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-    rh2ConfigService, Rh2InitializationParameter 
-} from '.';
+import { rh2ConfigService, Rh2InitializationParameter } from '.';
 
 const Rh2Initializer: React.FC<{ rh2Settings?: Rh2InitializationParameter, children?: React.ReactNode }> = ({ rh2Settings, children }) => {
 

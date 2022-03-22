@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 22 - 12:39 am                                        *
+ * Last Modified: 2022 03 22 - 06:44 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -72,7 +72,7 @@ class Rh2ConfigService {
     }
 
     /**
-     * If the user has initialized library with SettingsInitializerRnhrh and provided data for the param axiosConfig
+     * If the user has initialized library with Rh2Initializer or initializeParameters() method of this class and provided data for the param axiosConfig
      * All instances requested will be accessible. You can use them to make interceptors
      * If nothing provided, default instance has been created
      * @returns All Axios instances generate 
