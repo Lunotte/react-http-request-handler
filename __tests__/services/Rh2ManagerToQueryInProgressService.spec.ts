@@ -47,8 +47,8 @@ describe('Configuration erreur', () => {
             const erreurFetchApi: Partial<ErreurFetchApi> = { isRequestError: true, isResponseError: false };
             responseFetchApi = { ...responseFetchApi, responseErreur: erreurFetchApi as ErreurFetchApi };
             rh2ManagerToQueryInProgressService.addErrorApi(LABEL, configuration, responseFetchApi);
-            expect(rh2ManagerToQueryInProgressService.getErreurApi().length).toBe(1);
-            expect(rh2ManagerToQueryInProgressService.getErreurApi()).toEqual([{label: LABEL, configuration, error: responseFetchApi}]);
+            expect(rh2ManagerToQueryInProgressService.getErrorsApi().length).toBe(1);
+            expect(rh2ManagerToQueryInProgressService.getErrorsApi()).toEqual([{label: LABEL, configuration, error: responseFetchApi}]);
         });
 
         it('Erreur api, doit mettre à jour si label deja existant', () => {
@@ -56,16 +56,16 @@ describe('Configuration erreur', () => {
             responseFetchApi = { ...responseFetchApi, responseErreur: erreurFetchApi as ErreurFetchApi };
 
             rh2ManagerToQueryInProgressService.addErrorApi(LABEL, configuration, responseFetchApi);
-            expect(rh2ManagerToQueryInProgressService.getErreurApi().length).toBe(1);
-            expect(rh2ManagerToQueryInProgressService.getErreurApi()).toEqual([{label: LABEL, configuration, error: responseFetchApi}]);
+            expect(rh2ManagerToQueryInProgressService.getErrorsApi().length).toBe(1);
+            expect(rh2ManagerToQueryInProgressService.getErrorsApi()).toEqual([{label: LABEL, configuration, error: responseFetchApi}]);
         });
 
         it('Erreur api, ajouté un second élément', () => {
             const LABEL2 = 'titi';
 
             rh2ManagerToQueryInProgressService.addErrorApi(LABEL2, configuration, responseFetchApi);
-            expect(rh2ManagerToQueryInProgressService.getErreurApi().length).toBe(2);
-            expect(rh2ManagerToQueryInProgressService.getErreurApi()).toEqual([{label: LABEL, configuration, error: responseFetchApi}, {label: LABEL2, configuration, error: responseFetchApi}]);
+            expect(rh2ManagerToQueryInProgressService.getErrorsApi().length).toBe(2);
+            expect(rh2ManagerToQueryInProgressService.getErrorsApi()).toEqual([{label: LABEL, configuration, error: responseFetchApi}, {label: LABEL2, configuration, error: responseFetchApi}]);
         });
 
     });
