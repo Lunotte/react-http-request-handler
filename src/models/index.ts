@@ -11,19 +11,14 @@
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
-
-
-
 import type { Rh2AxiosConfig } from './AxiosConfig';
 import type { ErreurFetchApi, ResponseFetchApi } from './FetchApi';
 import type { KeyValue, Rh2InitializationParameter } from './Rh2Config';
-import { ConfigQueryParameter, MethodRnhrh, MultiplePossibleValues, ParamRnhnh } from './Rh2Directory';
+import { ConfigQueryParameter, MultiplePossibleValues, Rh2Method, Rh2Param } from './Rh2Directory';
 import type { Rh2EffectAxiosConfigHandler } from './Rh2Effect';
 
 export type {
     Rh2InitializationParameter, KeyValue, Rh2AxiosConfig, ResponseFetchApi, ErreurFetchApi, Rh2EffectAxiosConfigHandler
 };
-export { ConfigQueryParameter, MethodRnhrh, ParamRnhnh, MultiplePossibleValues };
+export { ConfigQueryParameter, Rh2Method, Rh2Param, MultiplePossibleValues };
 

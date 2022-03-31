@@ -4,23 +4,21 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 29 - 03:02 pm                                        *
+ * Last Modified: 2022 03 21 - 09:07 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
-import { AxiosRequestConfig, Method } from 'axios';
+import { AxiosRequestConfig, CancelTokenSource, Method } from 'axios';
 import hash from 'object-hash';
 import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
-import { ConfigQueryParameter, MethodRnhrh } from '../models/Rh2Directory';
+import { ConfigQueryParameter, DirectoryConfigQueryParameter, Rh2Method } from '../models/Rh2Directory';
 import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
-import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Hook } from './../models/Rh2Effect';
+import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Response } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
 import { default as rh2ConfigService } from './Rh2ConfigService';
@@ -48,7 +46,7 @@ export function useRh2WithParameters(
     configuration: Rh2EffectAxiosConfigHandler,
     filter = true,
     optionalParameters?: Rh2EffectData
-): Rh2Hook {
+): Rh2Response {
     const [
         state,
         setState
@@ -97,7 +95,7 @@ export function useRh2WithName(
     label: string,
     filter = true,
     optionalParameters?: Rh2EffectData
-): Rh2Hook {
+): Rh2Response {
     const [
         state,
         setState
@@ -118,7 +116,9 @@ export function useRh2WithName(
                     successHandler: configSelected?.successHandler,
                     errorHandler: configSelected?.errorHandler,
                     action: setState,
-                    addToDirectory: configSelected?.addToDirectory,
+                    lock: configSelected?.lock,
+                    messageCancelToken: configSelected.messageCancelToken,
+                    keyCancelToken: configSelected.keyCancelToken,
                     optionalParameters
                 },
                 filter
@@ -139,7 +139,7 @@ export function useRh2WithName(
 
 function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryParameter {
     return {
-        method: configAxios?.method as MethodRnhrh,
+        method: configAxios?.method as Rh2Method,
         url: configAxios?.url,
         params: configAxios?.params 
     } as ConfigQueryParameter;
@@ -148,12 +148,14 @@ function configToManageDirectory(configAxios: AxiosRequestConfig): ConfigQueryPa
 /**
  * Build a configuration to Axios with user's optional parameters
  * @param configuration 
+ * @param sourceCancelToken 
  * @returns config to use by Axios
  */
-function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest): AxiosRequestConfig {
+function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest, sourceCancelToken: CancelTokenSource): AxiosRequestConfig {
 
     let configToUse = {
         ...configuration.axiosRequestConfig,
+        cancelToken: (sourceCancelToken == null) ? null : sourceCancelToken.token,
         data: (configuration.optionalParameters?.data != null) ? configuration.optionalParameters.data : configuration.axiosRequestConfig.data
     };
 
@@ -181,42 +183,86 @@ async function traitementToManageRequest(
 ) {
     if (configuration.axiosRequestConfig != null) {
 
-        const configAxios = configuration.axiosRequestConfig;
-        const configTmp = configToManageDirectory(configAxios);
+        const configAxios: AxiosRequestConfig<any> = configuration.axiosRequestConfig;
+        const configTmp: ConfigQueryParameter = configToManageDirectory(configAxios);
 
-        // Requête declenchée si filtre à true et que la requête n'est pas déjà envoyée 
-        if (filter && !rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+        if (filter) {
 
-            isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
-
-            configuration.action({
-                loading: true,
-                completed: false,
-                failed: false,
-                success: false,
-                data: null 
-            });
-            
-            loadingStarted(configuration);
-
-            const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
-                buildConfigToAxios(configuration),
-                configuration.onlyResult == null || configuration.onlyResult === true);
-            
-            // Si mode annuaire demandé, et que la requete est en echec, celle-ci est tout de meme ajouté à l'annaire
-            if (configuration.addToDirectory) { // On ajoute à l'annuaire
-                rh2DirectoryService.addConfigQueryParameter(configTmp);
+            let cancelTokenSource = null;
+            if (!configuration.lock) {
+                cancelTokenSource = rh2DirectoryService.getOrGenerateCancelToken(configuration.keyCancelToken);
             }
 
-            if (reponse.isSuccess) {
-                treatmentIfSuccessInUseRequest(configuration, reponse);
-            } else {
-                treatmentIfErrorInUseRequest(configuration, reponse);
+            // Si la requête est en cours et quelle n’est pas lock alors on va pouvoir l’annuler
+            if (rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(configTmp, false)) {
+                // On l’a stoppe pour en déclencher une nouvelle
+                const myConfigToCancelRequest: DirectoryConfigQueryParameter = rh2DirectoryService.getConfigQueryParameter(configTmp.url, configTmp.method, configTmp.params);
+               
+                // On declenche le cancel
+                cancelToken(myConfigToCancelRequest, configuration);
+                // on supprime de l’annuaire
+                rh2DirectoryService.removeQueryDirectoryNotLocked(configTmp);
+                executeQuery(configuration, filter, configTmp, cancelTokenSource);
             }
-
-            loadingcompletedd(configuration);
+            // Si elle n’est pas en cours, on fait le traitement classique
+            // (Si lock est true ou false, on veut faire au moins une fois la requête)
+            // Cette condition ne sera jamais est vraie si le lock a été positionnée pendant une requête précèdente
+            else if (!rh2DirectoryService.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
+                executeQuery(configuration, filter, configTmp, cancelTokenSource);
+            }
+            // sinon on ne fait rien
+            else {
+                isDebugModeThenDisplayWarn('The query is configured to be executed only once', configTmp);
+            }
         }
     }
+}
+
+function cancelToken(
+    myConfigToCancelRequest: DirectoryConfigQueryParameter,
+    configuration: Rh2EffectTreatmentToManageRequest
+): void {
+    isDebugModeThenDisplayWarn('Cancel token called', configuration, myConfigToCancelRequest);
+    if (configuration.messageCancelToken == null) {
+        myConfigToCancelRequest.sourceCancelToken.cancel();
+    } else {
+        myConfigToCancelRequest.sourceCancelToken.cancel(configuration.messageCancelToken);
+    }
+    rh2DirectoryService.removeKeyCancelToken(configuration.keyCancelToken);
+}
+
+async function executeQuery(
+    configuration: Rh2EffectTreatmentToManageRequest,
+    filter: boolean,
+    configTmp: ConfigQueryParameter,
+    sourceCancelToken: CancelTokenSource
+): Promise<void> {
+
+    isDebugModeThenDisplayInfo(`State filter is ${filter} and configuration is`, configuration);
+
+    configuration.action({
+        loading: true,
+        completed: false,
+        failed: false,
+        success: false,
+        data: null 
+    });
+    
+    loadingStarted(configuration);
+
+    rh2DirectoryService.addConfigQueryParameter(configTmp, configuration.lock, sourceCancelToken);
+
+    const reponse: ResponseFetchApi = await fetchApi(configuration.keyOfInstance,
+        buildConfigToAxios(configuration, sourceCancelToken),
+        configuration.onlyResult == null || configuration.onlyResult === true);
+    
+    if (reponse.isSuccess) {
+        treatmentIfSuccessInUseRequest(configuration, reponse);
+    } else {
+        treatmentIfErrorInUseRequest(configuration, reponse);
+    }
+
+    loadingCompleted(configuration);
 }
 
 interface ObjectToHash {
@@ -249,7 +295,7 @@ function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void 
         rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
-function loadingcompletedd(configuration: Rh2EffectTreatmentToManageRequest): void {
+function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
     } else {
@@ -259,6 +305,12 @@ function loadingcompletedd(configuration: Rh2EffectTreatmentToManageRequest): vo
 }
 
 function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
+    
+    // Si on n'a pas demandé d'ajouter cette config en tant que config lock, on en a plus besoin
+    if (!configuration.lock) {
+        rh2DirectoryService.removeQueryDirectoryNotLocked(configuration.axiosRequestConfig);
+    }
+
     if (configuration.successHandler) {
         configuration.successHandler(reponse.responseSuccess);
     } else {
@@ -275,6 +327,7 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
 
 function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
     isDebugModeThenDisplayWarn('An error was encountered', configuration.label, reponse);
+    
     if (configuration.errorHandler) {
         configuration.errorHandler(reponse);
     } else if (rh2ConfigService.getParameters().errorHandler) {
@@ -282,6 +335,7 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
     } else {
         isDebugModeThenDisplayWarn('The method errorHandler has not provided. This is normal if you use the return of the hook');
     }
+
     configuration.action({
         loading: false,
         completed: true,
@@ -289,6 +343,6 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
         success: false,
         data: null 
     });
-    rh2ManagerToQueryInProgressService.addErrorApi(configuration.label, reponse);
+    const label = (configuration.label == null) ? hashConfiguration(configuration) : configuration.label;
+    rh2ManagerToQueryInProgressService.addErrorApi(label, configuration, reponse);
 }
-

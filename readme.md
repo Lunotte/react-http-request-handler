@@ -347,7 +347,7 @@ rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
 
 You can use Axios generated instances, by getting it from service rh2ConfigService.
 
-| Caution : : To initialize your instance, you have to fill in the property <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| Caution : : For custom instance initialization, you have to fill in the property <i>"defaultInterceptor"</i> à <i>"false"</i> |
 | ------------------------------------------------------------ |
 
 ```jsx
@@ -391,11 +391,11 @@ Initialize the app :
 
 | Méthode                                                      | type                   | Description                             |
 | ------------------------------------------------------------ | ---------------------- | --------------------------------------- |
-| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Check the presence of the configuration |
+| hasConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | boolean                | Check the presence of the configuration |
 | hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Check the presence of the configuration |
 | addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Add a configuration to the directory    |
 | getConfigQueryParameters()                                   | ConfigQueryParameter[] | Retrieve the list of configurations     |
-| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Retrieve a specific configuration       |
+| getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | ConfigQueryParameter   | Retrieve a specific configuration       |
 | removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Delete a specific configuration         |
 | removeAllQueryDirectory()                                    | void                   | Delete all configurations in memory     |
 
@@ -455,7 +455,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Axios configuration. 
 
-<b>addToDirectory</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>Rh2DirectoryService</b>.
+<b>lock</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>Rh2DirectoryService</b>.
 
 | Caution : The request filter depends on URL, method type and params property. |
 | ------------------------------------------------------------ |
@@ -555,7 +555,7 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[];
+    headerUrl?: KeyValue<string>[];
 }
 ````
 
@@ -632,7 +632,7 @@ const initSettings: Rh2InitializationParameter = {
 };
 ```
 
-
+If you have recommendations, we can analyze the need !
 
 ## Roadmap
 

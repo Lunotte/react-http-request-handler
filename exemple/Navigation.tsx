@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 24 - 12:26 pm
+ * Last Modified: 2022 03 21 - 09:10 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -21,7 +21,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2DirectoryService } from '../src';
+import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
 import { Rh2EffectAxiosConfigHandler } from '../src/models/Rh2Effect';
 import { useRh2WithName } from '../src/services/Rh2EffectsService';
 import { pourTestAction } from './redux/rh2-action';
@@ -126,20 +126,20 @@ const traitementErreur = (data: ResponseFetchApi) => {
         keyOfInstance: 'Test2',
         axiosRequestConfig: axiosConfig,
         label: GOOGLE,
-        addToDirectory: true
+        lock: false
     };
 
     // const configACharger2: Rh2AxiosConfig = {
     //     axiosRequestConfig: axiosConfig,
     //     label: MICROSOFT,
-    //     addToDirectory: true
+    //     lock: true
     // };
 
 
     // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
     // const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
     // const configACharger2: Rh2AxiosConfig = {
-    //   axiosRequestConfig: axiosConfig2, label: MICROSOFT, addToDirectory: false,
+    //   axiosRequestConfig: axiosConfig2, label: MICROSOFT, lock: false,
     //   successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
     // };
 
@@ -179,13 +179,13 @@ const traitementErreur = (data: ResponseFetchApi) => {
         password: 'I1€5t3nGerr€'
     });
     
-    const test = useRh2WithName(GOOGLE);
-    console.log(test);
+    // const test = useRh2WithName(GOOGLE);
+    // console.log(test);
 
-    console.log(rh2DirectoryService.getConfigQueryParameters());
+    // console.log(rh2DirectoryService.getConfigQueryParameters());
 
-    rh2DirectoryService.removeAllQueryDirectory();
-    console.log(rh2DirectoryService.getConfigQueryParameters());
+    // rh2DirectoryService.removeAllQueriesDirectory();
+    // console.log(rh2DirectoryService.getConfigQueryParameters());
     
 
 
@@ -245,24 +245,29 @@ const traitementErreur = (data: ResponseFetchApi) => {
         setstate
     ] = useState<number>(0);
 
+    const test = useRh2WithName(GOOGLE, state % 2 === 0);
+    console.log(test);
+
     const onMe = () => {
         
-        if (source != null) {
-            source.cancel('test cancellation');
-        }
+        // if (source != null) {
+        //     source.cancel('test cancellation');
+        // }
         setstate(state + 1);
 
         console.log('Onme');
-        source = axios.CancelToken.source();
-        configurationBis = {
-            ...configurationBis,
-            axiosRequestConfig: {
-                ...configurationBis.axiosRequestConfig,
-                params: state,
-                cancelToken: source.token 
-            } 
-        };
-        console.log('configuration dans navigation ', configurationBis);
+
+         
+        // source = axios.CancelToken.source();
+        // configurationBis = {
+        //     ...configurationBis,
+        //     axiosRequestConfig: {
+        //         ...configurationBis.axiosRequestConfig,
+        //         params: state,
+        //         cancelToken: source.token 
+        //     } 
+        // };
+        // console.log('configuration dans navigation ', configurationBis);
 
     //navigation.navigate({name: 'Details', params: [{jack: '5'}]});
     // navigation.navigate('Details', {

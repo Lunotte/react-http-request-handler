@@ -345,7 +345,7 @@ rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
 
 Vous pouvez utiliser les instances Axios qui ont été générées. Le service <b>rh2ConfigService</b> vous permet de les récupérer.
 
-| Attention : Pour l'initialisation de l'instance, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| Attention : Pour l'initialisation de l'instance personnalisée, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
 | ------------------------------------------------------------ |
 
 ```jsx
@@ -388,11 +388,11 @@ Initialise l’application :
 
 | Méthode                                                      | type                   | Description                                   |
 | ------------------------------------------------------------ | ---------------------- | --------------------------------------------- |
-| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Vérifier la présence de la configuration      |
+| hasConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | boolean                | Vérifier la présence de la configuration      |
 | hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Vérifier la présence de la configuration      |
 | addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Ajouter une configuration à l'annuaire        |
 | getConfigQueryParameters()                                   | ConfigQueryParameter[] | Récupérer la liste des configurations         |
-| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
+| getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
 | removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Supprimer une configuration précise           |
 | removeAllQueryDirectory()                                    | void                   | Supprimer toutes les configuration en mémoire |
 
@@ -452,7 +452,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Configuration Axios. 
 
-<b>addToDirectory</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
+<b>lock</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
 
 | Attention : La condition pour filtrer les requêtes s'appuie sur l'url, le type de méthode et la propriété params. |
 | ------------------------------------------------------------ |
@@ -553,7 +553,7 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[];
+    headerUrl?: KeyValue<string>[];
 }
 ````
 
@@ -575,7 +575,7 @@ export interface AxiosRequestConfigExtended {
 | ------------------ | ----------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------- |
 | key                | string                              | Clé pour retrouver l'instance Axios. Elle sera utilisée pour configurer les requêtes, vous devez indiquer à quelle instance elle devra se référer. Si aucune n’est renseignée, on utilise la première ajoutée | n/a                                                | `"MY_DEFAULT_KEY"`                                   |
 | axiosConfig        | AxiosRequestConfig                  | Configuration [Axios](https://github.com/axios/axios). Si vous ne connaissez pas cette librairie, par exemple, vous pouvez valoriser la propriété baseURL pour indiquer le préfixe de chaque url qui utilisera cette instance | n/a                                                | `{ baseURL: 'http://test.fr' }`                      |
-| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être créée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
+| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être crée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
 | headerUrl          | {key: string;<br/>value: string;}[] | Liste des en-têtes à utiliser par l'interceptor              | [{key: 'Content-Type', value: 'application/json'}] | `[{key: 'Content-Type', value: 'application/json'}]` |
 
 
@@ -630,6 +630,7 @@ const initSettings: Rh2InitializationParameter = {
 };
 ```
 
+Si vous avez des recommandations, on peut analyser le besoin !
 
 
 ## Roadmap

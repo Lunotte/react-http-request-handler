@@ -4,29 +4,26 @@
  * Created Date: 2021 08 03                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 12:33 pm                                        *
+ * Last Modified: 2022 03 30 - 07:25 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-
-
-
-
-
 import { ResponseFetchApi } from "../models";
+import { Rh2EffectTreatmentToManageRequest } from "../models/Rh2Effect";
 
-interface Rh2ErreurApi {
+interface Rh2errorsApi {
     label: string;
+    configuration: Rh2EffectTreatmentToManageRequest;
     error: ResponseFetchApi;
 }
 
 class Rh2ManagerToQueryInProgressService {
 
     private queryInProgress: string[] = [];
-    private erreurApi: Rh2ErreurApi[] = [];
+    private errorsApi: Rh2errorsApi[] = [];
 
     addQueryInProgress(label: string): void {
         if (!this.queryInProgress.includes(label)) {
@@ -41,29 +38,35 @@ class Rh2ManagerToQueryInProgressService {
         }
     }
 
-    getQueryInProgress(): string[] {
+    getQueriesInProgress(): string[] {
         return this.queryInProgress;
     }
 
-    addErrorApi(label: string, newError: ResponseFetchApi): void {
-        if (this.erreurApi.some(error => error.label === label)) {
-            const erreurApi = this.erreurApi.filter(erreur => erreur.label !== label);
-            this.erreurApi = erreurApi;
-            this.erreurApi.push({
-                label: label,
+    addErrorApi(label: string, configuration: Rh2EffectTreatmentToManageRequest, newError: ResponseFetchApi): void {
+        if (this.errorsApi.some(error => error.label === label)) {
+            const errorsApi = this.errorsApi.filter(erreur => erreur.label !== label);
+            this.errorsApi = errorsApi;
+            this.errorsApi.push({
+                label,
+                configuration,
                 error: newError 
             });
         } else {
-            this.erreurApi.push({
-                label: label,
+            this.errorsApi.push({
+                label,
+                configuration,
                 error: newError 
             });
         }
     }
 
-    getErreurApi(): Rh2ErreurApi[] {
-        return this.erreurApi;
+    getErrorsApi(): Rh2errorsApi[] {
+        return this.errorsApi;
     }
+}
+
+export function getErrorsApi() {
+    return rh2ManagerToQueryInProgressService.getErrorsApi();
 }
 
 const rh2ManagerToQueryInProgressService = new Rh2ManagerToQueryInProgressService();

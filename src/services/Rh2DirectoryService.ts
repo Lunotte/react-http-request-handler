@@ -4,34 +4,88 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 09 11 - 11:40 am                                        *
+ * Last Modified: 2022 03 20 - 06:39 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
-
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import _ from "lodash";
-import { ConfigQueryParameter, MethodRnhrh, ParamRnhnh } from "../models/Rh2Directory";
+import { ConfigQueryParameter, DirectoryConfigQueryParameter, Rh2Method, Rh2Param } from "../models/Rh2Directory";
 import { isDebugModeThenDisplayWarn } from "../tools/Utils";
+import { KeyValue } from './../models/Rh2Config';
 
 
 /**
  * Storage service for executed requests
+ * Manages the queries used. If they are locked, we keep them until we explicitly ask to delete them,
+ * for the others we delete them when the requests are finished
  */
 class Rh2DirectoryService {
 
-    private configQueryParameter: ConfigQueryParameter[] = [];
+    private directoryConfigQueryParameter: DirectoryConfigQueryParameter[] = [];
 
+    private keysCancelToken: KeyValue<CancelTokenSource>[] = [];
+
+    private cancelToken = axios.CancelToken;
+
+    isKeyCancelToken(searchedKey: string): boolean {
+        return this.keysCancelToken.some(keyCancelToken => keyCancelToken.key === searchedKey);
+    }
+
+    getKeyCancelToken(searchedKey: string): CancelTokenSource {
+        if (this.isKeyCancelToken(searchedKey)) {
+            const source: KeyValue<CancelTokenSource> = this.keysCancelToken.find(keyCancelToken => keyCancelToken.key === searchedKey);
+            return source.value;
+        }
+        return null
+    }
+
+    private setKeyCancelToken(keyCancelToken: string): CancelTokenSource {
+        this.keysCancelToken.push({
+            key: keyCancelToken,
+            value: this.generateCancelToken() 
+        });
+        return this.getKeyCancelToken(keyCancelToken);
+    }
+
+    /**
+     * Remove cancel token
+     * 
+     * @param searchedKey Search key
+     */
+    removeKeyCancelToken(searchedKey: string): void {
+        if (this.isKeyCancelToken(searchedKey)) {
+            this.keysCancelToken = this.keysCancelToken.filter(keyCancelToken => keyCancelToken.key !== searchedKey);
+        }
+    }
+
+    private generateCancelToken(): CancelTokenSource {
+        return this.cancelToken.source();
+    }
+
+    /**
+     * Get or create CancelToken
+     * When the searched key is empty, it means that there is no need to memorize the generated token.
+     * When the key is entered, we will look for the associated token if it exists, otherwise we generate it.
+     * @param searchedKey Search key
+     * @returns CancelTokenSource
+     */
+    getOrGenerateCancelToken(searchedKey: string): CancelTokenSource {
+        if (searchedKey == null) {
+            return this.generateCancelToken();
+        } else {
+            return (this.isKeyCancelToken(searchedKey) ? this.getKeyCancelToken(searchedKey) : this.setKeyCancelToken(searchedKey));
+        }
+    }
+    
     /**
      * Get all stored items
      * @returns Result table
      */
-    getConfigQueryParameters(): ConfigQueryParameter[] {
-        return this.configQueryParameter;
+    getConfigQueryParameters(): DirectoryConfigQueryParameter[] {
+        return this.directoryConfigQueryParameter;
     }
 
     /**
@@ -41,19 +95,26 @@ class Rh2DirectoryService {
      * @param params Settings searched
      * @returns The element searched if it exists
      */
-    getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): ConfigQueryParameter {
-        return this.configQueryParameter.find(config => comparatorUrlMethodParams(config, url, method, params));
+    getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param): DirectoryConfigQueryParameter {
+        return this.directoryConfigQueryParameter.find(config => comparatorUrlMethodParams(config, url, method, params));
     }
 
     /**
      * Check the setting
+     * @param lock Lock searched
      * @param url Url searched
      * @param method Method searched
      * @param params Settings searched
      * @returns True if present else False
      */
-    hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh): boolean {
-        return this.configQueryParameter.some((config) => comparatorUrlMethodParams(config, url, method, params));
+    hasConfigQueryParameter(lock: boolean, url: string, method: Rh2Method, params?: Rh2Param): boolean {
+        if (lock == null) {
+            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParams(config, url, method, params));
+        } else if (lock === true) {
+            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParamsWithLockEnabled(config, url, method, params));
+        } else {
+            return this.directoryConfigQueryParameter.some((config) => comparatorUrlMethodParamsWithLockDisabled(config, url, method, params));
+        }
     }
 
     /**
@@ -62,35 +123,64 @@ class Rh2DirectoryService {
      * @returns True If present else False
      */
     hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter): boolean {
-        return this.hasConfigQueryParameter(parameter.url, parameter.method, parameter.params);
+        return this.hasConfigQueryParameter(null, parameter.url, parameter.method, parameter.params);
+    }
+
+    /**
+     * Check the setting
+     * @param parameter Url searched
+     * @param lock Lock searched
+     * @returns True If present else False
+     */
+    hasConfigQueryParameterByConfigQueryParameterWithLockEnabled(parameter: ConfigQueryParameter, lock: boolean): boolean {
+        return this.hasConfigQueryParameter(lock, parameter.url, parameter.method, parameter.params);
     }
 
     /**
      * Add a new setting
      * @param configTmp new setting
+     * @param lock we want use this query one time
      */
-    addConfigQueryParameter(configTmp: ConfigQueryParameter): void {
+    addConfigQueryParameter(configTmp: ConfigQueryParameter, lock: boolean, sourceCancelToken: CancelTokenSource = null): void {
         if (!this.hasConfigQueryParameterByConfigQueryParameter(configTmp)) {
-            this.configQueryParameter.push(configTmp);       
+            this.directoryConfigQueryParameter.push({
+                ...configTmp,
+                lock,
+                sourceCancelToken
+            });       
         } else {
             isDebugModeThenDisplayWarn('New config was not added because it already exists', configTmp);
         }
     }
 
     /**
-     * Removes the element send as a paraneter
+     * Remove the element send as a parameter used with lock
      * @param axiosRequestConfig Item to delete
      */
-    removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig): void {
-        this.configQueryParameter = this.configQueryParameter.filter(config =>
-            !comparatorUrlMethodParams(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
+    removeQueryDirectoryLocked(axiosRequestConfig: AxiosRequestConfig): void {
+        this.directoryConfigQueryParameter = this.directoryConfigQueryParameter.filter(config =>
+            !comparatorUrlMethodParamsWithLockEnabled(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
     }
 
     /**
-     * Empty all items
+     * Empty all items without items not locked
      */
-    removeAllQueryDirectory(): void {
-        this.configQueryParameter = []
+    removeAllQueriesDirectoryLocked(): void {
+        const removeConfigLocked = this.directoryConfigQueryParameter.filter(config => !config.lock);
+        this.directoryConfigQueryParameter = removeConfigLocked
+    }
+
+    removeAllQueriesDirectory(): void {
+        this.directoryConfigQueryParameter = [];
+    }
+
+    /**
+     * Remove the element send as a parameter and not locked
+     * @param axiosRequestConfig Item to delete
+     */
+    removeQueryDirectoryNotLocked(axiosRequestConfig: AxiosRequestConfig): void {
+        this.directoryConfigQueryParameter = this.directoryConfigQueryParameter.filter(config =>
+            !comparatorUrlMethodParamsWithLockDisabled(config, axiosRequestConfig.url, axiosRequestConfig.method, axiosRequestConfig.params));
     }
 
 }
@@ -101,7 +191,7 @@ class Rh2DirectoryService {
  * @param params2 
  * @returns True If the parameters are identical, null or empty otherwise False
  */
-const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean => {
+const compareParams = (params1: Rh2Param, params2: Rh2Param): boolean => {
     if (params1 == null && params2 == null) {
         return true;
     } else if ((params1 == null && params2 != null && Object.keys(params2).length === 0) ||
@@ -114,6 +204,12 @@ const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean => {
     }
 }
 
+const comparatorUrlMethodParamsWithLockDisabled = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
+    !config.lock && comparatorUrlMethodParams(config, url, method, params);
+
+const comparatorUrlMethodParamsWithLockEnabled = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
+    config.lock && comparatorUrlMethodParams(config, url, method, params);
+
 /**
  * Compare url, method type and parameters
  * @param config Configuration in memory
@@ -122,7 +218,7 @@ const compareParams = (params1: ParamRnhnh, params2: ParamRnhnh): boolean => {
  * @param params Params received
  * @returns True if the comparison is strictly identical
  */
-const comparatorUrlMethodParams = (config, url, method, params): boolean =>
+const comparatorUrlMethodParams = (config: DirectoryConfigQueryParameter, url, method, params): boolean =>
     config.url === url && config.method === method && compareParams(config.params, params);
 
 const rh2DirectoryService = new Rh2DirectoryService();
