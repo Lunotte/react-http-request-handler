@@ -4,7 +4,7 @@
  * Created Date: 2021 08 03                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 30 - 07:25 pm                                        *
+ * Last Modified: 2022 04 04 - 08:57 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -14,7 +14,7 @@
 import { ResponseFetchApi } from "../models";
 import { Rh2EffectTreatmentToManageRequest } from "../models/Rh2Effect";
 
-interface Rh2errorsApi {
+interface Rh2ErrorsApi {
     label: string;
     configuration: Rh2EffectTreatmentToManageRequest;
     error: ResponseFetchApi;
@@ -23,7 +23,7 @@ interface Rh2errorsApi {
 class Rh2ManagerToQueryInProgressService {
 
     private queryInProgress: string[] = [];
-    private errorsApi: Rh2errorsApi[] = [];
+    private errorsApi: Rh2ErrorsApi[] = [];
 
     addQueryInProgress(label: string): void {
         if (!this.queryInProgress.includes(label)) {
@@ -60,12 +60,17 @@ class Rh2ManagerToQueryInProgressService {
         }
     }
 
-    getErrorsApi(): Rh2errorsApi[] {
+    getErrorsApi(): Rh2ErrorsApi[] {
         return this.errorsApi;
     }
 }
 
-export function getErrorsApi() {
+/**
+ * List of errors to each concerned api
+ * 
+ * @returns Rh2ErrorsApi[]
+ */
+export function getErrorsApi(): Rh2ErrorsApi[] {
     return rh2ManagerToQueryInProgressService.getErrorsApi();
 }
 

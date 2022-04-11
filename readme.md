@@ -46,7 +46,7 @@
 
 ## Contexte
 
-This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the web client needs.
+This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the client needs.
 For example :
 - Configuring the request to be executed once through our historization module
 - Configuring methods to be called in case of error
@@ -58,7 +58,7 @@ Redux users will find means to dispatch the request’s result, whether it was s
 - Adding a global configuration (instance management, HTTP error handling, request filtering, .. etc)
 - Coupling with redux
 - Allowing less code production
-
+- Easily cancel a request
 
 
 ## Installation
