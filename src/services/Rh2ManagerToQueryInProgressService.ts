@@ -13,12 +13,7 @@
 
 import { ResponseFetchApi } from "../models";
 import { Rh2EffectTreatmentToManageRequest } from "../models/Rh2Effect";
-
-interface Rh2ErrorsApi {
-    label: string;
-    configuration: Rh2EffectTreatmentToManageRequest;
-    error: ResponseFetchApi;
-}
+import { Rh2ErrorsApi } from "../models/Rh2ErrorsApi";
 
 class Rh2ManagerToQueryInProgressService {
 
