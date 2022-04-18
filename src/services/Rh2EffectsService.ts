@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 04 04 - 09:01 pm                                        *
+ * Last Modified: 2022 04 18 - 07:18 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, DirectoryConfigQueryParameter, Rh2Method } from '../models/Rh2Directory';
-import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
+import { isDebugModeThenDisplayError, isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Response } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
@@ -104,7 +104,11 @@ export function useRh2WithName(
         async function fetch() {
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-            isDebugModeThenDisplayInfo('The following configuration was found', configSelected);
+            if (configSelected == null) {
+                isDebugModeThenDisplayError('The configuration was not found for this label', label);
+            } else {
+                isDebugModeThenDisplayInfo('The following configuration was found', configSelected);
+            }
 
             traitementToManageRequest(
                 {

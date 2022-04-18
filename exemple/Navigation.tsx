@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 21 - 09:10 pm
+ * Last Modified: 2022 04 18 - 07:18 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -17,11 +17,11 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import axios, { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
+import { getErrorsApi, ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService } from '../src';
 import { Rh2EffectAxiosConfigHandler } from '../src/models/Rh2Effect';
 import { useRh2WithName } from '../src/services/Rh2EffectsService';
 import { pourTestAction } from './redux/rh2-action';
@@ -31,9 +31,6 @@ import { pourTestAction } from './redux/rh2-action';
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
 const AMAZON = 'AMAZON';
-
-const CancelToken = axios.CancelToken;
-let source;// = CancelToken.source();
 
 const axiosConfigBis: AxiosRequestConfig = {
     url: 'https://www.google.com/',
@@ -118,16 +115,16 @@ const traitementErreur = (data: ResponseFetchApi) => {
     //   });
 
 
-    const axiosConfig: AxiosRequestConfig = {
-        url: '/search?q=champ',
-        method: 'GET'
-    };
-    const configACharger: Rh2AxiosConfig = {
-        keyOfInstance: 'Test2',
-        axiosRequestConfig: axiosConfig,
-        label: GOOGLE,
-        lock: false
-    };
+    // const axiosConfig: AxiosRequestConfig = {
+    //     url: '/search?q=champ',
+    //     method: 'GET'
+    // };
+    // const configACharger: Rh2AxiosConfig = {
+    //     keyOfInstance: 'Test2',
+    //     axiosRequestConfig: axiosConfig,
+    //     label: GOOGLE,
+    //     lock: false
+    // };
 
     // const configACharger2: Rh2AxiosConfig = {
     //     axiosRequestConfig: axiosConfig,
@@ -137,32 +134,23 @@ const traitementErreur = (data: ResponseFetchApi) => {
 
 
     // // const axiosConfig2: AxiosRequestConfig = { url: 'https://www.microsoft.com', method: 'GET' };
-    // const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
-    // const configACharger2: Rh2AxiosConfig = {
-    //   axiosRequestConfig: axiosConfig2, label: MICROSOFT, lock: false,
-    //   successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
-    // };
+    const axiosConfig2: AxiosRequestConfig = { url: 'https://jsonplaceholder.typicode.com/todos/1', method: 'GET' };
+    const configACharger2: Rh2AxiosConfig = {
+      axiosRequestConfig: axiosConfig2, label: 'jsonplaceholder', lock: false,
+      successHandler: () => dispatch(pourTestAction('Voici ma première offre')),
+    };
 
     // const axiosConfigSansDispatch: AxiosRequestConfig = { url: 'https://www.amazon.com', method: 'GET' };
     // const configAChargerSansDispatch: Rh2AxiosConfig = { axiosRequestConfig: axiosConfigSansDispatch, label: AMAZON, onlyResult: true };
 
     // // const dispatch = useDispatch();
 
-    rh2AxiosConfigService.addConfigAxios(configACharger);
+    rh2AxiosConfigService.addConfigAxios(configACharger2);
     // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
 
     // rh2AxiosConfigService.addConfigAxios(configACharger2);
 
-
-    // const erreurs = rh2Errors();
-    // console.log(erreurs);
-
-    // const erreursGoogle = rh2Error(MICROSOFT);
-    // console.log(erreursGoogle);
-
-    // const erreursMicrosoft = rh2Error(MICROSOFT);
-    // console.log(erreursMicrosoft);
 
     // rh2AxiosConfigService.addConfigAxios(configACharger2);
     // rh2AxiosConfigService.addConfigAxios(configAChargerSansDispatch);
@@ -174,10 +162,10 @@ const traitementErreur = (data: ResponseFetchApi) => {
   //  useRh2WithParameters(configuration);
    // console.log(test);
     
-    rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
-        username: 'toto',
-        password: 'I1€5t3nGerr€'
-    });
+    // rh2AxiosConfigService.addAuthToConfigAxios(GOOGLE, {
+    //     username: 'toto',
+    //     password: 'I1€5t3nGerr€'
+    // });
     
     // const test = useRh2WithName(GOOGLE);
     // console.log(test);
@@ -245,8 +233,10 @@ const traitementErreur = (data: ResponseFetchApi) => {
         setstate
     ] = useState<number>(0);
 
-    const test = useRh2WithName(GOOGLE, state % 2 === 0);
+    const test = useRh2WithName('jsonplaceholder', state % 2 === 0);
     console.log(test);
+
+    console.log(getErrorsApi());
 
     const onMe = () => {
         
