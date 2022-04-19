@@ -4,7 +4,7 @@
  * Created Date: 2021 07 04                                                   *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 20 - 06:39 pm                                        *
+ * Last Modified: 2022 04 04 - 08:53 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -212,6 +212,7 @@ const comparatorUrlMethodParamsWithLockEnabled = (config: DirectoryConfigQueryPa
 
 /**
  * Compare url, method type and parameters
+ * 
  * @param config Configuration in memory
  * @param url Url received
  * @param method Method received

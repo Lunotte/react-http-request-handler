@@ -4,7 +4,7 @@
  * Created Date: 2021 07 24                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 22 - 12:36 am                                        *
+ * Last Modified: 2022 04 04 - 08:53 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -27,7 +27,8 @@ const HEADER_URL: KeyValue<string>[] = [
 
 /**
  * Generate default instance of Axios with name « default »
- * @returns 
+ * 
+ * @returns Rh2AxiosInstance
  */
 function initInstance(): Rh2AxiosInstance {
     return {
@@ -40,6 +41,7 @@ function initInstance(): Rh2AxiosInstance {
 
 /**
  * Generate instances with given parameters
+ * 
  * @param axiosRequestConfigExtended config to genarate instances
  * @returns List of Axios instance
  */
@@ -78,6 +80,7 @@ export function initAxiosInstance(axiosRequestConfigExtended: AxiosRequestConfig
 
 /**
  * Generate interceptors
+ * 
  * @param axiosInstance New instance
  * @param headersToAdd Header to link with the interceptor
  * @returns 
@@ -95,6 +98,7 @@ function generateInterceptors(axiosInstance: AxiosInstance, headersToAdd: KeyVal
 
 /**
  * Eject interceptor of the instance
+ * 
  * @param axiosInstances targeted instance
  */
 export function ejectInterceptor(axiosInstances: Rh2AxiosInstance): void {
@@ -105,9 +109,10 @@ export function ejectInterceptor(axiosInstances: Rh2AxiosInstance): void {
 
 /**
  * Generate new header
+ * 
  * @param config Axios config
  * @param headersToAdd Headers to add
- * @returns 
+ * @returns AxiosRequestConfig
  */
 export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: KeyValue<string>[]): Promise<AxiosRequestConfig<any>> {
     const headers = await addHeaderToUrl(headersToAdd);
@@ -144,7 +149,8 @@ async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<Rh2Head
  * @returns headers
  */
 function mapAllHeaders(headers: KeyValue<string>[]): Rh2Header {
-    const headerAfterBuilding = {};
+    const headerAfterBuilding = {
+    };
     headers.forEach((kv: KeyValue<string>) => headerAfterBuilding[kv.key] = kv.value);
     return headerAfterBuilding;
 }

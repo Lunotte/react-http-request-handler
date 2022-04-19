@@ -4,7 +4,7 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 21 - 09:07 pm                                        *
+ * Last Modified: 2022 04 18 - 07:18 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
 import { ResponseFetchApi } from '../models';
 import { ConfigQueryParameter, DirectoryConfigQueryParameter, Rh2Method } from '../models/Rh2Directory';
-import { isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
+import { isDebugModeThenDisplayError, isDebugModeThenDisplayInfo, isDebugModeThenDisplayWarn } from '../tools/Utils';
 import { Rh2EffectAxiosConfigHandler, Rh2EffectData, Rh2EffectTreatmentToManageRequest, Rh2Response } from './../models/Rh2Effect';
 import { fetchApi } from './FetchApiService';
 import { default as rh2AxiosConfigService } from './Rh2AxiosConfigService';
@@ -32,7 +32,6 @@ const initState = {
     success: false,
     data: null
 } 
-
 
 /**
  * Get data from configuration
@@ -105,7 +104,11 @@ export function useRh2WithName(
         async function fetch() {
 
             const configSelected: Rh2AxiosConfig = rh2AxiosConfigService.getConfigAxios(label);
-            isDebugModeThenDisplayInfo('The following configuration was found', configSelected);
+            if (configSelected == null) {
+                isDebugModeThenDisplayError('The configuration was not found for this label', label);
+            } else {
+                isDebugModeThenDisplayInfo('The following configuration was found', configSelected);
+            }
 
             traitementToManageRequest(
                 {
@@ -180,7 +183,7 @@ function buildConfigToAxios(configuration: Rh2EffectTreatmentToManageRequest, so
 async function traitementToManageRequest(
     configuration: Rh2EffectTreatmentToManageRequest,
     filter: boolean
-) {
+): Promise<void> {
     if (configuration.axiosRequestConfig != null) {
 
         const configAxios: AxiosRequestConfig<any> = configuration.axiosRequestConfig;
@@ -283,7 +286,12 @@ function buildObjectToHash(configuration: Rh2EffectTreatmentToManageRequest): Ob
     };
 }
 
-function hashConfiguration(configuration: Rh2EffectTreatmentToManageRequest) {
+/**
+ * Create hash because the configuration doesn’t have label to identify it
+ * @param configuration 
+ * @returns 
+ */
+function hashConfiguration(configuration: Rh2EffectTreatmentToManageRequest): any {
     return hash(buildObjectToHash(configuration));
 }
 
@@ -295,6 +303,7 @@ function loadingStarted(configuration: Rh2EffectTreatmentToManageRequest): void 
         rh2ManagerToQueryInProgressService.addQueryInProgress(hashResult);
     }
 }
+
 function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): void {
     if (configuration.label) {
         rh2ManagerToQueryInProgressService.removeQueryInProgress(configuration.label);
@@ -304,7 +313,7 @@ function loadingCompleted(configuration: Rh2EffectTreatmentToManageRequest): voi
     }
 }
 
-function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
+function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi): void {
     
     // Si on n'a pas demandé d'ajouter cette config en tant que config lock, on en a plus besoin
     if (!configuration.lock) {
@@ -325,7 +334,7 @@ function treatmentIfSuccessInUseRequest(configuration: Rh2EffectTreatmentToManag
     });
 }
 
-function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi) {
+function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageRequest, reponse: ResponseFetchApi): void {
     isDebugModeThenDisplayWarn('An error was encountered', configuration.label, reponse);
     
     if (configuration.errorHandler) {
@@ -343,6 +352,7 @@ function treatmentIfErrorInUseRequest(configuration: Rh2EffectTreatmentToManageR
         success: false,
         data: null 
     });
+    
     const label = (configuration.label == null) ? hashConfiguration(configuration) : configuration.label;
     rh2ManagerToQueryInProgressService.addErrorApi(label, configuration, reponse);
 }
