@@ -100,5 +100,6 @@
             "language": "typescript",
             "mapTo": "javascript"
         }
-    ]
+    ],
+    "typescript.enablePromptUseWorkspaceTsdk": false
 }
