@@ -46,8 +46,8 @@ useStateSpy.mockImplementation((init) => [
 ]);
 
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-let mockDispatchFn = jest.fn();
-useDispatchSpy.mockReturnValue(mockDispatchFn);
+let mockDispatchFn; // = jest.fn();
+// useDispatchSpy.mockReturnValue(mockDispatchFn);
 
 const useEffect = jest.spyOn(React, "useEffect");
 const mockUseEffect = async () => {
