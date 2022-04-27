@@ -30,3 +30,26 @@ jobs:
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
+  build-ios:
+    needs: install-and-test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install npm dependencies
+        run: |
+          npm install --legacy-peer-deps
+      - run: xcode-select -p
+      - run: pod install
+        working-directory: ios
+        name: Install pod dependencies
+      - name: Build iOS (debug)
+        run: xcodebuild \
+          -workspace ios/ReactHttpRequestHandler.xcworkspace \
+          -scheme ReactHttpRequestHandler \
+          clean archive \
+          -sdk iphoneos \
+          -configuration Debug \
+          -UseModernBuildSystem=NO \
+          -archivePath $PWD/ReactHttpRequestHandler \
+          CODE_SIGNING_ALLOWED=NO
+    
