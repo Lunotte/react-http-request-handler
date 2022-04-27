@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - 2022-04-XX
+## [1.1.0] - 2022-04-27
 
 ### Added
 Get API history in errors
