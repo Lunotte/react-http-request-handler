@@ -114,7 +114,6 @@ const traitementErreur = (data: ResponseFetchApi) => {
     //     return Promise.reject(error);
     //   });
 
-
     // const axiosConfig: AxiosRequestConfig = {
     //     url: '/search?q=champ',
     //     method: 'GET'
@@ -169,6 +168,7 @@ const traitementErreur = (data: ResponseFetchApi) => {
     
     // const test = useRh2WithName(GOOGLE);
     // console.log(test);
+
 
     // console.log(rh2DirectoryService.getConfigQueryParameters());
 
@@ -235,7 +235,6 @@ const traitementErreur = (data: ResponseFetchApi) => {
 
     const test = useRh2WithName('jsonplaceholder', state % 2 === 0);
     console.log(test);
-
     console.log(getErrorsApi());
 
     const onMe = () => {

@@ -15,7 +15,6 @@
 /* eslint-disable no-eval */
 import { AxiosRequestConfig } from "axios";
 import React from 'react';
-// import * as redux from 'react-redux';
 import {
     ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter
 } from "../../src";
@@ -45,10 +44,9 @@ useStateSpy.mockImplementation((init) => [
     setState
 ]);
 
-let redux2 = {useDispatch: () => {}}
-const useDispatchSpy = jest.spyOn(redux2, 'useDispatch');
-//let mockDispatchFn = jest.fn();
-useDispatchSpy.mockReturnValue(redux2.useDispatch());
+let redux = {useDispatch: () => {}}
+const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+useDispatchSpy.mockReturnValue(redux.useDispatch());
 
 const useEffect = jest.spyOn(React, "useEffect");
 const mockUseEffect = async () => {
@@ -78,8 +76,7 @@ function resetMocks() {
 }
 
 function initMocksServices() {
-   //  mockDispatchFn = jest.fn();
-    useDispatchSpy.mockReturnValue(redux2.useDispatch());
+    useDispatchSpy.mockReturnValue(redux.useDispatch());
     mockUseEffect();
 }
 
