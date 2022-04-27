@@ -12,6 +12,8 @@ addons:
 cache:
   directories:
   - node_modules
+install:
+- npm install --legacy-peer-deps
 script:
 - npm test -- --coverage
 - sonar-scanner
