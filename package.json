@@ -42,7 +42,7 @@
     "@react-navigation/native": "6.0.10",
     "@react-navigation/stack": "6.2.1",
     "@types/jest": "27.4.1",
-    "@types/lodash": "4.14.179",
+    "@types/lodash": "4.14.182",
     "@types/react": "18.0.6",
     "@types/react-native": "0.67.4",
     "@types/react-test-renderer": "18.0.0",
