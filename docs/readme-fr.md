@@ -27,6 +27,7 @@
     + [Rh2DirectoryService](#rh2directoryservice)
     + [Rh2ConfigService](#rh2configservice)
     + [Rh2AxiosConfigService](#rh2axiosconfigservice)
+  * [Historique des erreurs http](#historique-des-erreurs-http)
   * [Liste des models Rh2](#liste-des-models-rh2)
     + [Paramètre pour pour les requêtes non pré-chargée](#param-tre-pour-pour-les-requ-tes-non-pr--charg-e)
       - [Rh2EffectAxiosConfigHandler](#rh2effectaxiosconfighandler)
@@ -40,11 +41,13 @@
       - [AxiosRequestConfigExtended](#axiosrequestconfigextended)
     + [Rh2InitializationParameter](#rh2initializationparameter-1)
     + [AxiosRequestConfigExtended](#axiosrequestconfigextended-1)
+    + [Historique des erreurs](#historique-des-erreurs)
+      - [Rh2ErrorsApi](#rh2errorsapi)
 - [Roadmap](#roadmap)
 
 ## Contexte
 
-Cette librairie React utilisant les hooks customisés a pour but de faciliter l'utilisateur dans sa manipulation des requêtes HTTP. Il doit simplement configurer la requête qui sera exécutée par Axios, ainsi que le moment du déclenchement.Il est possible d’ajouter des paramètres supplémentaires pour des besoins de l’application cliente.
+Cette librairie React utilisant les hooks customisés a pour but de faciliter l'utilisateur dans sa manipulation des requêtes HTTP. Il doit simplement configurer la requête qui sera exécutée par Axios, ainsi que le moment du déclenchement. Il est possible d’ajouter des paramètres supplémentaires pour des besoins de l’application cliente.
 Par exemple : 
 - Demander qu’une requête soit exécutée seulement une fois via notre système d’historisation; la configuration des traitements à effectuer en cas d’erreurs de requête.
 - Les utilisateurs de redux pourront trouver leur bonheur pour dispatch le résultat de la requête revenue avec succès ou non, celle-ci pourra également être précédée d’un traitement ou non.
@@ -54,18 +57,18 @@ Par exemple :
 - Ajouter une configuration globale (gestion des instances, manipulation des erreurs HTTP, filtrage des requêtes pour une unique exécution, etc ...)
 - Possibilité d’être couplé avec Redux
 - Moins de code
-
+- Facilement annuler une requête
 
 
 ## Installation
 
-Utilisant npm :
+via npm :
 
 ```powershell
 $ npm install react-http-request-handler
 ```
 
-Utilisant yarn :
+via yarn :
 
 ```powershell
 $ yarn add react-http-request-handler
@@ -73,11 +76,9 @@ $ yarn add react-http-request-handler
 
 ## Toutes les configurations 
 
-
+Dans les sources du projet, il y a un dossier nommé <b>exemple</b> dans lequel on peut voir des exemples de configuration (attention, c’est un peu le bordel…).
 
 ### Initialisation de la librairie
-
-
 
 #### L'application peut être initialisée de 2 manières :
 
@@ -345,7 +346,7 @@ rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
 
 Vous pouvez utiliser les instances Axios qui ont été générées. Le service <b>rh2ConfigService</b> vous permet de les récupérer.
 
-| Attention : Pour l'initialisation de l'instance, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| Attention : Pour l'initialisation de l'instance personnalisée, il faut impérativement avoir indiqué la propriété <i>"defaultInterceptor"</i> à <i>"false"</i> |
 | ------------------------------------------------------------ |
 
 ```jsx
@@ -388,11 +389,11 @@ Initialise l’application :
 
 | Méthode                                                      | type                   | Description                                   |
 | ------------------------------------------------------------ | ---------------------- | --------------------------------------------- |
-| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Vérifier la présence de la configuration      |
+| hasConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | boolean                | Vérifier la présence de la configuration      |
 | hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Vérifier la présence de la configuration      |
 | addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Ajouter une configuration à l'annuaire        |
 | getConfigQueryParameters()                                   | ConfigQueryParameter[] | Récupérer la liste des configurations         |
-| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
+| getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | ConfigQueryParameter   | Récupérer une configuration spécifique        |
 | removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Supprimer une configuration précise           |
 | removeAllQueryDirectory()                                    | void                   | Supprimer toutes les configuration en mémoire |
 
@@ -432,6 +433,20 @@ Initialise l’application :
 | removeConfigAxios(label: string)                             | void             | Supprimer une configuration existante                        |
 | removeAllConfigAxios()                                       | void             | Supprimer toutes les configuration existante                 |
 
+### Historique des erreurs http
+
+Chaque requête que vous allez exécuter aura au préalable été configurée, avec un label ou non. Si une requête échoue, on l’historise avec pour clé le label, si absent, on utilise un hash. Pour chaque configuration on garde la dernière erreur survenue (ex. : code d’erreur 404, 500, etc. ...).
+
+Vous pouvez accèder à la liste via cette méthode :
+
+```typescript
+import { getErrorsApi } from 'react-http-request-handler';
+
+getErrorsApi();
+```
+
+
+
 ### Liste des models Rh2
 
 #### Paramètre pour pour les requêtes non pré-chargée
@@ -452,7 +467,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Configuration Axios. 
 
-<b>addToDirectory</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
+<b>lock</b> S'utilise si l'on veut exécuter une seule fois la requête durant l'utilisation de l'application. Si true, la valeur pourra être mise à jour avec le service <b>Rh2DirectoryService</b> pour être réinitialisée. 
 
 | Attention : La condition pour filtrer les requêtes s'appuie sur l'url, le type de méthode et la propriété params. |
 | ------------------------------------------------------------ |
@@ -553,7 +568,7 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[];
+    headerUrl?: KeyValue<string>[];
 }
 ````
 
@@ -575,7 +590,7 @@ export interface AxiosRequestConfigExtended {
 | ------------------ | ----------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------- |
 | key                | string                              | Clé pour retrouver l'instance Axios. Elle sera utilisée pour configurer les requêtes, vous devez indiquer à quelle instance elle devra se référer. Si aucune n’est renseignée, on utilise la première ajoutée | n/a                                                | `"MY_DEFAULT_KEY"`                                   |
 | axiosConfig        | AxiosRequestConfig                  | Configuration [Axios](https://github.com/axios/axios). Si vous ne connaissez pas cette librairie, par exemple, vous pouvez valoriser la propriété baseURL pour indiquer le préfixe de chaque url qui utilisera cette instance | n/a                                                | `{ baseURL: 'http://test.fr' }`                      |
-| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être créée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
+| defaultInterceptor | boolean                             | Si null ou true, alors un intercepteur va être crée pour cette instance. La propriété `headerUrl` devra également être valorisée. Vous pouvez créer votre propre interceptor en récupérant l'instance via un service mis à disposition.<br/><b>Si pour cette instance un interceptor par défaut a été crée et que vous implémentez le vôtre, il ne va pas fonctionner</b> | true                                               | `true, false`                                        |
 | headerUrl          | {key: string;<br/>value: string;}[] | Liste des en-têtes à utiliser par l'interceptor              | [{key: 'Content-Type', value: 'application/json'}] | `[{key: 'Content-Type', value: 'application/json'}]` |
 
 
@@ -632,11 +647,20 @@ const initSettings: Rh2InitializationParameter = {
 
 
 
+#### Historique des erreurs
+##### Rh2ErrorsApi
+
+````typescript
+interface Rh2ErrorsApi {
+    label: string;
+    configuration: Rh2EffectTreatmentToManageRequest;
+    error: ResponseFetchApi;
+}
+````
+
 ## Roadmap
 
-- Modifier une instance Axios pour prendre en compte de nouveaux éléments (Ex : Mise à jour du paramètre «auth» de Axios)
-- Gérer l'annulation des requêtes HTTP par le biais de la librairie si nécessaire
+Si vous avez des recommandations, on peut analyser le besoin !
 
-	
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>

@@ -4,14 +4,12 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 12:31 pm                                        *
+ * Last Modified: 2022 03 22 - 12:31 am                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
 
 import { Rh2AxiosConfig } from "..";
 
@@ -42,7 +40,7 @@ class Rh2AxiosConfigService {
 
     /**
      * Check the setting
-     * @param id Query name
+     * @param label Query name
      * @returns True If present else False
      */
     hasConfigAxios(label: string): boolean {
@@ -61,6 +59,17 @@ class Rh2AxiosConfigService {
     }
 
     /**
+     * Add or update auth to a axios config
+     * @param label Query name
+     * @param auth Ident to HTTP Basic auth
+     */
+    addOrUpdateAuthToConfigAxios(label: string, auth: { username: string, password: string }): void {
+        this.addAuthToConfigAxios(label, auth);
+    }
+
+    /**
+     * @deprecated You need to use addOrUdateAuthToConfigAxios method  
+     * 
      * Add auth to a axios config
      * @param label Query name
      * @param auth Ident to HTTP Basic auth
@@ -83,7 +92,7 @@ class Rh2AxiosConfigService {
 
     /**
      * Add body to an axios config
-     * @param id Query name
+     * @param label Query name
      * @param body Body to the http request
      */
     addBodyToConfigAxios<T>(label: string, body: T): void {
