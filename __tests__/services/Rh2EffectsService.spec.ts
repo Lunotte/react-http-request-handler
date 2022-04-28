@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 24 - 12:25 pm                                        *
+ * Last Modified: 2022 03 21 - 09:10 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -15,7 +15,6 @@
 /* eslint-disable no-eval */
 import { AxiosRequestConfig } from "axios";
 import React from 'react';
-import * as redux from 'react-redux';
 import {
     ResponseFetchApi, Rh2AxiosConfig, rh2AxiosConfigService, rh2ConfigService, Rh2InitializationParameter
 } from "../../src";
@@ -45,9 +44,9 @@ useStateSpy.mockImplementation((init) => [
     setState
 ]);
 
+let redux = {useDispatch: () => {}}
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-let mockDispatchFn; // = jest.fn();
-// useDispatchSpy.mockReturnValue(mockDispatchFn);
+useDispatchSpy.mockReturnValue(redux.useDispatch());
 
 const useEffect = jest.spyOn(React, "useEffect");
 const mockUseEffect = async () => {
@@ -62,12 +61,13 @@ const axiosConfigGoogle: AxiosRequestConfig = {
     method: 'GET'
 };
 const configurationGoogle: Rh2EffectAxiosConfigHandler = {
-    axiosRequestConfig: axiosConfigGoogle 
+    axiosRequestConfig: axiosConfigGoogle,
+    lock: false
 };
 
 function resetMocksAndServices() {
     rh2AxiosConfigService.removeAllConfigAxios();
-    rh2DirectoryService.removeAllQueryDirectory();
+    rh2DirectoryService.removeAllQueriesDirectoryLocked();
     resetMocks();
 }
 
@@ -76,8 +76,7 @@ function resetMocks() {
 }
 
 function initMocksServices() {
-    mockDispatchFn = jest.fn();
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(redux.useDispatch());
     mockUseEffect();
 }
 
@@ -86,6 +85,9 @@ beforeAll(() => {
 });
 
 describe('useRh2WithParameters', () => {
+
+    const cancelTokenSource: any = { cancel: jest.fn(), token: { reason: { message: 'user canceled' } } };
+    jest.spyOn(rh2DirectoryService["cancelToken"], 'source').mockReturnValue(cancelTokenSource);
 
     afterEach(() => {
         resetMocksAndServices();
@@ -298,10 +300,6 @@ describe('useRh2WithParameters', () => {
 
 });
 
-
-
-
-
 describe('useRh2WithName', () => {
 
     afterEach(() => {
@@ -317,7 +315,8 @@ describe('useRh2WithName', () => {
 
             const configACharger: Rh2AxiosConfig = {
                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
-                label: GOOGLE
+                label: GOOGLE,
+                messageCancelToken: 'Query canceled'
             }
             rh2AxiosConfigService.addConfigAxios(configACharger);
 
@@ -358,7 +357,7 @@ describe('useRh2WithName', () => {
             const configACharger: Rh2AxiosConfig = {
                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE,
-                addToDirectory: true
+                lock: true
             }
             rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
@@ -398,7 +397,7 @@ describe('useRh2WithName', () => {
             const configACharger: Rh2AxiosConfig = {
                 axiosRequestConfig: configurationGoogle.axiosRequestConfig,
                 label: GOOGLE,
-                addToDirectory: true
+                lock: true
             }
             rh2AxiosConfigService.replaceConfig(GOOGLE, configACharger);
 
@@ -417,8 +416,6 @@ describe('useRh2WithName', () => {
             expect(setState).toHaveBeenCalledTimes(0);
         });
     });
-
-
 });
 
 
@@ -584,7 +581,12 @@ describe('useRh2WithName', () => {
             url: 'https://www.google.com/2/trote',
             method: 'GET',
             data: undefined,
-            params: { une: 'valeur', chatte: 'chienne' }
+            params: { une: 'valeur', chatte: 'chienne' },
+            cancelToken: {
+                reason: {
+                    message: "user canceled"
+                }
+            }
           });
         expect(setState).toHaveBeenCalledTimes(3);
         resetMocksAndServices();

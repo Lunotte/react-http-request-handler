@@ -4,17 +4,12 @@
  * Created Date: 2021 07 04                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2021 08 14 - 01:11 pm                                        *
+ * Last Modified: 2022 03 21 - 11:11 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
-
-
-
 
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 

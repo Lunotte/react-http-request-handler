@@ -4,14 +4,12 @@
  * Created Date: We Jun yyyy                                                   *
  * Author: Charly Beaugrand                                                                *
  * -----                                                                       *
- * Last Modified: 2021 08 25 - 11:12 am                                        *
+ * Last Modified: 2022 04 04 - 09:01 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
-
-
 
 import { rh2ConfigService } from "../services";
 

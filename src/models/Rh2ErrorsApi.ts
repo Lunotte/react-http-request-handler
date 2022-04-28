@@ -1,23 +1,21 @@
 /*
- * File: AxiosConfig.ts                                                        *
+ * File: Rh2ErrorsApi.ts                                                              *
  * Project: react-http-request-handler                                         *
- * Created Date: 2021 05 15                                                    *
+ * Created Date: 2022 04 17                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 22 - 12:02 am                                        *
+ * Last Modified: 2022 04 17 - 22:46 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-import { Rh2EffectAxiosConfigHandler } from './Rh2Effect';
+import { ResponseFetchApi } from "./FetchApi";
+import { Rh2EffectTreatmentToManageRequest } from "./Rh2Effect";
 
-/**
- * label To identify the configuration
- */
-export interface Rh2AxiosConfig extends Rh2EffectAxiosConfigHandler {
-    readonly label: ConfigAxiosTrigger;
+export interface Rh2ErrorsApi {
+    label: string;
+    configuration: Rh2EffectTreatmentToManageRequest;
+    error: ResponseFetchApi;
 }
-
-export type ConfigAxiosTrigger = string;

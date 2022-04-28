@@ -29,6 +29,7 @@
     + [Rh2DirectoryService](#rh2directoryservice)
     + [Rh2ConfigService](#rh2configservice)
     + [Rh2AxiosConfigService](#rh2axiosconfigservice)
+  * [Http error history](#http-error-history)
   * [Rh2 model list](#rh2-model-list)
     + [Parameters for non-preloaded requests](#parameters-for-non-preloaded-requests)
       - [Rh2EffectAxiosConfigHandler](#rh2effectaxiosconfighandler)
@@ -42,11 +43,13 @@
       - [AxiosRequestConfigExtended](#axiosrequestconfigextended)
     + [Rh2InitializationParameter](#rh2initializationparameter-1)
     + [AxiosRequestConfigExtended](#axiosrequestconfigextended-1)
+    + [Error history](#error-history)
+      - [Rh2ErrorsApi](#rh2errorsapi)
 - [Roadmap](#roadmap)
 
 ## Contexte
 
-This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the web client needs.
+This React library using customized hooks is aimed to help users handling HTTP requests. The request and its trigger are simply configured, then executed by Axios. Optional parameters can also be configured depending on the client needs.
 For example :
 - Configuring the request to be executed once through our historization module
 - Configuring methods to be called in case of error
@@ -58,18 +61,18 @@ Redux users will find means to dispatch the request’s result, whether it was s
 - Adding a global configuration (instance management, HTTP error handling, request filtering, .. etc)
 - Coupling with redux
 - Allowing less code production
-
+- Easily cancel a request
 
 
 ## Installation
 
-Utilisant npm :
+Using npm :
 
 ```powershell
 $ npm install react-http-request-handler
 ```
 
-Utilisant yarn :
+Using yarn :
 
 ```powershell
 $ yarn add react-http-request-handler
@@ -77,11 +80,9 @@ $ yarn add react-http-request-handler
 
 ## Configurations
 
-
+In the project sources, there is a folder named example in which you can see configuration examples (be careful, it's a bit of a mess...).
 
 ### Library usage
-
-
 
 #### You can initialize your application by :
 
@@ -347,7 +348,7 @@ rh2AxiosConfigService.addBodyToConfigAxios(GOOGLE, {
 
 You can use Axios generated instances, by getting it from service rh2ConfigService.
 
-| Caution : : To initialize your instance, you have to fill in the property <i>"defaultInterceptor"</i> à <i>"false"</i> |
+| Caution : : For custom instance initialization, you have to fill in the property <i>"defaultInterceptor"</i> à <i>"false"</i> |
 | ------------------------------------------------------------ |
 
 ```jsx
@@ -391,11 +392,11 @@ Initialize the app :
 
 | Méthode                                                      | type                   | Description                             |
 | ------------------------------------------------------------ | ---------------------- | --------------------------------------- |
-| hasConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | boolean                | Check the presence of the configuration |
+| hasConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | boolean                | Check the presence of the configuration |
 | hasConfigQueryParameterByConfigQueryParameter(parameter: ConfigQueryParameter) | boolean                | Check the presence of the configuration |
 | addConfigQueryParameter(configTmp: ConfigQueryParameter)     | void                   | Add a configuration to the directory    |
 | getConfigQueryParameters()                                   | ConfigQueryParameter[] | Retrieve the list of configurations     |
-| getConfigQueryParameter(url: string, method: MethodRnhrh, params?: ParamRnhnh) | ConfigQueryParameter   | Retrieve a specific configuration       |
+| getConfigQueryParameter(url: string, method: Rh2Method, params?: Rh2Param) | ConfigQueryParameter   | Retrieve a specific configuration       |
 | removeQueryDirectory(axiosRequestConfig: AxiosRequestConfig) | void                   | Delete a specific configuration         |
 | removeAllQueryDirectory()                                    | void                   | Delete all configurations in memory     |
 
@@ -435,6 +436,18 @@ Initialize the app :
 | removeConfigAxios(label: string)                             | void             | Delete an existing configuration, specified in parameter     |
 | removeAllConfigAxios()                                       | void             | Delete all existing configurations                           |
 
+### Http error history
+
+Each query you will execute will have been configured beforehand, with a label or not. If a request fails, it is logged with the label as key, if not, a hash is used. For each configuration, the last error that occurred is kept (eg: error code 404, 500, etc.).
+
+You can access the list through this method :
+
+```typescript
+import { getErrorsApi } from 'react-http-request-handler';
+
+getErrorsApi();
+```
+
 ### Rh2 model list
 
 #### Parameters for non-preloaded requests
@@ -455,7 +468,7 @@ export interface Rh2EffectAxiosConfigHandler {
 
 <b>axiosRequestConfig</b> Axios configuration. 
 
-<b>addToDirectory</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>Rh2DirectoryService</b>.
+<b>lock</b> This is used if we want to execute once the request during runtime. This value can be updated with <b>Rh2DirectoryService</b>.
 
 | Caution : The request filter depends on URL, method type and params property. |
 | ------------------------------------------------------------ |
@@ -555,7 +568,7 @@ export interface AxiosRequestConfigExtended {
     key: string;
     axiosConfig: AxiosRequestConfig;
     defaultInterceptor?: boolean;
-    headerUrl?: KeyValue[];
+    headerUrl?: KeyValue<string>[];
 }
 ````
 
@@ -632,12 +645,19 @@ const initSettings: Rh2InitializationParameter = {
 };
 ```
 
+#### Error history
+##### Rh2ErrorsApi
 
+````typescript
+interface Rh2ErrorsApi {
+    label: string;
+    configuration: Rh2EffectTreatmentToManageRequest;
+    error: ResponseFetchApi;
+}
+````
 
 ## Roadmap
 
-- Handling HTTP request cancellation with the library
-	
-	
-	
+If you have recommendations, we can analyze the need !
+
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
