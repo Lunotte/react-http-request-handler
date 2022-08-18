@@ -1,5 +1,10 @@
  Changelog
 
+## [1.1.1] - 2022-08-18
+
+### Fixed
+[Issue 154](https://github.com/Lunotte/react-http-request-handler/issues/154)  iOS - react-native bundle in a project that implements RH2
+
 ## [1.1.0] - 2022-04-28
 
 ### Added

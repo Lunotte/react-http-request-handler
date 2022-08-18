@@ -1,6 +1,6 @@
 {
   "name": "react-http-request-handler",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": false,
   "license": "MIT",
   "repository": {
@@ -83,10 +83,10 @@
     "redux": "^4.1.0",
     "reselect": "^4.0.0"
   },
-  "main": "lib\\commonjs\\index.js",
-  "react-native": "src\\index.ts",
-  "module": "lib\\module\\index.js",
-  "types": "lib\\typescript\\src\\index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "react-native": "src/index.ts",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
   "files": [
     "src",
     "lib",
