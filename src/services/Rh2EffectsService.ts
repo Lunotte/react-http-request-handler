@@ -4,14 +4,14 @@
  * Created Date: 2021 07 16                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 04 18 - 07:18 pm                                        *
+ * Last Modified: 2023 03 22 - 09:31 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-import { AxiosRequestConfig, CancelTokenSource, Method } from 'axios';
+import { AxiosRequestConfig, CancelTokenSource } from 'axios';
 import hash from 'object-hash';
 import { useEffect, useState } from 'react';
 import { Rh2AxiosConfig } from '..';
@@ -271,7 +271,7 @@ async function executeQuery(
 interface ObjectToHash {
     readonly baseUrl: string;
     readonly url: string;
-    readonly method: Method;
+    readonly method: string;
     readonly params: any;
     readonly data: any;
 }

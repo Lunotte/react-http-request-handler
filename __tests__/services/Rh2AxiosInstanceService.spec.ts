@@ -4,7 +4,7 @@
  * Created Date: Su Aug yyyy                                                   *
  * Author: <<author>                                                           *
  * -----                                                                       *
- * Last Modified: 2022 02 12 - 04:37 pm                                        *
+ * Last Modified: 2023 03 22 - 10:04 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -168,8 +168,7 @@ describe('Generate a header to interceptor', () => {
 
     it('Header param is null', async () => {
         
-        const axiosConfig: AxiosRequestConfig = {
-            method: 'GET' 
+        const axiosConfig: any = {
         };
         expect(axiosConfig.headers).toBeFalsy();
         const resultat = await generateHeaders(axiosConfig, null);

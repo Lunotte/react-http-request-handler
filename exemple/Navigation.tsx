@@ -4,7 +4,7 @@
  * Created Date: 07 26 2021                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 04 18 - 07:18 pm
+ * Last Modified: 2023 03 26 - 07:05 pm
  * Modified By: Charly Beaugrand
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -15,7 +15,7 @@
 
 
 
-import { NavigationContainer } from '@react-navigation/native';
+//import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AxiosRequestConfig } from 'axios';
 import React, { useState } from 'react';
@@ -322,16 +322,16 @@ const Moi2 = () => {
 
 const Stack = createStackNavigator();
 
-function Navigation() {
+// function Navigation() {
     
-    return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Home" component={Moi} />
-                <Stack.Screen name="Details" component={Moi2} />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
-}
+//     return (
+//         <NavigationContainer>
+//             <Stack.Navigator>
+//                 <Stack.Screen name="Home" component={Moi} />
+//                 <Stack.Screen name="Details" component={Moi2} />
+//             </Stack.Navigator>
+//         </NavigationContainer>
+//     );
+// }
 
-export default Navigation;
+// export default Navigation;

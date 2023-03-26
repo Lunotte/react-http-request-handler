@@ -1,17 +1,18 @@
+import { AxiosRequestHeaders, InternalAxiosRequestConfig } from 'axios';
 /*
  * File: Rh2AxiosInstanceService.ts                                            *
  * Project: react-http-request-handler                                         *
  * Created Date: 2021 07 24                                                    *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 04 04 - 08:53 pm                                        *
+ * Last Modified: 2023 03 22 - 10:06 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
  * ----------	---	---------------------------------------------------------  *
  */
 
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { KeyValue } from '../models/Rh2Config';
 import { AxiosRequestConfigExtended } from './../models/Rh2Config';
 
@@ -114,14 +115,14 @@ export function ejectInterceptor(axiosInstances: Rh2AxiosInstance): void {
  * @param headersToAdd Headers to add
  * @returns AxiosRequestConfig
  */
-export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: KeyValue<string>[]): Promise<AxiosRequestConfig<any>> {
+export async function generateHeaders(config: InternalAxiosRequestConfig, headersToAdd: KeyValue<string>[]): Promise<InternalAxiosRequestConfig<any>> {
     const headers = await addHeaderToUrl(headersToAdd);
 
     if (headers) {
         if (config.method !== 'OPTIONS') {
             config = {
                 ...config,
-                headers 
+                headers: headers
             };
         }
     }
@@ -133,7 +134,7 @@ export async function generateHeaders(config: AxiosRequestConfig, headersToAdd: 
  * @param headersToAdd List of headers
  * @returns Headers
  */
-async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<Rh2Header> {
+async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<AxiosRequestHeaders> {
     const headersDefault: KeyValue<string>[] = HEADER_URL;
 
     if (headersToAdd == null || headersToAdd.length === 0) {
@@ -148,9 +149,11 @@ async function addHeaderToUrl(headersToAdd: KeyValue<string>[]): Promise<Rh2Head
  * @param headers List of headers
  * @returns headers
  */
-function mapAllHeaders(headers: KeyValue<string>[]): Rh2Header {
-    const headerAfterBuilding = {
-    };
-    headers.forEach((kv: KeyValue<string>) => headerAfterBuilding[kv.key] = kv.value);
+function mapAllHeaders(headers: KeyValue<string>[]): AxiosRequestHeaders {
+    const headerAfterBuilding: AxiosRequestHeaders = null;
+
+    headers.forEach((kv: KeyValue<string>) => {
+        headerAfterBuilding.set(kv.key, kv.value, true);
+    });
     return headerAfterBuilding;
 }

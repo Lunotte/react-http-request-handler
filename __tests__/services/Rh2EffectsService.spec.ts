@@ -4,7 +4,7 @@
  * Created Date: Fri July 16 2021                                              *
  * Author: Charly Beaugrand                                                    *
  * -----                                                                       *
- * Last Modified: 2022 03 21 - 09:10 pm                                        *
+ * Last Modified: 2023 03 26 - 07:05 pm                                        *
  * Modified By: Charly Beaugrand                                               *
  * -----                                                                       *
  * Copyright (c) 2021 Lunotte                                                  *
@@ -26,15 +26,15 @@ import { useRh2WithName, useRh2WithParameters } from "../../src/services/Rh2Effe
 const GOOGLE = 'GOOGLE';
 const MICROSOFT = 'MICROSOFT';
 
-jest.mock('@react-navigation/native', () => ({
-    // @ts-ignore
-    ...jest.requireActual('@react-navigation/native'),
-    useRoute: () => ({
-        params: {
-            paramTest: 'Réponse à paramTest'
-        }
-    })
-}));
+// jest.mock('@react-navigation/native', () => ({
+//     // @ts-ignore
+//     ...jest.requireActual('@react-navigation/native'),
+//     useRoute: () => ({
+//         params: {
+//             paramTest: 'Réponse à paramTest'
+//         }
+//     })
+// }));
 
 const setState = jest.fn();
 const useStateSpy = jest.spyOn(React, 'useState')
