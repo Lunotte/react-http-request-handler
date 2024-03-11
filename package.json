@@ -36,7 +36,7 @@
   "devDependencies": {
     "@babel/core": "7.21.3",
     "@babel/runtime": "7.21.0",
-    "@react-native-community/cli": "10.2.1",
+    "@react-native-community/cli": "13.6.2",
     "@react-native-community/eslint-config": "3.2.0",
     "@react-navigation/devtools": "6.0.18",
     "@react-navigation/native": "6.1.6",
@@ -46,8 +46,8 @@
     "@types/react": "18.0.28",
     "@types/react-native": "0.71.4",
     "@types/react-test-renderer": "18.0.0",
-    "@typescript-eslint/eslint-plugin": "5.56.0",
-    "@typescript-eslint/parser": "5.56.0",
+    "@typescript-eslint/eslint-plugin": "7.2.0",
+    "@typescript-eslint/parser": "7.2.0",
     "babel-jest": "29.5.0",
     "coveralls": "3.1.1",
     "eslint": "8.36.0",
@@ -66,10 +66,10 @@
     "react-native-screens": "3.20.0",
     "react-native-unimodules": "0.14.10",
     "react-native-web": "0.18.12",
-    "react-redux": "8.0.5",
+    "react-redux": "9.1.0",
     "react-test-renderer": "18.2.0",
-    "redux": "4.2.1",
-    "reselect": "4.1.7",
+    "redux": "5.0.1",
+    "reselect": "5.1.0",
     "typescript": "5.0.2"
   },
   "peerDependencies": {
